@@ -9,8 +9,8 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-@Table(name = "FRIEND_REQ")
+@ToString(exclude = {"friendReqUserNo","friendResUserNo"})
+@Table
 public class FriendReq extends BaseEntity{
 
     @Id
@@ -18,14 +18,14 @@ public class FriendReq extends BaseEntity{
     @Column(name = "FRIEND_REQ_NO")
     private Long friendReqNo;
 
-    @ManyToOne
-    @JoinColumn(name = "FRIEND_REQ_USER_NO" ,nullable = false)
-    private UserInfo friendSendUserNo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "FRIEND_REQ_USER_NO" ,nullable = false, referencedColumnName = "USER_NO")
+    private UserInfo friendReqUserNo;
 
-    @ManyToOne
-    @JoinColumn(name = "FRIEND_REC_USER_NO" ,nullable = false)
-    private UserInfo friendReceiveUserNo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "FRIEND_RES_USER_NO" ,nullable = false, referencedColumnName = "USER_NO")
+    private UserInfo friendResUserNo;
 
     @Column(name = "FRIEND_REQ_STATUS" ,nullable = false)
-    private int friendReqStatus;
+    private int friendReqStatus;// 0대기 1수락 2거절 수락시 friend 테이블에 두번의 로그
 }

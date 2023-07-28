@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("bej")
 public class SampleController {
 
-    @GetMapping("/index")
+    @GetMapping("/main")
     public void hello(){
     }
 }

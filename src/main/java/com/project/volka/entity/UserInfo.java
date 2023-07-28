@@ -30,6 +30,9 @@ public class UserInfo extends BaseEntity{
     @Column(length = 20, nullable = false, name = "USER_NAME")
     private String userName;
 
+    @Column(length = 20, nullable = false, name = "USER_NICK_NAME")
+    private String userNickName;
+
     @Column(length = 20, nullable = false, name = "USER_PHONE")
     private String userPhone;
 
