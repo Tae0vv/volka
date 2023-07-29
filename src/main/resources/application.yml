@@ -19,5 +19,6 @@ logging:
   level:
     org:
       springframework: info
+      springframework.security: trace
     com:
       project: debug
