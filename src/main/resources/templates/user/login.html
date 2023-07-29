@@ -8,33 +8,36 @@
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="../../../../../../../Users/ty/Downloads/AdminLTE-3.2.0/AdminLTE-3.2.0/plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
   <!-- icheck bootstrap -->
-  <link rel="stylesheet" href="../../../../../../../Users/ty/Downloads/AdminLTE-3.2.0/AdminLTE-3.2.0/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <link rel="stylesheet" href="/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="../../../../../../../Users/ty/Downloads/AdminLTE-3.2.0/AdminLTE-3.2.0/dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="/dist/css/adminlte.min.css">
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
   <!-- /.login-logo -->
   <div class="card card-outline card-primary">
     <div class="card-header text-center">
-      <a href="../../../../../../../Users/ty/Downloads/AdminLTE-3.2.0/AdminLTE-3.2.0/index2.html" class="h1"><b>Admin</b>LTE</a>
+      <a href="/index2.html" class="h1"><b>VOLKA</b></a>
     </div>
     <div class="card-body">
       <p class="login-box-msg">Sign in to start your session</p>
 
-      <form action="../../../../../../../Users/ty/Downloads/AdminLTE-3.2.0/AdminLTE-3.2.0/index3.html" method="post">
+      <th:block th:if="${param.logout != null}">
+        <h1>LogOut</h1>
+      </th:block>
+      <form action="/user/login" method="post" th:if="${param.logout == null}">
         <div class="input-group mb-3">
-          <input type="email" class="form-control" placeholder="Email">
+          <input type="text" class="form-control" placeholder="USER ID" name="username">
           <div class="input-group-append">
             <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
+              <span class="fas fa-user"></span>
             </div>
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Password">
+          <input type="password" class="form-control" placeholder="PASSWORD" name="password">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
@@ -44,15 +47,15 @@
         <div class="row">
           <div class="col-8">
             <div class="icheck-primary">
-              <input type="checkbox" id="remember">
+              <input type="checkbox" id="remember" name="remember-me">
               <label for="remember">
-                Remember Me
+                자동 로그인
               </label>
             </div>
           </div>
           <!-- /.col -->
           <div class="col-4">
-            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+            <button type="submit" class="btn btn-primary btn-block">LOGIN</button>
           </div>
           <!-- /.col -->
         </div>
@@ -69,10 +72,10 @@
       <!-- /.social-auth-links -->
 
       <p class="mb-1">
-        <a href="../../../../../../../Users/ty/Downloads/AdminLTE-3.2.0/AdminLTE-3.2.0/pages/examples/forgot-password.html">I forgot my password</a>
+        <a href="/pages/examples/forgot-password.html">I forgot my password</a>
       </p>
       <p class="mb-0">
-        <a href="../../../../../../../Users/ty/Downloads/AdminLTE-3.2.0/AdminLTE-3.2.0/pages/examples/register.html" class="text-center">Register a new membership</a>
+        <a href="/pages/examples/register.html" class="text-center">Register a new membership</a>
       </p>
     </div>
     <!-- /.card-body -->
@@ -82,10 +85,10 @@
 <!-- /.login-box -->
 
 <!-- jQuery -->
-<script src="../../../../../../../Users/ty/Downloads/AdminLTE-3.2.0/AdminLTE-3.2.0/plugins/jquery/jquery.min.js"></script>
+<script src="/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
-<script src="../../../../../../../Users/ty/Downloads/AdminLTE-3.2.0/AdminLTE-3.2.0/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
-<script src="../../../../../../../Users/ty/Downloads/AdminLTE-3.2.0/AdminLTE-3.2.0/dist/js/adminlte.min.js"></script>
+<script src="/dist/js/adminlte.min.js"></script>
 </body>
 </html>
