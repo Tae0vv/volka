@@ -29,7 +29,7 @@
       </th:block>
       <form action="/user/login" method="post" th:if="${param.logout == null}">
         <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="USER ID" name="username">
+          <input type="text" class="form-control" placeholder="ID" name="username">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-user"></span>
@@ -60,6 +60,9 @@
           <!-- /.col -->
         </div>
       </form>
+      <div>
+        <a href="/oauth2/authorization/kakao">KAKAO</a>
+      </div>
 
       <div class="social-auth-links text-center mt-2 mb-3">
         <a href="#" class="btn btn-block btn-primary">

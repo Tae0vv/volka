@@ -12,13 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("bej")
 public class BejController {
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/main")
     public void hello(){
     }
 
-    @PreAuthorize("hasRole('USER')")
-    @GetMapping("/test")
-    public void test(){
-
-    }
 }

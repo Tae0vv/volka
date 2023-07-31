@@ -29,7 +29,7 @@ public class Promise {
     private String promiseBreakeReason;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PROMISE_BREAKE_USER", referencedColumnName = "USER_NO")
+    @JoinColumn(name = "PROMISE_BREAKE_USER_ID", referencedColumnName = "USER_ID")
     private UserInfo promiseBreakeUser ;
 
 }

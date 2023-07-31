@@ -19,11 +19,11 @@ public class PromiseReq extends BaseEntity{
     private Long promiseReqNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PROMISE_REQ_USER_NO" ,nullable = false, referencedColumnName ="USER_NO")
+    @JoinColumn(name = "PROMISE_REQ_USER_ID" ,nullable = false, referencedColumnName ="USER_ID")
     private UserInfo promiseReqUserNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PROMISE_RES_USER_NO" ,nullable = false, referencedColumnName ="USER_NO")
+    @JoinColumn(name = "PROMISE_RES_USER_ID" ,nullable = false, referencedColumnName ="USER_ID")
     private UserInfo promiseResUserNo;
 
     @Column(name = "PROMISE_REQ_STATUS" ,nullable = false)

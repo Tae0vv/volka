@@ -22,7 +22,7 @@ public class Chat extends BaseEntity{
     @JoinColumn(name = "CHAT_ROOM_NO" ,nullable = false, referencedColumnName = "CHAT_ROOM_NO")
     private ChatRoom chatRoomNo;
 
-    @JoinColumn(name = "CHAT_USER_NO",nullable = false, referencedColumnName = "USER_NO")
+    @JoinColumn(name = "CHAT_USER_ID",nullable = false, referencedColumnName = "USER_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private UserInfo chatUserNo;
 

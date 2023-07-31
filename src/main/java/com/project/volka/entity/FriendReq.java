@@ -19,11 +19,11 @@ public class FriendReq extends BaseEntity{
     private Long friendReqNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "FRIEND_REQ_USER_NO" ,nullable = false, referencedColumnName = "USER_NO")
+    @JoinColumn(name = "FRIEND_REQ_USER_ID" ,nullable = false, referencedColumnName = "USER_ID")
     private UserInfo friendReqUserNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "FRIEND_RES_USER_NO" ,nullable = false, referencedColumnName = "USER_NO")
+    @JoinColumn(name = "FRIEND_RES_USER_ID" ,nullable = false, referencedColumnName = "USER_ID")
     private UserInfo friendResUserNo;
 
     @Column(name = "FRIEND_REQ_STATUS" ,nullable = false)

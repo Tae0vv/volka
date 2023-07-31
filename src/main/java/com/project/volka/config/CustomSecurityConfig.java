@@ -47,6 +47,8 @@ public class CustomSecurityConfig {
                 .userDetailsService(userDetailsService)
                 .tokenValiditySeconds(60*60*24*30);
 
+        http.oauth2Login().loginPage("/user/login");
+
         return http.build();
     }
 

@@ -18,7 +18,7 @@ public class Plan extends BaseEntity{
     @Column(name = "PLAN_NO")
     private Long planNo;
 
-    @JoinColumn(name = "USER_NO" ,nullable = false, referencedColumnName = "USER_NO")
+    @JoinColumn(name = "USER_ID" ,nullable = false, referencedColumnName = "USER_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private UserInfo planUserNo;
 

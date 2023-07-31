@@ -19,11 +19,11 @@ public class Friend {
     private Long friendNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_MAIN_NO" ,nullable = false)
+    @JoinColumn(name = "USER_MAIN_ID" ,nullable = false, referencedColumnName = "USER_ID")
     private UserInfo UserMainNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_SUB_NO" ,nullable = false)
+    @JoinColumn(name = "USER_SUB_ID" ,nullable = false, referencedColumnName = "USER_ID")
     private UserInfo UserSubNo;
 
     @Column(name = "FRIEND_REMOVE" ,nullable = false)

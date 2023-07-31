@@ -3,6 +3,8 @@ package com.project.volka.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -14,21 +16,17 @@ import javax.persistence.*;
 public class UserInfo extends BaseEntity{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "USER_NO")
-    private Long userNo;
-
     @Column(length = 20, nullable = false, name = "USER_ID")
     private String userId;
 
-    @Column(length = 20, nullable = false, name = "USER_PW")
+    @Column(nullable = false, name = "USER_PW")
     private String userPw;
-
-    @Column(length = 200, nullable = false, name = "USER_ADDRESS")
-    private String userAddress;
 
     @Column(length = 20, nullable = false, name = "USER_NAME")
     private String userName;
+
+    @Column(length = 2000, nullable = false, name = "USER_EMAIL")
+    private String userEmail;
 
     @Column(length = 20, nullable = false, name = "USER_NICK_NAME")
     private String userNickName;
@@ -43,12 +41,36 @@ public class UserInfo extends BaseEntity{
     @Column(nullable = false, name = "USER_ON")
     private boolean userOn;
 
-    public void change(String userPw, String userAddress, String userName, String userPhone, char userStatus, boolean userOn) {
+    @Column(nullable = false, name = "USER_SOCIAL")
+    private boolean userSocial;
+
+    @ElementCollection
+    @Builder.Default
+    private Set<UserRole> roleSet = new HashSet<>();
+
+
+    public void changePassword(String userPw){
         this.userPw = userPw;
-        this.userAddress = userAddress;
-        this.userName = userName;
-        this.userPhone = userPhone;
-        this.userStatus = userStatus;
-        this.userOn = userOn;
     }
+
+    public void changeStatus(int userStatus){
+        this.userStatus = userStatus;
+    }
+
+    public void changeNickName(String userNickName){
+        this.userNickName = userNickName;
+    }
+
+    public void addRole(UserRole userRole) {
+        this.roleSet.add(userRole);
+    }
+
+    public void clearRoles(){
+        this.roleSet.clear();
+    }
+
+    public void changeSocial(boolean userSocial){
+        this.userSocial = userSocial;
+    }
+
 }
