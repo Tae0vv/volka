@@ -1,6 +1,7 @@
 package com.project.volka.config;
 
 import com.project.volka.security.CustomUserDetailsService;
+import com.project.volka.security.handler.CustomSocialLoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
@@ -37,7 +39,7 @@ public class CustomSecurityConfig {
         log.info("----------configure----------");
 
         //커스텀 로그인 페이지
-        http.formLogin().loginPage("/user/login");
+        http.formLogin().loginPage("/user/login").defaultSuccessUrl("/bej/main", true);
         // CSRF 토큰 비활성화
         http.csrf().disable();
 
@@ -47,7 +49,7 @@ public class CustomSecurityConfig {
                 .userDetailsService(userDetailsService)
                 .tokenValiditySeconds(60*60*24*30);
 
-        http.oauth2Login().loginPage("/user/login");
+        http.oauth2Login().loginPage("/user/login").successHandler(authenticationSuccessHandler());
 
         return http.build();
     }
@@ -63,5 +65,10 @@ public class CustomSecurityConfig {
         JdbcTokenRepositoryImpl repo = new JdbcTokenRepositoryImpl();
         repo.setDataSource(dataSource);
         return repo;
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler authenticationSuccessHandler(){
+        return new CustomSocialLoginSuccessHandler(passwordEncoder());
     }
 }

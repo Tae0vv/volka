@@ -7,8 +7,11 @@ import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.annotation.Commit;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
@@ -55,4 +58,21 @@ public class UserRepositoryTests {
         userInfo.getRoleSet().forEach(userRole->log.info(userRole.name()));
     }
 
+    @Test
+    public void changeTest(){
+        Optional<UserInfo> result = userRepository.getWithRoles("test");
+        UserInfo userInfo = result.orElseThrow();
+        userInfo.changeNickName("안녕dkssud");
+        log.info(userInfo);
+        userRepository.save(userInfo);
+    }
+
+    @Commit
+    @Test
+    public void testUpdate(){
+        String userId = "kty2451@gmail.com";
+        String userPw = passwordEncoder.encode("123");
+        userRepository.updatePassword(userId, userPw);
+
+    }
 }

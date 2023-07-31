@@ -61,6 +61,9 @@ public class UserInfo extends BaseEntity{
         this.userNickName = userNickName;
     }
 
+    public void changeName(String userName) {this.userName = userName; }
+    public void changePhone(String userPhone) {this.userPhone = userPhone; }
+
     public void addRole(UserRole userRole) {
         this.roleSet.add(userRole);
     }

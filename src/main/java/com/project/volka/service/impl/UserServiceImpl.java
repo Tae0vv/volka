@@ -11,6 +11,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Log4j2
 @Service
 @RequiredArgsConstructor
@@ -32,6 +34,17 @@ public class UserServiceImpl implements UserService {
         log.info("=======================");
         log.info(userInfo);
         log.info(userInfo.getRoleSet());
+        userRepository.save(userInfo);
+    }
+
+    @Override
+    public void kakaoAddInfo(UserInfoDTO userInfoDTO) {
+        String userId = userInfoDTO.getUserId();
+        UserInfo userInfo = userRepository.findById(userInfoDTO.getUserId()).orElseThrow();
+        userInfo.changeNickName(userInfoDTO.getUserNickName());
+        userInfo.changePassword(passwordEncoder.encode(userInfoDTO.getUserPw()));
+        userInfo.changeName(userInfoDTO.getUserName());
+        userInfo.changePhone(userInfoDTO.getUserPhone());
         userRepository.save(userInfo);
     }
 }

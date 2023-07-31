@@ -4,6 +4,8 @@ import com.project.volka.dto.UserInfoDTO;
 import com.project.volka.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,15 +30,20 @@ public class UserController {
         }
     }
 
+    @PostMapping
+    public void loginPost(UserInfoDTO userInfoDTO, RedirectAttributes redirectAttributes){
+
+    }
+
     @GetMapping("/signup")
     public void signupGet(){
         log.info("signup get.....");
     }
 
     @PostMapping("/signup")
-    public String joinPost(UserInfoDTO userInfoDTO, RedirectAttributes redirectAttributes){
+    public String signupPost(UserInfoDTO userInfoDTO, RedirectAttributes redirectAttributes){
 
-        log.info("join post");
+        log.info("signup post");
         log.info(userInfoDTO);
 
         try {
@@ -48,6 +55,22 @@ public class UserController {
         }
 
         redirectAttributes.addFlashAttribute("result", "success");
+        return "redirect:/bej/main";
+    }
+
+    @GetMapping("/kakao")
+    public void kakaoGet(){
+        log.info("kakao signup-----");
+    }
+
+    @PostMapping("/kakao")
+    public String kakaoPost(UserInfoDTO userInfoDTO, RedirectAttributes redirectAttributes, @AuthenticationPrincipal User user){
+        log.info("kakao signup------");
+
+        userInfoDTO.setUserId(user.getUsername());
+        log.info("tttttttttt");
+        userService.kakaoAddInfo(userInfoDTO);
+
         return "redirect:/bej/main";
     }
 }
