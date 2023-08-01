@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Registration Page (v2)</title>
+  <title>volka | 회원가입 </title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="/dist/css/adminlte.min.css">
+
 </head>
 <body class="hold-transition register-page">
 <div class="register-box">
@@ -83,21 +84,18 @@
         <div class="row">
           <div class="col-8">
             <div class="icheck-primary">
-              <input type="checkbox" id="agreeTerms" name="terms" value="agree">
-              <label for="agreeTerms">
-               I agree to the <a href="#">terms</a>
-              </label>
+              오른쪽 버튼을 눌러주세요
             </div>
           </div>
           <!-- /.col -->
           <div class="col-4">
-            <button type="submit" class="btn btn-primary btn-block">Register</button>
+            <button type="submit" class="btn btn-primary btn-block">가입하기</button>
           </div>
           <!-- /.col -->
         </div>
       </form>
 
-      <a href="/user/login" class="text-center">I already have a membership</a>
+      <a href="/user/login" class="text-center">로그인 화면으로</a>
     </div>
     <!-- /.form-box -->
   </div><!-- /.card -->
@@ -111,12 +109,20 @@
 <!-- AdminLTE App -->
 <script src="/dist/js/adminlte.min.js"></script>
 <script src="/dist/js/volka/user/signup.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.15/dist/sweetalert2.all.min.js"></script>
+
 <script layout:fragment="script" th:inline="javascript">
   const error = [[${error}]];
 
-  if(error && error === 'userId'){
-    alert("동일한 ID를 가진 계정이 존재합니다.");
+  if (error && error === 'userId') {
+    Swal.fire({
+      icon: 'error',
+      title: '오류',
+      text: '동일한 ID를 가진 계정이 존재합니다.',
+      confirmButtonText: '확인'
+    });
   }
+
 </script>
 </body>
 </html>

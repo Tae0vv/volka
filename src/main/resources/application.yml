@@ -5,8 +5,8 @@ spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://localhost:3306/bej
-    username: volka
-    password: novski
+    username: ${db.name}
+    password: ${db.password}
   jpa:
     hibernate:
       ddl-auto: update
