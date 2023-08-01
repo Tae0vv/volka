@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Log in (v2)</title>
+  <title>volka login</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -19,15 +19,12 @@
   <!-- /.login-logo -->
   <div class="card card-outline card-primary">
     <div class="card-header text-center">
-      <a href="/index2.html" class="h1"><b>VOLKA</b></a>
+      <a href="#" class="h1"><b>VOLKA</b></a>
     </div>
     <div class="card-body">
       <p class="login-box-msg">Sign in to start your session</p>
 
-      <th:block th:if="${param.logout != null}">
-        <h1>LogOut</h1>
-      </th:block>
-      <form action="/user/login" method="post" th:if="${param.logout == null}">
+      <form action="/user/login" method="post">
         <div class="input-group mb-3">
           <input type="text" class="form-control" placeholder="ID" name="username">
           <div class="input-group-append">
@@ -60,26 +57,28 @@
           <!-- /.col -->
         </div>
       </form>
-      <div>
-        <a href="/oauth2/authorization/kakao">KAKAO</a>
-      </div>
-
-      <div class="social-auth-links text-center mt-2 mb-3">
-        <a href="#" class="btn btn-block btn-primary">
-          <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
-        </a>
-        <a href="#" class="btn btn-block btn-danger">
-          <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
+      <br>
+      <div class="col-12">
+        <a href="/oauth2/authorization/kakao" style="display: block; width: 100%; height: 100%;">
+          <!-- img 요소에 인라인 스타일을 추가하여 비율을 유지하고 div 내에 맞춥니다. -->
+          <img src="/dist/img/kakao.png" style="max-width: 100%; max-height: 100%; width: auto; height: auto;">
         </a>
       </div>
-      <!-- /.social-auth-links -->
+      <br>
+      <div class="row" style="height: 28px">
+        <p class="col-6 text-center">
+          <a href="/user/forgotid">아이디 찾기</a>
+        </p>
+        <p class="col-6 text-center" >
+          <a href="/user/forgotpw">비밀번호 찾기</a>
+        </p>
+      </div>
+      <div class="row" style="height: 28px">
+        <p class="mb-0 col-6 text-center">
+          <a href="/user/signup" class="text-center">회원가입</a>
+        </p>
+      </div>
 
-      <p class="mb-1">
-        <a href="/pages/examples/forgot-password.html">I forgot my password</a>
-      </p>
-      <p class="mb-0">
-        <a href="/pages/examples/register.html" class="text-center">Register a new membership</a>
-      </p>
     </div>
     <!-- /.card-body -->
   </div>

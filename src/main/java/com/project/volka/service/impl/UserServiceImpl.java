@@ -47,5 +47,7 @@ public class UserServiceImpl implements UserService {
         userInfo.changePhone(userInfoDTO.getUserPhone());
         userRepository.save(userInfo);
     }
+
+
 }
 

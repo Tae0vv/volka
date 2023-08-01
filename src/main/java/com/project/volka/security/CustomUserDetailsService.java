@@ -31,10 +31,25 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         Optional<UserInfo> result = userRepository.getWithRoles(username);
 
-        if(result.isEmpty()){
-            throw new UsernameNotFoundException("username not found");
+        if(result.isEmpty()){ //그냥 로그인이 없을때
+            Optional<UserInfo> socialResult = userRepository.getWithRolesSocial(username);
+
+            if(socialResult.isEmpty()){// 카카오 로그인에 대한 예외
+                throw new UsernameNotFoundException("username not found");
+            }
+
+            return getUserDetails(socialResult);
+
+        }else{ //그냥 로그인이 있을때
+            return getUserDetails(result);
+
         }
 
+        
+
+    }
+
+    private UserDetails getUserDetails(Optional<UserInfo> result) {
         UserInfo user = result.get();
         UserSecurityDTO userSecurityDTO = new UserSecurityDTO(
                 user.getUserId(),
@@ -51,10 +66,10 @@ public class CustomUserDetailsService implements UserDetailsService {
                         .collect(Collectors.toList())
 
         );
+
         log.info("userSecurityDTO");
         log.info(userSecurityDTO);
 
         return userSecurityDTO;
-
     }
 }

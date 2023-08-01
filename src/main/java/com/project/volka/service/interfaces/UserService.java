@@ -9,4 +9,5 @@ public interface UserService {
 
     void signup(UserInfoDTO userInfoDTO) throws MidExistException;
     void kakaoAddInfo(UserInfoDTO userInfoDTO);
+
 }

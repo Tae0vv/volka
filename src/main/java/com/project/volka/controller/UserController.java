@@ -30,11 +30,6 @@ public class UserController {
         }
     }
 
-    @PostMapping
-    public void loginPost(UserInfoDTO userInfoDTO, RedirectAttributes redirectAttributes){
-
-    }
-
     @GetMapping("/signup")
     public void signupGet(){
         log.info("signup get.....");
@@ -58,6 +53,21 @@ public class UserController {
         return "redirect:/bej/main";
     }
 
+    @GetMapping("/findpw")
+    public void findPw(){
+        log.info("findPw");
+    }
+
+    @GetMapping("/forgotid")
+    public void forgotid(){
+        log.info("forgotid");
+    }
+
+    @GetMapping("/forgotpw")
+    public void forgotpw(){
+        log.info("forgotpw");
+    }
+
     @GetMapping("/kakao")
     public void kakaoGet(){
         log.info("kakao signup-----");
@@ -68,7 +78,6 @@ public class UserController {
         log.info("kakao signup------");
 
         userInfoDTO.setUserId(user.getUsername());
-        log.info("tttttttttt");
         userService.kakaoAddInfo(userInfoDTO);
 
         return "redirect:/bej/main";
