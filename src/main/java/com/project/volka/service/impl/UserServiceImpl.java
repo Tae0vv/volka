@@ -3,6 +3,7 @@ package com.project.volka.service.impl;
 
 import com.project.volka.dto.UserInfoDTO;
 import com.project.volka.entity.UserInfo;
+import com.project.volka.entity.UserRole;
 import com.project.volka.repository.UserRepository;
 import com.project.volka.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class UserServiceImpl implements UserService {
         }
         UserInfo userInfo = modelMapper.map(userInfoDTO, UserInfo.class);
         userInfo.changePassword(passwordEncoder.encode(userInfoDTO.getUserPw()));
+        userInfo.addRole(UserRole.USER);
         log.info("=======================");
         log.info(userInfo);
         log.info(userInfo.getRoleSet());

@@ -50,7 +50,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="RETYPE PASSWORD">
+          <input type="password" class="form-control" placeholder="RETYPE PASSWORD" id="userPwConfirm">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
@@ -84,7 +84,10 @@
         <div class="row">
           <div class="col-8">
             <div class="icheck-primary">
-              오른쪽 버튼을 눌러주세요
+              <input type="checkbox" id="agreeTerms" name="terms" value="agree">
+              <label for="agreeTerms">
+                회원가입을 <a href="#">동의합니다.</a>
+              </label>
             </div>
           </div>
           <!-- /.col -->

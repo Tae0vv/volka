@@ -1,14 +1,12 @@
-$('#signupForm').submit(function(e) {
+$('#kakaoForm').submit(function(e) {
     let password1 = $('input[name="userPw"]').val();
     let password2 = $('input[id="userPwConfirm"]').val();
-    let userEmail = $('input[name="userEmail"]').val();
-    let userId = $('input[name="userId"]').val();
     let userName = $('input[name="userName"]').val();
     let userNickName = $('input[name="userNickName"]').val();
     let userPhone = $('input[name="userPhone"]').val();
     let agreeTerms = $('#agreeTerms').prop('checked');
 
-    if (password1 === '' || password2 === '' || userEmail === '' || userId === '' || userName === '' || userNickName === '' || userPhone === '') {
+    if (password1 === '' || password2 === '' || userName === '' || userNickName === '' || userPhone === '') {
         e.preventDefault(); // 폼 제출을 막음
         Swal.fire({
             icon: 'error',
