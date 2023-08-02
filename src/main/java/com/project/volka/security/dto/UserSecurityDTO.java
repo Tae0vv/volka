@@ -51,4 +51,8 @@ public class UserSecurityDTO  extends User implements OAuth2User {
     public String getName(){
         return this.userId;
     }
+
+    public String getUserPw(){
+        return this.userPw;
+    }
 }

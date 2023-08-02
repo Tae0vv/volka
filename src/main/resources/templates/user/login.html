@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -92,5 +92,28 @@
 <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="/dist/js/adminlte.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.15/dist/sweetalert2.all.min.js"></script>
+
+<script layout:fragment="script" th:inline="javascript">
+  const result = [[${result}]];
+  console.log(result)
+
+  if (result && result === 'signup') {
+    Swal.fire({
+      icon: 'success',
+      title: '완료',
+      text: '회원가입이 완료되었습니다.',
+      confirmButtonText: '확인'
+    });
+  }else if(result && result === 'change'){
+    Swal.fire({
+      icon: 'success',
+      title: '완료',
+      text: '비밀번호가 변경되었습니다.',
+      confirmButtonText: '확인'
+    });
+  }
+
+</script>
 </body>
 </html>

@@ -1,7 +1,10 @@
 package com.project.volka.controller;
 
+import com.project.volka.dto.PasswordDTO;
 import com.project.volka.dto.UserInfoDTO;
+import com.project.volka.entity.UserInfo;
 import com.project.volka.service.interfaces.UserService;
+import com.project.volka.utility.MailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,6 +22,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class UserController {
 
     private final UserService userService;
+    private final MailService mailService;
+
 
     @GetMapping("/login")
     public void loginGet(String error, String logout){
@@ -50,18 +55,22 @@ public class UserController {
             return "redirect:/user/signup";
         }
 
-        redirectAttributes.addFlashAttribute("result", "success");
-        return "redirect:/bej/main";
-    }
-
-    @GetMapping("/findpw")
-    public void findPw(){
-        log.info("findPw");
+        redirectAttributes.addFlashAttribute("result", "signup");
+        return "redirect:/user/login";
     }
 
     @GetMapping("/forgotid")
-    public void forgotid(){
-        log.info("forgotid");
+    public void forgotIdGet(){
+        log.info("forgotIdGet get");
+    }
+
+    @PostMapping("/forgotid")
+    public String forgotIdPost(UserInfoDTO userInfoDTO){
+
+        log.info("forgotIdPost");
+        mailService.sendId(userInfoDTO);
+
+        return "redirect:/user/login";
     }
 
     @GetMapping("/forgotpw")
@@ -69,6 +78,14 @@ public class UserController {
         log.info("forgotpw");
     }
 
+    @PostMapping("/forgotpw")
+    public String forgotPwPost(UserInfoDTO userInfoDTO){
+
+        log.info("forgotPwPost");
+        mailService.sendTempPw(userInfoDTO);
+
+        return "redirect:/user/login";
+    }
     @GetMapping("/kakao")
     public void kakaoGet(){
         log.info("kakao signup-----");
@@ -81,6 +98,7 @@ public class UserController {
         userInfoDTO.setUserId(user.getUsername());
         userService.kakaoAddInfo(userInfoDTO);
 
-        return "redirect:/bej/main";
+        return "redirect:/user/login";
     }
+
 }

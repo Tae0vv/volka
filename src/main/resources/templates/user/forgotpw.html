@@ -21,13 +21,21 @@
       <a href="/index2.html" class="h1"><b>Admin</b>LTE</a>
     </div>
     <div class="card-body">
-      <p class="login-box-msg">You forgot your password? Here you can easily retrieve a new password.</p>
-      <form action="recover-password.html" method="post">
+      <p class="login-box-msg">비밀번호를 잊으셨나요? Email과 ID로 임시 Password를 발급받으세요.</p>
+      <form action="/user/forgotpw" method="post">
         <div class="input-group mb-3">
-          <input type="email" class="form-control" placeholder="Email">
+          <input type="email" class="form-control" placeholder="Email" name="userEmail">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="ID" name="userId">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-user"></span>
             </div>
           </div>
         </div>

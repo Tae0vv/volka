@@ -1,8 +1,10 @@
 package com.project.volka.service.interfaces;
 
+import com.project.volka.dto.PasswordDTO;
 import com.project.volka.dto.UserInfoDTO;
 
 public interface UserService {
+
     static class MidExistException extends Exception{
 
     }

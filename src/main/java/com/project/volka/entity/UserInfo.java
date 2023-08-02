@@ -25,7 +25,7 @@ public class UserInfo extends BaseEntity{
     @Column(length = 20, nullable = false, name = "USER_NAME")
     private String userName;
 
-    @Column(length = 2000, nullable = false, name = "USER_EMAIL")
+    @Column(length = 2000, nullable = false, name = "USER_EMAIL", unique = true)
     private String userEmail;
 
     @Column(length = 20, nullable = false, name = "USER_NICK_NAME")

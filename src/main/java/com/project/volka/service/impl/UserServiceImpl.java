@@ -1,6 +1,7 @@
 package com.project.volka.service.impl;
 
 
+import com.project.volka.dto.PasswordDTO;
 import com.project.volka.dto.UserInfoDTO;
 import com.project.volka.entity.UserInfo;
 import com.project.volka.entity.UserRole;
@@ -11,8 +12,6 @@ import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Log4j2
 @Service
@@ -49,7 +48,6 @@ public class UserServiceImpl implements UserService {
         userInfo.changePhone(userInfoDTO.getUserPhone());
         userRepository.save(userInfo);
     }
-
 
 }
 
