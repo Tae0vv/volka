@@ -31,7 +31,7 @@ public class Plan extends BaseEntity{
     @Column(name = "PLAN_START_DATE",nullable = false)
     private LocalDateTime planStartDate;
 
-    @Column(name = "PLAN_END_DATE",nullable = false)
+    @Column(name = "PLAN_END_DATE")
     private LocalDateTime planEndDate;
 
     @Column(name = "REAL_START_DATE")

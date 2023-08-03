@@ -43,7 +43,7 @@ public class PlanRepositoryTests {
         planDTO.setPlanStatus(0);
         planDTO.setPlanContent("내용");
         planDTO.setPlanTitle("제목");
-        planDTO.setUserNo(userId);
+        //planDTO.setUserNo(userId);
         UserInfo userInfo = userRepository.findById(userId).orElseThrow();
         planDTO.setPlanUserNo(userInfo);
         planDTO.setPlanStartDate(now);
@@ -67,8 +67,13 @@ public class PlanRepositoryTests {
             keyWordList = List.of(keyWord.split("/"));
             log.info(keyWordList);
         }
+    }
 
-
+    @Test
+    public void findByUserInfoTest(){
+        UserInfo userInfo = userRepository.findById("test").orElseThrow();
+        List<Plan> plans = planRepository.findByPlanUserNo(userInfo);
+        log.info(plans);
     }
 
 }

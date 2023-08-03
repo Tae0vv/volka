@@ -292,13 +292,34 @@
 
 <script th:inline="javascript">
 
+  //planList 만들기 타입맞춰주기
+  let plans = [[${planList}]];
+  let planList = plans.map((data) => ({
+    title: data.planTitle,
+    start: new Date(data.planStartDate),
+    end: data.dataplanEndDate == null ? new Date(data.planEndDate) : new Date(data.planStartDate),
+    allDay: true,
+    backgroundColor: '#00c0ef', // 정보 (민트색)
+    borderColor: '#00c0ef', // 정보 (민트색)
+    // 필요한 다른 필드들도 추가할 수 있습니다.
+  }));
+
   //keyword 가져와서 화면에 뿌리기
   let user = [[${user}]];
+
+  console.log(planList);
+
   let keyword = user.userKeyword;
-  let keywordList = keyword.split('/');
-  if(keywordList.length > 1) {
-    keywordList.pop();
+  let keywordList;
+  if (keyword) {
+    keywordList = keyword.split('/');
+    if (keywordList.length > 1) {
+      keywordList.pop();
+    }
+  } else {
+    keywordList = [];
   }
+
   let eventContainer = $('#event-container');
   for (let i = 0; i < keywordList.length; i++) {
     let eventData = keywordList[i].split('=');
@@ -307,6 +328,7 @@
     let newEvent = $('<div>').addClass('external-event').addClass('bg-' + eventColor).text(eventText);
     eventContainer.append(newEvent);
   }
+
 
 
   $(function () {
@@ -373,51 +395,7 @@
       themeSystem: 'bootstrap',
       // 랜덤한 기본 이벤트들을 설정합니다.
       events: [
-        {
-          title          : 'All Day Event',
-          start          : new Date(y, m, 1),
-          backgroundColor: '#f56954', // 빨강
-          borderColor    : '#f56954', // 빨강
-          allDay         : true
-        },
-        {
-          title          : 'Long Event',
-          start          : new Date(y, m, d - 5),
-          end            : new Date(y, m, d - 2),
-          backgroundColor: '#f39c12', // 노랑
-          borderColor    : '#f39c12'  // 노랑
-        },
-        {
-          title          : 'Meeting',
-          start          : new Date(y, m, d, 10, 30),
-          allDay         : false,
-          backgroundColor: '#0073b7', // 파랑
-          borderColor    : '#0073b7'  // 파랑
-        },
-        {
-          title          : 'Lunch',
-          start          : new Date(y, m, d, 12, 0),
-          end            : new Date(y, m, d, 14, 0),
-          allDay         : false,
-          backgroundColor: '#00c0ef', // 정보 (민트색)
-          borderColor    : '#00c0ef'  // 정보 (민트색)
-        },
-        {
-          title          : 'Birthday Party',
-          start          : new Date(y, m, d + 1, 19, 0),
-          end            : new Date(y, m, d + 1, 22, 30),
-          allDay         : false,
-          backgroundColor: '#00a65a', // 성공 (녹색)
-          borderColor    : '#00a65a'  // 성공 (녹색)
-        },
-        {
-          title          : 'Click for Google',
-          start          : new Date(y, m, 28),
-          end            : new Date(y, m, 29),
-          url            : 'https://www.google.com/',
-          backgroundColor: '#3c8dbc', // 주요 (라이트 블루)
-          borderColor    : '#3c8dbc'  // 주요 (라이트 블루)
-        }
+
       ],
       editable  : true,      // 이벤트를 편집 가능하도록 합니다.
       droppable : true,      // 이벤트를 달력에 놓을 수 있도록 합니다.
@@ -430,10 +408,10 @@
         // 이벤트가 달력에 놓여졌을 때의 동작을 여기에 추가합니다.
         // 이 부분에 원하는 알림 또는 동작을 작성하면 됩니다.
 
-        let postTitle = info.draggedEl.innerText;
-        let postDate = info.date;
+        let postTitle = info.draggedEl.innerText; //계획 title
+        let postPlanStartDate = info.date; //계획 시작일
 
-        ajax('/bej/plan', {title: postTitle ,date: postDate}, 'POST')
+        ajax('/bej/plan', {title: postTitle ,planStartDate: postPlanStartDate}, 'POST')
         .then((responseData) => {
             console.log('성공:', responseData);
         })
@@ -442,6 +420,11 @@
         });
       }
 
+    });
+
+
+    planList.forEach((plan) => {
+      calendar.addEvent(plan);
     });
 
     calendar.render();

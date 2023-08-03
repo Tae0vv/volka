@@ -10,10 +10,8 @@ import java.time.LocalDateTime;
 public class PlanDTO {
 
     private Long planNo;
-
-    private String userNo;
+    //private String userNo;
     private UserInfo planUserNo;
-
     private String planTitle;
     private String planContent;
     private LocalDateTime planStartDate;
