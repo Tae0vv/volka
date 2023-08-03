@@ -11,8 +11,8 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Table(name = "USER_INFO")
+@ToString
 public class UserInfo extends BaseEntity{
 
     @Id
@@ -48,6 +48,9 @@ public class UserInfo extends BaseEntity{
     @Builder.Default
     private Set<UserRole> roleSet = new HashSet<>();
 
+    @Column(name = "USER_Keyword")
+    private String userKeyword;
+
 
     public void changePassword(String userPw){
         this.userPw = userPw;
@@ -76,4 +79,7 @@ public class UserInfo extends BaseEntity{
         this.userSocial = userSocial;
     }
 
+    public void changeKeyword(String userKeyword) {
+        this.userKeyword = userKeyword;
+    }
 }

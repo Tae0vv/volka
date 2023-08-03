@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,17 +19,35 @@
   <link rel="stylesheet" href="/plugins/jqvmap/jqvmap.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="/dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="/dist/css/reset.css">
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
   <!-- Daterange picker -->
   <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="/plugins/summernote/summernote-bs4.min.css">
+
+
   <style>
-    /* a 태그에 마우스 호버 시 색상 변경 */
+
     .nav-link:hover {
-      color: black !important; /* 검정색으로 변경 */
+      color: black !important;
     }
+
+
+    .nav li a {
+      background-color: white;
+    }
+
+     .nav-item .nav-link.active {
+       background-color: lightgrey; !important;
+     }
+
+     .external-event{
+       font-weight: lighter;
+     }
+
+
   </style>
 </head>
 <body class="hold-transition sidebar-mini">
@@ -43,13 +61,13 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="/bej/main" class="nav-link">Home</a>
+        <a href="/volka" class="nav-link">Home</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         <a href="/bej/main" class="nav-link">BeJ</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Setting</a>
+        <a href="/setting/info" class="nav-link">Setting</a>
       </li>
     </ul>
 
@@ -61,7 +79,7 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="/bej/main" class="brand-link py-4" style="border-bottom: 1px solid lightgrey;">
+    <a href="/volka" class="brand-link py-4" style="border-bottom: 1px solid lightgrey;">
       <img src="/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-bold" style="color: black;">VOLKA</span>
     </a>
@@ -77,7 +95,7 @@
         </div>
       </div>
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        <li class="nav-item">
+        <li class="nav-item menu-is-opening menu-open">
           <a href="#" class="nav-link">
             <i class="nav-icon far fa-calendar"></i>
             <p>
@@ -85,9 +103,9 @@
               <i class="right fas fa-angle-left"></i>
             </p>
           </a>
-          <ul class="nav nav-treeview" style="display: none;">
+          <ul class="nav nav-treeview" style="display: block;">
             <li class="nav-item">
-              <a href="pages/charts/chartjs.html" class="nav-link">
+              <a href="/bej/main" class="nav-link active">
                 <i class="far fa-circle nav-icon"></i>
                 <p>main</p>
               </a>
@@ -104,20 +122,19 @@
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="pages/UI/general.html" class="nav-link">
+              <a href="/setting/password" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>개인정보 수정</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="pages/UI/icons.html" class="nav-link">
+              <a href="/setting/password" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>비밀번호 변경</p>
               </a>
             </li>
           </ul>
         </li>
-
       </ul>
 
     </div>
@@ -132,13 +149,10 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Calendar</h1>
+            <h1 th:text="${user.userNickName} + '의 일정'"></h1>
           </div>
           <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Calendar</li>
-            </ol>
+
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -157,9 +171,13 @@
                 <div class="card-body">
                   <!-- the events -->
                   <div id="external-events">
-                    <div class="external-event bg-success">Lunch</div>
-                    <div class="external-event bg-warning">Dinner</div>
-                    <div class="external-event bg-info">Meeting</div>
+                    <!--동적으로 DB에서 가져와서 넣어줘야 한다.-->
+                    <div id="event-container">
+
+                    </div>
+<!--                    <div class="external-event bg-success">Lunch</div>-->
+<!--                    <div class="external-event bg-warning">Dinner</div>-->
+<!--                    <div class="external-event bg-info">Meeting</div>-->
                     <div class="checkbox">
                       <label for="drop-remove">
                         <input type="checkbox" id="drop-remove">
@@ -173,7 +191,7 @@
               <!-- /.card -->
               <div class="card">
                 <div class="card-header">
-                  <h3 class="card-title">Create Event</h3>
+                  <h3 class="card-title">키워드 생성</h3>
                 </div>
                 <div class="card-body">
                   <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
@@ -182,7 +200,7 @@
                       <li><a class="text-warning" href="#"><i class="fas fa-square"></i></a></li>
                       <li><a class="text-success" href="#"><i class="fas fa-square"></i></a></li>
                       <li><a class="text-danger" href="#"><i class="fas fa-square"></i></a></li>
-                      <li><a class="text-muted" href="#"><i class="fas fa-square"></i></a></li>
+                      <li><a class="text-secondary" href="#"><i class="fas fa-square"></i></a></li>
                     </ul>
                   </div>
                   <!-- /btn-group -->
@@ -213,55 +231,18 @@
           <!-- /.col -->
           <div class="col-md-3">
             <div class="card">
-              <div class="card-header">
-                <h4 class="card-title">친구목록</h4>
-              </div>
-              <div class="card-body">
+
+              <div class="card-body" style="height: 80vh">
                 <ul class="list-group">
+
                   <li class="list-group-item d-flex justify-content-between align-items-center">
                     <i class="fas fa-user mr-1"></i>친구1
-                    <span class="badge bg-success ml-auto">온라인</span>
+                    <span class="badge bg-light ml-auto">on</span>
                   </li>
                   <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <i class="fas fa-user mr-1"></i>친구1
-                    <span class="badge bg-success ml-auto">온라인</span>
-                  </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <i class="fas fa-user mr-1"></i>친구1
-                    <span class="badge bg-success ml-auto">온라인</span>
-                  </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <i class="fas fa-user mr-1"></i>친구1
-                    <span class="badge bg-success ml-auto">온라인</span>
-                  </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <i class="fas fa-user mr-1"></i>친구1
-                    <span class="badge bg-success ml-auto">온라인</span>
-                  </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <i class="fas fa-user mr-1"></i>친구1
-                    <span class="badge bg-danger ml-auto">오프라인</span>
-                  </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <i class="fas fa-user mr-1"></i>친구1
-                    <span class="badge bg-danger ml-auto">오프라인</span>
-                  </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <i class="fas fa-user mr-1"></i>친구1
-                    <span class="badge bg-danger ml-auto">오프라인</span>
-                  </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <i class="fas fa-user mr-1"></i>친구1
-                    <span class="badge bg-danger ml-auto">오프라인</span>
-                  </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <i class="fas fa-user mr-1"></i>친구1
-                    <span class="badge bg-danger ml-auto">오프라인</span>
-                  </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <i class="fas fa-user mr-1"></i>친구1
-                    <span class="badge bg-danger ml-auto">오프라인</span>
-                  </li>
+                    <i class="fas fa-user mr-1"></i>친구2
+                    <span class="badge bg-gray ml-auto">off</span>
+
                 </ul>
               </div>
               <!-- /.card-body -->
@@ -306,38 +287,57 @@
 <!-- AdminLTE for demo purposes -->
 <script src="/dist/js/demo.js"></script>
 <!-- Page specific script -->
-<script>
-  $(function () {
+<script src="/dist/js/volka/bej/bejMain.js"></script>
+<script src="/dist/js/volka/Utility.js"></script>
 
+<script th:inline="javascript">
+
+  //keyword 가져와서 화면에 뿌리기
+  let user = [[${user}]];
+  let keyword = user.userKeyword;
+  let keywordList = keyword.split('/');
+  if(keywordList.length > 1) {
+    keywordList.pop();
+  }
+  let eventContainer = $('#event-container');
+  for (let i = 0; i < keywordList.length; i++) {
+    let eventData = keywordList[i].split('=');
+    let eventText = eventData[0];
+    let eventColor = eventData[1];
+    let newEvent = $('<div>').addClass('external-event').addClass('bg-' + eventColor).text(eventText);
+    eventContainer.append(newEvent);
+  }
+
+
+  $(function () {
     /* initialize the external events
      -----------------------------------------------------------------*/
     function ini_events(ele) {
       ele.each(function () {
-
-        // create an Event Object (https://fullcalendar.io/docs/event-object)
-        // it doesn't need to have a start or end
+        // 이벤트 객체 생성 (https://fullcalendar.io/docs/event-object)
+        // 이벤트가 시작 또는 종료 시간을 가질 필요가 없으므로, start와 end를 생략합니다.
         var eventObject = {
-          title: $.trim($(this).text()) // use the element's text as the event title
+          title: $.trim($(this).text()) // 이벤트의 제목으로 요소의 텍스트를 사용합니다.
         }
 
-        // store the Event Object in the DOM element so we can get to it later
+        // 이벤트 객체를 DOM 요소에 저장하여 나중에 접근할 수 있도록 합니다.
         $(this).data('eventObject', eventObject)
 
-        // make the event draggable using jQuery UI
+        // jQuery UI를 사용하여 이벤트를 드래그 가능하도록 만듭니다.
         $(this).draggable({
           zIndex        : 1070,
-          revert        : true, // will cause the event to go back to its
-          revertDuration: 0  //  original position after the drag
+          revert        : true, // 드래그 후 이벤트가 원래 위치로 되돌아가도록 합니다.
+          revertDuration: 0     // 드래그 후 이벤트가 되돌아가는 데 걸리는 시간을 설정합니다.
         })
-
       })
     }
 
+    // 외부 이벤트를 초기화합니다.
     ini_events($('#external-events div.external-event'))
 
     /* initialize the calendar
      -----------------------------------------------------------------*/
-    //Date for the calendar events (dummy data)
+    // 달력 이벤트를 위한 날짜 정보 (가짜 데이터)
     var date = new Date()
     var d    = date.getDate(),
             m    = date.getMonth(),
@@ -350,21 +350,20 @@
     var checkbox = document.getElementById('drop-remove');
     var calendarEl = document.getElementById('calendar');
 
-    // initialize the external events
-    // -----------------------------------------------------------------
-
+    // 외부 이벤트를 초기화합니다.
     new Draggable(containerEl, {
       itemSelector: '.external-event',
       eventData: function(eventEl) {
         return {
           title: eventEl.innerText,
-          backgroundColor: window.getComputedStyle( eventEl ,null).getPropertyValue('background-color'),
-          borderColor: window.getComputedStyle( eventEl ,null).getPropertyValue('background-color'),
-          textColor: window.getComputedStyle( eventEl ,null).getPropertyValue('color'),
+          backgroundColor: window.getComputedStyle(eventEl, null).getPropertyValue('background-color'),
+          borderColor: window.getComputedStyle(eventEl, null).getPropertyValue('background-color'),
+          textColor: window.getComputedStyle(eventEl, null).getPropertyValue('color'),
         };
       }
     },);
 
+    // 달력을 초기화합니다.
     var calendar = new Calendar(calendarEl, {
       headerToolbar: {
         left  : 'prev,next today',
@@ -372,94 +371,105 @@
         right : 'dayGridMonth,timeGridWeek,timeGridDay'
       },
       themeSystem: 'bootstrap',
-      //Random default events
+      // 랜덤한 기본 이벤트들을 설정합니다.
       events: [
         {
           title          : 'All Day Event',
           start          : new Date(y, m, 1),
-          backgroundColor: '#f56954', //red
-          borderColor    : '#f56954', //red
+          backgroundColor: '#f56954', // 빨강
+          borderColor    : '#f56954', // 빨강
           allDay         : true
         },
         {
           title          : 'Long Event',
           start          : new Date(y, m, d - 5),
           end            : new Date(y, m, d - 2),
-          backgroundColor: '#f39c12', //yellow
-          borderColor    : '#f39c12' //yellow
+          backgroundColor: '#f39c12', // 노랑
+          borderColor    : '#f39c12'  // 노랑
         },
         {
           title          : 'Meeting',
           start          : new Date(y, m, d, 10, 30),
           allDay         : false,
-          backgroundColor: '#0073b7', //Blue
-          borderColor    : '#0073b7' //Blue
+          backgroundColor: '#0073b7', // 파랑
+          borderColor    : '#0073b7'  // 파랑
         },
         {
           title          : 'Lunch',
           start          : new Date(y, m, d, 12, 0),
           end            : new Date(y, m, d, 14, 0),
           allDay         : false,
-          backgroundColor: '#00c0ef', //Info (aqua)
-          borderColor    : '#00c0ef' //Info (aqua)
+          backgroundColor: '#00c0ef', // 정보 (민트색)
+          borderColor    : '#00c0ef'  // 정보 (민트색)
         },
         {
           title          : 'Birthday Party',
           start          : new Date(y, m, d + 1, 19, 0),
           end            : new Date(y, m, d + 1, 22, 30),
           allDay         : false,
-          backgroundColor: '#00a65a', //Success (green)
-          borderColor    : '#00a65a' //Success (green)
+          backgroundColor: '#00a65a', // 성공 (녹색)
+          borderColor    : '#00a65a'  // 성공 (녹색)
         },
         {
           title          : 'Click for Google',
           start          : new Date(y, m, 28),
           end            : new Date(y, m, 29),
           url            : 'https://www.google.com/',
-          backgroundColor: '#3c8dbc', //Primary (light-blue)
-          borderColor    : '#3c8dbc' //Primary (light-blue)
+          backgroundColor: '#3c8dbc', // 주요 (라이트 블루)
+          borderColor    : '#3c8dbc'  // 주요 (라이트 블루)
         }
       ],
-      editable  : true,
-      droppable : true, // this allows things to be dropped onto the calendar !!!
+      editable  : true,      // 이벤트를 편집 가능하도록 합니다.
+      droppable : true,      // 이벤트를 달력에 놓을 수 있도록 합니다.
       drop      : function(info) {
-        // is the "remove after drop" checkbox checked?
+        // "드래그 후 삭제" 체크박스가 선택되었는지 확인합니다.
         if (checkbox.checked) {
-          // if so, remove the element from the "Draggable Events" list
+          // 선택된 경우, 이벤트를 "Draggable Events" 목록에서 제거합니다.
           info.draggedEl.parentNode.removeChild(info.draggedEl);
         }
         // 이벤트가 달력에 놓여졌을 때의 동작을 여기에 추가합니다.
         // 이 부분에 원하는 알림 또는 동작을 작성하면 됩니다.
-        console.log('이벤트가 달력에 놓여졌습니다:');
 
+        let postTitle = info.draggedEl.innerText;
+        let postDate = info.date;
+
+        ajax('/bej/plan', {title: postTitle ,date: postDate}, 'POST')
+        .then((responseData) => {
+            console.log('성공:', responseData);
+        })
+        .catch((error) => {
+            console.error('실패:', error);
+        });
       }
+
     });
 
     calendar.render();
-    // $('#calendar').fullCalendar()
 
     /* ADDING EVENTS */
-    var currColor = '#3c8dbc' //Red by default
-    // Color chooser button
+    var currColor = '#3c8dbc' // 기본적으로 빨간색
+    // 색상 선택 버튼
     $('#color-chooser > li > a').click(function (e) {
       e.preventDefault()
-      // Save color
+      // 색상 저장
       currColor = $(this).css('color')
-      // Add color effect to button
+      // 버튼에 색상 효과 추가
       $('#add-new-event').css({
         'background-color': currColor,
         'border-color'    : currColor
       })
     })
+
+    // "새 이벤트 추가" 버튼 클릭 시
     $('#add-new-event').click(function (e) {
       e.preventDefault()
-      // Get value and make sure it is not null
+      // 값 가져오기 및 null이 아닌지 확인
       var val = $('#new-event').val()
       if (val.length == 0) {
         return
       }
 
-      // Create events
+      // 이벤트 생성
       var event = $('<div />')
       event.css({
         'background-color': currColor,
@@ -469,13 +479,14 @@
       event.text(val)
       $('#external-events').prepend(event)
 
-      // Add draggable funtionality
+      // 드래그 기능 추가
       ini_events(event)
 
-      // Remove event from text input
+      // 텍스트 입력란에서 이벤트 삭제
       $('#new-event').val('')
     })
   })
+
 </script>
 </body>
 </html>

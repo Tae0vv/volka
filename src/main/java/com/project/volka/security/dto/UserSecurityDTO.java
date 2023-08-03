@@ -20,6 +20,7 @@ public class UserSecurityDTO  extends User implements OAuth2User {
     private String userEmail;
     private String userNickName;
     private String userPhone;
+    private String userKeyword;
     private int userStatus;
     private boolean userOn;
     private boolean userSocial;
@@ -27,7 +28,7 @@ public class UserSecurityDTO  extends User implements OAuth2User {
 
 
     public UserSecurityDTO(String username, String password,String userName,
-                           String userEmail, String userNickName, String userPhone,
+                           String userEmail, String userNickName, String userPhone, String userKeyword,
                            int userStatus, boolean userOn, boolean userSocial,
                            Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
@@ -37,6 +38,7 @@ public class UserSecurityDTO  extends User implements OAuth2User {
         this.userEmail = userEmail;
         this.userNickName = userNickName;
         this.userPhone = userPhone;
+        this.userKeyword = userKeyword;
         this.userStatus = userStatus;
         this.userOn = userOn;
         this.userSocial = userSocial;

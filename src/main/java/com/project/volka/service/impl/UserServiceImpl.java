@@ -6,10 +6,12 @@ import com.project.volka.dto.UserInfoDTO;
 import com.project.volka.entity.UserInfo;
 import com.project.volka.entity.UserRole;
 import com.project.volka.repository.UserRepository;
+import com.project.volka.security.dto.UserSecurityDTO;
 import com.project.volka.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +50,12 @@ public class UserServiceImpl implements UserService {
         userInfo.changePhone(userInfoDTO.getUserPhone());
         userRepository.save(userInfo);
     }
+
+    @Override
+    public UserInfo updateUserInfo(UserSecurityDTO user) {
+        return userRepository.findById(user.getUserId()).orElseThrow();
+    }
+
 
 }
 

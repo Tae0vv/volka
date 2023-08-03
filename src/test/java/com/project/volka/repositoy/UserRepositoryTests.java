@@ -12,6 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Commit;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
@@ -74,5 +76,14 @@ public class UserRepositoryTests {
         String userPw = passwordEncoder.encode("123");
         userRepository.updatePassword(userId, userPw);
 
+    }
+
+    @Test
+    public void addKeyword(){
+        Optional<UserInfo> result = userRepository.getWithRoles("test");
+        UserInfo userInfo = result.orElseThrow();
+        log.info(userInfo);
+        userInfo.changeKeyword("아침/점심/저녁/");
+        userRepository.save(userInfo);
     }
 }

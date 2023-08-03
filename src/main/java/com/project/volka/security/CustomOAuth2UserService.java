@@ -68,6 +68,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     .userId(email)
                     .userPw(passwordEncoder.encode("undefined"))
                     .userPhone("undefined")
+                    .userKeyword("")
                     .userNickName("undefined")
                     .userName("undefined")
                     .userEmail(email)
@@ -78,7 +79,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             UserSecurityDTO userSecurityDTO =
                     new UserSecurityDTO
                             (email,"undefined","undefined",
-                            email,"undefined","undefined",
+                            email,"undefined","undefined","",
                             0,false,true,
                             Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
             userSecurityDTO.setProps(params);
@@ -95,6 +96,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                             userInfo.getUserEmail(),
                             userInfo.getUserNickName(),
                             userInfo.getUserPhone(),
+                            userInfo.getUserKeyword(),
                             userInfo.getUserStatus(),
                             userInfo.isUserOn(),
                             userInfo.isUserSocial(),

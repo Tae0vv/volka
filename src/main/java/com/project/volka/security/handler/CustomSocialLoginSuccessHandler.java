@@ -37,7 +37,7 @@ public class CustomSocialLoginSuccessHandler implements AuthenticationSuccessHan
 
             response.sendRedirect("/user/kakao");
         }else{
-            response.sendRedirect("/bej/main");
+            response.sendRedirect("/volka");
         }
     }
 }

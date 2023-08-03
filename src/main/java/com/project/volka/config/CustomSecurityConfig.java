@@ -39,7 +39,7 @@ public class CustomSecurityConfig {
         log.info("----------configure----------");
 
         //커스텀 로그인 페이지
-        http.formLogin().loginPage("/user/login").defaultSuccessUrl("/bej/main", true);
+        http.formLogin().loginPage("/user/login").defaultSuccessUrl("/volka", true);
         // CSRF 토큰 비활성화
         http.csrf().disable();
 

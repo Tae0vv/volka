@@ -14,6 +14,6 @@ public class UserInfoDTO {
     private int userStatus;
     private boolean userOn;
     private boolean userSocial;
-
+    private String userKeyword;
 
 }
