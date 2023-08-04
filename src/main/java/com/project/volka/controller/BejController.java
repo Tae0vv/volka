@@ -47,13 +47,41 @@ public class BejController {
     public ResponseEntity<?> planPost(@AuthenticationPrincipal User user,
                                       @RequestBody HashMap<String, Object> planMap) {
 
-        log.info("들어옴");
         log.info(planMap);
 
         UserInfo userInfo = userService.updateUserInfo((UserSecurityDTO) user);
         planService.makePlan(userInfo,planMap);
+        HashMap<String, Object> responseData = new HashMap<>();
+        responseData.put("status", "success");
+        responseData.put("message", "요청이 성공적으로 처리되었습니다.");
 
-        // 클라이언트에게 보낼 데이터를 HashMap으로 구성
+        return ResponseEntity.ok(responseData); // 클라이언트에게 JSON 응답을 보냄
+    }
+
+    @PostMapping("/keyword")
+    @ResponseBody
+    public ResponseEntity<?> keywordPost(@AuthenticationPrincipal User user,
+                                      @RequestBody HashMap<String, Object> keywordMap) {
+
+        log.info(keywordMap);
+
+        UserInfo userInfo = userService.updateUserInfo((UserSecurityDTO) user);
+        userService.addKeyword(userInfo,keywordMap);
+        HashMap<String, Object> responseData = new HashMap<>();
+        responseData.put("status", "success");
+        responseData.put("message", "요청이 성공적으로 처리되었습니다.");
+
+        return ResponseEntity.ok(responseData); // 클라이언트에게 JSON 응답을 보냄
+    }
+
+    @DeleteMapping("/keyword")
+    @ResponseBody
+    public ResponseEntity<?> keywordDelete(@AuthenticationPrincipal User user,
+                                         @RequestBody HashMap<String, Object> keywordMap) {
+
+        log.info(keywordMap);
+        UserInfo userInfo = userService.updateUserInfo((UserSecurityDTO) user);
+        userService.deleteKeyword(userInfo,keywordMap);
         HashMap<String, Object> responseData = new HashMap<>();
         responseData.put("status", "success");
         responseData.put("message", "요청이 성공적으로 처리되었습니다.");

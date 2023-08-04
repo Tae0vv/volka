@@ -57,6 +57,9 @@ public class PlanServiceImpl implements PlanService {
             LocalDateTime localDateTime = (LocalDateTime) planMap.get("realEndDate");
             planDTO.setRealEndDate(localDateTime);
         }
+        if(planMap.containsKey("color")){
+            planDTO.setPlanColor((String) planMap.get("color"));
+        }
 
         planDTO.setPlanStatus(0);
         planDTO.setPlanUserNo(userInfo);

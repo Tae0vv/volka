@@ -15,6 +15,11 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 @Log4j2
 @Service
 @RequiredArgsConstructor
@@ -56,6 +61,56 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(user.getUserId()).orElseThrow();
     }
 
+    @Override
+    public void addKeyword(UserInfo userInfo, Map<String,Object> keywordMap) {
+        String keywords = userInfo.getUserKeyword() == null ? "" : userInfo.getUserKeyword();
+        String keyWordTitle = "";
+        String keyWordColor = "";
+        String addKeyword = "";
 
+        if(keywordMap.containsKey("title") && keywordMap.containsKey("color")){
+            keyWordTitle = (String) keywordMap.get("title");
+            keyWordColor = (String) keywordMap.get("color");
+            addKeyword = keyWordTitle + "=" + keyWordColor + "/";
+        }
+
+        keywords += addKeyword;
+        userInfo.changeKeyword(keywords);
+        userRepository.save(userInfo);
+    }
+
+    @Override
+    public void deleteKeyword(UserInfo userInfo, Map<String, Object> keywordMap) {
+        String keywords = userInfo.getUserKeyword();
+        List<String> keywordList = new ArrayList<>(Arrays.asList(keywords.split("/")));
+
+        String deleteKeyword = "";
+        String deleteColor = "";
+        String deleteKeywords = "";
+        String changeKeyword = "";
+
+
+        if(keywordMap.containsKey("keyword") && keywordMap.containsKey("color")){
+
+            deleteKeyword = (String) keywordMap.get("keyword");
+            deleteColor = (String) keywordMap.get("color");
+            deleteKeywords = deleteKeyword + "=" + deleteColor;
+
+            for(int i = 0; i < keywordList.size(); i++){
+
+                if(keywordList.get(i).equals(deleteKeywords)){
+                    keywordList.remove(i);
+                    break;
+                }
+            }
+
+            for(int i = 0; i < keywordList.size(); i++){
+                changeKeyword += keywordList.get(i)+"/";
+            }
+            userInfo.changeKeyword(changeKeyword);
+        }
+
+        userRepository.save(userInfo);
+    }
 }
 

@@ -7,6 +7,7 @@ import com.project.volka.security.dto.UserSecurityDTO;
 import org.springframework.security.core.userdetails.User;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserService {
 
@@ -16,6 +17,9 @@ public interface UserService {
 
     void signup(UserInfoDTO userInfoDTO) throws MidExistException;
     void kakaoAddInfo(UserInfoDTO userInfoDTO);
-
     UserInfo updateUserInfo(UserSecurityDTO user);
+    void addKeyword(UserInfo userInfo, Map<String,Object> keywordMap);
+    void deleteKeyword(UserInfo userInfo, Map<String,Object> keywordMap);
+
+
 }

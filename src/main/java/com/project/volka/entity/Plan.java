@@ -43,6 +43,8 @@ public class Plan extends BaseEntity{
     @Column(name = "PLAN_STATUS",nullable = false)
     private int planStatus; //0대기 1진행중 2완료 3취소 4약속을보냈는데상대방이거절
 
+    @Column(name = "PLAN_COLOR")
+    private String planColor;
 
     public void changePlanTitle(String planTitle) {
     }
@@ -69,6 +71,10 @@ public class Plan extends BaseEntity{
 
     public void changePlanStatus(int planStatus) {
         this.planStatus = planStatus;
+    }
+
+    public void changePlanColor(String planColor) {
+        this.planColor = planColor;
     }
 }
 

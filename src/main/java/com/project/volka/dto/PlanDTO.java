@@ -19,6 +19,7 @@ public class PlanDTO {
     private LocalDateTime realStartDate;
     private LocalDateTime realEndDate;
     private int planStatus; //0대기 1진행중 2완료 3취소 4약속을보냈는데상대방이거절
+    private String planColor;
 }
 
 
