@@ -23,6 +23,12 @@ public class SettingController {
     private final SettingService settingService;
 
     @PreAuthorize("hasRole('USER')")
+    @GetMapping("/info")
+    public void changeInfoGet(@AuthenticationPrincipal User user){
+        log.info(user);
+    }
+
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/password")
     public String changePasswordGet(@AuthenticationPrincipal User user){
         log.info(user);
