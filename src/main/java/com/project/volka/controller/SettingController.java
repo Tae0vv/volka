@@ -1,6 +1,7 @@
 package com.project.volka.controller;
 
 import com.project.volka.dto.PasswordDTO;
+import com.project.volka.dto.UserInfoDTO;
 import com.project.volka.security.dto.UserSecurityDTO;
 import com.project.volka.service.interfaces.SettingService;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,11 @@ public class SettingController {
     @GetMapping("/info")
     public void changeInfoGet(@AuthenticationPrincipal User user){
         log.info(user);
+    }
+
+    @PostMapping("/info")
+    public void changeInfo(@AuthenticationPrincipal User user, UserInfoDTO userInfoDTO) {
+
     }
 
     @PreAuthorize("hasRole('USER')")
