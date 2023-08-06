@@ -73,6 +73,9 @@
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a href="/logout" class="nav-link">Logout</a>
+      </li>
     </ul>
   </nav>
   <!-- /.navbar -->
@@ -272,6 +275,63 @@
   <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="eventTitle">Tttle</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row mb-1">
+          <div class="col-4">
+            <strong>등록일</strong>
+          </div>
+          <div class="col-8 text-right" id="regDate">
+            2023-08-07 15:23:55
+            <span class="small text-muted" id="state">(진행중)</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <p class="mt-0 mb-0"><strong>계획시작시간</strong></p>
+            <input type="datetime-local" id="startDate" class="form-control">
+          </div>
+          <div class="col-6">
+            <p class="mt-0 mb-0"><strong>계획종료시간</strong></p>
+            <input type="datetime-local" id="endDate" class="form-control">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <p class="mt-0 mb-0"><strong>계획 내용</strong></p>
+            <textarea id="textArea" class="form-control" rows="10"></textarea>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <p class="mt-0 mb-0"><strong>실제시작시간</strong></p>
+            <input type="datetime-local" id="realStartDate" class="form-control">
+          </div>
+          <div class="col-6">
+            <p class="mt-0 mb-0"><strong>실제종료시간</strong></p>
+            <input type="datetime-local" id="realEndDate" class="form-control">
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">저장</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
 <!-- jQuery -->
 <script src="/plugins/jquery/jquery.min.js"></script>

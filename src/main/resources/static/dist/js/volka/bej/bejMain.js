@@ -4,13 +4,13 @@ const utility = new Utility();
 
 //planList 만들기 타입맞춰주기
 let planList = plans.map((data) => ({
+    no: data.planNo,
     title: data.planTitle,
     start: new Date(data.planStartDate),
     end: data.dataplanEndDate == null ? new Date(data.planEndDate) : new Date(data.planStartDate),
     allDay: true,
     backgroundColor: data.planColor, //
     borderColor: data.planColor, //
-    // 필요한 다른 필드들도 추가할 수 있습니다.
 }));
 
 //keyword 가져와서 화면에 뿌리기
@@ -26,6 +26,7 @@ if (keyword) {
     keywordList = [];
 }
 
+// 키워도 화면에 표시
 let eventContainer = $('#event-container');
 for (let i = 0; i < keywordList.length; i++) {
     let eventData = keywordList[i].split('=');
@@ -150,6 +151,12 @@ $(function () {
                 .catch((error) => {
                     console.error('실패:', error);
                 });
+        },eventClick: function(info) {
+            // 이벤트 더블 클릭 시 실행되는 콜백 함수
+            console.log(info.event.extendedProps.no); // no 값을 콘솔에 출력합니다.
+
+
+            $('#myModal').modal('show');
         }
 
     });
@@ -224,3 +231,6 @@ $(function () {
         $('#new-event').val('')
     })
 })
+
+
+
