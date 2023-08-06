@@ -42,5 +42,18 @@ public class SettingServiceImpl implements SettingService {
         }
     }
 
+    @Override
+    public void changeInfo(UserInfoDTO userInfoDTO,User user) {
+
+        UserSecurityDTO userDTO = (UserSecurityDTO) user;
+        UserInfo userInfo = userRepository.findById(userDTO.getUserId()).orElseThrow();
+
+        userInfo.changeNickName(userInfoDTO.getUserNickName());
+        userInfo.changeName(userInfoDTO.getUserName());
+        userInfo.changePhone(userInfoDTO.getUserPhone());
+        userRepository.save(userInfo);
+
+    }
+
 }
 

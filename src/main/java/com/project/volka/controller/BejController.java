@@ -32,7 +32,7 @@ public class BejController {
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/main")
-    public void hello(@AuthenticationPrincipal User user,Model model){
+    public void bejMainGet(@AuthenticationPrincipal User user,Model model){
         log.info(user);
 
         UserInfo userInfo = userService.updateUserInfo((UserSecurityDTO) user);

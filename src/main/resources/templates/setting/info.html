@@ -25,15 +25,15 @@
 
       <form action="/setting/info" method="post" id="infoChangeForm">
         <div class="input-group mb-3">
-          <input type="email" class="form-control" placeholder="Email" name="userEmail" readonly="true">
-          <div class="input-group-append">
+          <input type="email" class="form-control" th:placeholder="${user.userEmail}" name="userEmail" readonly="true">
+            <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
             </div>
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="ID" name="userId" readonly="true">
+          <input type="text" class="form-control" th:placeholder="${user.userId}" name="userId" readonly="true">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-user"></span>
