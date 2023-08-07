@@ -48,12 +48,52 @@ public class BejController {
                                       @RequestBody HashMap<String, Object> planMap) {
 
         log.info(planMap);
+        log.info("시간테스트");
 
         UserInfo userInfo = userService.updateUserInfo((UserSecurityDTO) user);
         planService.makePlan(userInfo,planMap);
+        List<Plan> planList = planService.getPlanList(userInfo);
         HashMap<String, Object> responseData = new HashMap<>();
         responseData.put("status", "success");
         responseData.put("message", "요청이 성공적으로 처리되었습니다.");
+        responseData.put("list", planList);
+
+        return ResponseEntity.ok(responseData); // 클라이언트에게 JSON 응답을 보냄
+    }
+    @PutMapping("/plan")
+    @ResponseBody
+    public ResponseEntity<?> planPut(@AuthenticationPrincipal User user,
+                                      @RequestBody HashMap<String, Object> planMap) {
+
+        log.info(planMap);
+
+        UserInfo userInfo = userService.updateUserInfo((UserSecurityDTO) user);
+        planService.modifyPlan(userInfo,planMap);
+        List<Plan> planList = planService.getPlanList(userInfo);
+
+        HashMap<String, Object> responseData = new HashMap<>();
+        responseData.put("status", "success");
+        responseData.put("message", "요청이 성공적으로 처리되었습니다.");
+        responseData.put("list", planList);
+
+        return ResponseEntity.ok(responseData); // 클라이언트에게 JSON 응답을 보냄
+    }
+
+    @PostMapping("/planList")
+    @ResponseBody
+    public ResponseEntity<?> planGet(@AuthenticationPrincipal User user,
+                                     @RequestBody HashMap<String, Object> planMap) {
+
+        log.info(planMap);
+
+        UserInfo userInfo = userService.updateUserInfo((UserSecurityDTO) user);
+        planService.getPlanList(userInfo);
+        List<Plan> planList = planService.getPlanList(userInfo);
+
+        HashMap<String, Object> responseData = new HashMap<>();
+        responseData.put("status", "success");
+        responseData.put("message", "요청이 성공적으로 처리되었습니다.");
+        responseData.put("list", planList);
 
         return ResponseEntity.ok(responseData); // 클라이언트에게 JSON 응답을 보냄
     }
@@ -85,6 +125,25 @@ public class BejController {
         HashMap<String, Object> responseData = new HashMap<>();
         responseData.put("status", "success");
         responseData.put("message", "요청이 성공적으로 처리되었습니다.");
+
+        return ResponseEntity.ok(responseData); // 클라이언트에게 JSON 응답을 보냄
+    }
+
+    @PutMapping("/date")
+    @ResponseBody
+    public ResponseEntity<?> datePut(@AuthenticationPrincipal User user,
+                                     @RequestBody HashMap<String, Object> planMap) {
+
+        log.info(planMap);
+
+        UserInfo userInfo = userService.updateUserInfo((UserSecurityDTO) user);
+        planService.changeDate(userInfo,planMap);
+        List<Plan> planList = planService.getPlanList(userInfo);
+
+        HashMap<String, Object> responseData = new HashMap<>();
+        responseData.put("status", "success");
+        responseData.put("message", "요청이 성공적으로 처리되었습니다.");
+        responseData.put("list", planList);
 
         return ResponseEntity.ok(responseData); // 클라이언트에게 JSON 응답을 보냄
     }

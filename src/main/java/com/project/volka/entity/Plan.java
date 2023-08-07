@@ -41,7 +41,7 @@ public class Plan extends BaseEntity{
     private LocalDateTime realEndDate;
 
     @Column(name = "PLAN_STATUS",nullable = false)
-    private int planStatus; //0대기 1진행중 2완료 3취소 4약속을보냈는데상대방이거절
+    private int planStatus; //0대기 1진행중 2완료 3취소
 
     @Column(name = "PLAN_COLOR")
     private String planColor;

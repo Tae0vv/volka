@@ -47,6 +47,36 @@
        font-weight: lighter;
      }
 
+    .fc-header-toolbar .fc-prev-button,
+    .fc-header-toolbar .fc-next-button,
+    .fc-header-toolbar .fc-today-button {
+      background-color: #C0C0C0;
+      border-color : white;
+    }
+
+    .fc-header-toolbar .fc-toolbar-title {
+      color: black;
+    }
+
+    .fc-header-toolbar .fc-dayGridMonth-button,
+    .fc-header-toolbar .fc-timeGridWeek-button,
+    .fc-header-toolbar .fc-timeGridDay-button {
+      background-color: #C0C0C0;
+      border-color : white;
+
+    }
+
+    .fc-header-toolbar .fc-dayGridMonth-button.active,
+    .fc-header-toolbar .fc-timeGridWeek-button.active,
+    .fc-header-toolbar .fc-timeGridDay-button.active {
+      background-color: #757575 !important;
+      border-color: #FFFFFF !important;
+    }
+
+    .fc-color-picker a.selected i {
+      border: 2px solid #000; /* 선택된 색상에 검은 테두리 추가 */
+      padding: 2px; /* 테두리와 아이콘 사이의 여백 설정 */
+    }
 
   </style>
 </head>
@@ -199,19 +229,25 @@
                 <div class="card-body">
                   <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
                     <ul class="fc-color-picker" id="color-chooser">
-                      <li><a class="text-primary" href="#"><i class="fas fa-square"></i></a></li>
-                      <li><a class="text-warning" href="#"><i class="fas fa-square"></i></a></li>
-                      <li><a class="text-success" href="#"><i class="fas fa-square"></i></a></li>
-                      <li><a class="text-danger" href="#"><i class="fas fa-square"></i></a></li>
-                      <li><a class="text-secondary" href="#"><i class="fas fa-square"></i></a></li>
+                      <li><a style="color: #C0C0C0;" href="#"><i class="fas fa-square"></i></a></li> <!-- 은색 -->
+                      <li><a style="color: #FFD700;" href="#"><i class="fas fa-square"></i></a></li> <!-- 금색 -->
+                      <li><a style="color: #FFC0CB;" href="#"><i class="fas fa-square"></i></a></li> <!-- 분홍색 -->
+                      <li><a style="color: #ADD8E6;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 파란색 -->
+                      <li><a style="color: #98FB98;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 녹색 -->
+                      <li><a style="color: #F08080;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 코랄색 -->
+                      <li><a style="color: #C19A6B;" href="#"><i class="fas fa-square"></i></a></li> <!-- 갈색 -->
+                      <li><a style="color: #BA55D3;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 보라색 -->
+                      <li><a style="color: #FF6347;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 빨간색-->
+                      <li><a style="color: #00CED1;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 청록색-->
                     </ul>
                   </div>
+
                   <!-- /btn-group -->
                   <div class="input-group">
                     <input id="new-event" type="text" class="form-control" placeholder="Event Title">
 
                     <div class="input-group-append">
-                      <button id="add-new-event" type="button" class="btn btn-primary">Add</button>
+                      <button id="add-new-event" type="button" class="btn btn-secondary">Add</button>
                     </div>
                     <!-- /btn-group -->
                   </div>
@@ -226,6 +262,9 @@
               <div class="card-body p-0">
                 <!-- THE CALENDAR -->
                 <div id="calendar"></div>
+              </div>
+              <div class="card-footer">
+                <button class="btn btn-secondary float-right " id="addPlanBtn">일정등록</button>
               </div>
               <!-- /.card-body -->
             </div>
@@ -277,54 +316,115 @@
 <!-- ./wrapper -->
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-dialog modal-dialog-centered " role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="eventTitle">Tttle</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <div class="modal-header row">
+        <h4 class="col-3 text-center">
+          <strong>Title</strong>
+        </h4>
+        <input type="text" class="form-control col-7" id="eventTitleInput">
+        <button type="button" class="close " data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <div class="row mb-1">
-          <div class="col-4">
-            <strong>등록일</strong>
-          </div>
-          <div class="col-8 text-right" id="regDate">
-            2023-08-07 15:23:55
-            <span class="small text-muted" id="state">(진행중)</span>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-6">
-            <p class="mt-0 mb-0"><strong>계획시작시간</strong></p>
-            <input type="datetime-local" id="startDate" class="form-control">
-          </div>
-          <div class="col-6">
-            <p class="mt-0 mb-0"><strong>계획종료시간</strong></p>
-            <input type="datetime-local" id="endDate" class="form-control">
+        <div class="mb-4 row">
+          <div class="col-3"></div>
+          <div class="text-right col-md-6 p-0 pt-2 text-sm" id="regDate"></div>
+          <div class="col-md-3">
+            <select id="statusSelect" class="form-control">
+              <option value="0">대기</option>
+              <option value="1">진행중</option>
+              <option value="2">완료</option>
+              <option value="3">취소</option>
+            </select>
           </div>
         </div>
-        <div class="row">
+        <div class="row mb-4">
+          <div class="col-6">
+            <p class="mt-0 mb-1"><strong>계획시작시간</strong></p>
+            <input type="datetime-local" id="startDate" class="form-control" style="font-size: 12px;">
+          </div>
+          <div class="col-6">
+            <p class="mt-0 mb-1"><strong>계획종료시간</strong></p>
+            <input type="datetime-local" id="endDate" class="form-control" style="font-size: 12px;">
+          </div>
+        </div>
+        <div class="row mb-4">
           <div class="col">
-            <p class="mt-0 mb-0"><strong>계획 내용</strong></p>
-            <textarea id="textArea" class="form-control" rows="10"></textarea>
+            <p class="mt-0 mb-1"><strong>계획 내용</strong></p>
+            <textarea id="textArea" class="form-control" rows="8"></textarea>
           </div>
         </div>
         <div class="row">
           <div class="col-6">
-            <p class="mt-0 mb-0"><strong>실제시작시간</strong></p>
-            <input type="datetime-local" id="realStartDate" class="form-control">
+            <p class="mt-0 mb-1"><strong>실제시작시간</strong></p>
+            <input type="datetime-local" id="realStartDate" class="form-control" style="font-size: 12px;">
           </div>
           <div class="col-6">
-            <p class="mt-0 mb-0"><strong>실제종료시간</strong></p>
-            <input type="datetime-local" id="realEndDate" class="form-control">
+            <p class="mt-0 mb-1"><strong>실제종료시간</strong></p>
+            <input type="datetime-local" id="realEndDate" class="form-control" style="font-size: 12px;">
           </div>
         </div>
 
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary">저장</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+        <button type="button" class="btn btn-danger" id="deleteBtn">삭제</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered " role="document">
+    <div class="modal-content">
+      <div class="modal-header row">
+        <h4 class="col-3 text-center">
+          <strong>Title</strong>
+        </h4>
+        <input type="text" class="form-control col-7" id="addTitle">
+        <button type="button" class="close " data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="selectedColor">
+        <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
+          <ul class="fc-color-picker" id="Addcolor-chooser">
+            <li><a style="color: #C0C0C0;" href="#"><i class="fas fa-square"></i></a></li> <!-- 은색 -->
+            <li><a style="color: #FFD700;" href="#"><i class="fas fa-square"></i></a></li> <!-- 금색 -->
+            <li><a style="color: #FFC0CB;" href="#"><i class="fas fa-square"></i></a></li> <!-- 분홍색 -->
+            <li><a style="color: #ADD8E6;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 파란색 -->
+            <li><a style="color: #98FB98;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 녹색 -->
+            <li><a style="color: #F08080;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 코랄색 -->
+            <li><a style="color: #C19A6B;" href="#"><i class="fas fa-square"></i></a></li> <!-- 갈색 -->
+            <li><a style="color: #BA55D3;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 보라색 -->
+            <li><a style="color: #FF6347;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 빨간색-->
+            <li><a style="color: #00CED1;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 청록색-->
+          </ul>
+        </div>
+        <div class="row mb-4">
+          <div class="col-6">
+            <p class="mt-0 mb-1"><strong>계획시작시간</strong></p>
+            <input type="datetime-local" id="addStartDate" class="form-control" style="font-size: 12px;">
+          </div>
+          <div class="col-6">
+            <p class="mt-0 mb-1"><strong>계획종료시간</strong></p>
+            <input type="datetime-local" id="addEndDate" class="form-control" style="font-size: 12px;">
+          </div>
+        </div>
+        <div class="row mb-4">
+          <div class="col">
+            <p class="mt-0 mb-1"><strong>계획 내용</strong></p>
+            <textarea id="addTextArea" class="form-control" rows="8"></textarea>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="newBtn">저장</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
       </div>
     </div>

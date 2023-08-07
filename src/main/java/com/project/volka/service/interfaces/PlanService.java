@@ -9,6 +9,7 @@ import java.util.Map;
 public interface PlanService {
 
     void makePlan(UserInfo userInfo, Map<String,Object> planMap);
-
+    void modifyPlan(UserInfo userInfo, Map<String,Object> planMap);
+    void changeDate(UserInfo userInfo, Map<String,Object> planMap);
     List<Plan> getPlanList(UserInfo userInfo);
 }
