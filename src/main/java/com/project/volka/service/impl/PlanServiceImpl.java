@@ -147,46 +147,59 @@ public class PlanServiceImpl implements PlanService {
         }
     }
 
-    @Override
-    public void changeDate(UserInfo userInfo, Map<String, Object> planMap) {
+    public void updatePlanDate(Map<String, Object> planMap) {
         if (planMap.containsKey("planNo")) {
-            log.info("서비스");
-            log.info(planMap);
-            String planNoStr = planMap.get("planNo").toString();
+            Long planNo = Long.parseLong(planMap.get("planNo").toString());
+            Plan plan = planRepository.findById(planNo).orElseThrow();
 
-            int planNo = Integer.parseInt(planNoStr);
-            Long longPlanNo = (long) planNo;
-            Plan plan = planRepository.findById(longPlanNo).orElseThrow();
-
-
-            if (planMap.containsKey("start")) {
-                String dateString = planMap.get("start").toString();
-
-                if (!dateString.isEmpty()) {
-                    LocalDateTime localDateTime;
-
-                    if (dateString.contains("Z")) {
-                        String cutString = dateString.substring(0, dateString.length() - 5);
+            // 시작일 업데이트
+            if (planMap.containsKey("planStartDate")) {
+                String startDateString = planMap.get("planStartDate").toString();
+                if (!startDateString.isEmpty()) {
+                    LocalDateTime startDate;
+                    if (startDateString.contains("Z")) {
+                        String cutString = startDateString.substring(0, startDateString.length() - 5);
                         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-                        localDateTime = LocalDateTime.parse(cutString, formatter);
-                        plan.changePlanStartDate(localDateTime);
+                        startDate = LocalDateTime.parse(cutString, formatter);
                     } else {
-                        localDateTime = LocalDateTime.parse(dateString);
-                        plan.changePlanStartDate(localDateTime);
+                        startDate = LocalDateTime.parse(startDateString);
                     }
-
+                    plan.changePlanStartDate(startDate);
                 }
             }
 
-            if (planMap.containsKey("end")) {
-                String dateString = planMap.get("end").toString();
-
-
+            // 종료일 업데이트
+            if (planMap.containsKey("planEndDate")) {
+                String endDateString = planMap.get("planEndDate").toString();
+                if (!endDateString.isEmpty()) {
+                    LocalDateTime endDate;
+                    if (endDateString.contains("Z")) {
+                        String cutString = endDateString.substring(0, endDateString.length() - 5);
+                        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+                        endDate = LocalDateTime.parse(cutString, formatter);
+                    } else {
+                        endDate = LocalDateTime.parse(endDateString);
+                    }
+                    plan.changePlanEndDate(endDate);
+                } else {
+                    plan.changePlanEndDate(null); // 종료일이 없는 경우 null로 업데이트
+                }
             }
 
             planRepository.save(plan);
         }
     }
+
+    @Override
+    public void deletePlan(Map<String, Object> planMap) {
+        if (planMap.containsKey("planNo")) {
+            String planNoString = planMap.get("planNo").toString();
+            Long planNo = Long.parseLong(planNoString);
+
+            planRepository.deleteById(planNo);
+        }
+    }
+
 
 
     @Override

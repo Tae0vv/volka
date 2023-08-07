@@ -78,9 +78,6 @@ $(function () {
     // 외부 이벤트를 초기화합니다.
     ini_events($('#external-events div.external-event'))
 
-    /* initialize the calendar
-     -----------------------------------------------------------------*/
-    // 달력 이벤트를 위한 날짜 정보 (가짜 데이터)
     var date = new Date()
     var d    = date.getDate(),
         m    = date.getMonth(),
@@ -106,6 +103,7 @@ $(function () {
         }
     },);
 
+
     // 달력을 초기화합니다.
     calendar = new Calendar(calendarEl, {
         timeZone : 'local',
@@ -122,7 +120,6 @@ $(function () {
         editable  : true,      // 이벤트를 편집 가능하도록 합니다.
         droppable : true,      // 이벤트를 달력에 놓을 수 있도록 합니다.
         drop      : function(info) {
-            console.log("드래그");
             // 자주잡는 일정 -> 달력
             if (checkbox.checked) {
                 // 체크돼있으면 일정을 달력에 옮기고 삭제됨
@@ -161,7 +158,6 @@ $(function () {
                     }));
 
                     planList.forEach((plan) => {
-                        // planEndDate를 하루 늘림
                         if (plan.end) {
                             let endDate = new Date(plan.end);
                             endDate.setDate(endDate.getDate() + 1);
@@ -176,38 +172,75 @@ $(function () {
                 });
         },eventClick: function(info) {
 
-            utility.ajax('/bej/planList', {plan: 'plz'}, 'post')
+            utility.ajax('/bej/planList', {info: 'info'}, 'post')
                 .then((responseData) => {
-                    console.log('정보가져오기')
                     plans = responseData.list;
                     let selectPlan = plans.find(plan => plan.planNo === info.event.extendedProps.no);
                     updateModal(selectPlan);
+                    $('#myModal').modal('show'); // 모달에 내용 채워주기 이전에 모달을 띄웁니다.
                 })
                 .catch((error) => {
                     console.error('실패:', error);
                 });
-            //모달에 내용 채워주기
-            $('#myModal').modal('show');
-            $('#myModal').on('click', '.btn-primary', function() {
 
-                let selectedPlanNo = info.event.extendedProps.no;
+                //모달에 내용 채워주기
+                $('#myModal').on('click', '.btn-primary', function() {
 
-                let sendData = {
-                    planNo: selectedPlanNo,
-                    title:  $('#eventTitleInput').val(),
-                    content: $('#textArea').val(),
-                    planStartDate: $('#startDate').val(),
-                    planEndDate: $('#endDate').val(),
-                    realStartDate:  $('#realStartDate').val(),
-                    realEndDate: $('#realEndDate').val(),
-                    status: $('#statusSelect').val(), // 선택한 옵션 값 가져오기
-                }
+                    let selectedPlanNo = info.event.extendedProps.no;
 
-                // utility.ajax() 함수를 사용하여 서버로 데이터를 보냅니다.
-                utility.ajax('/bej/plan', sendData, 'put')
+                    let sendData = {
+                        planNo: selectedPlanNo,
+                        title:  $('#eventTitleInput').val(),
+                        content: $('#textArea').val(),
+                        planStartDate: $('#startDate').val(),
+                        planEndDate: $('#endDate').val(),
+                        realStartDate:  $('#realStartDate').val(),
+                        realEndDate: $('#realEndDate').val(),
+                        status: $('#statusSelect').val(), // 선택한 옵션 값 가져오기
+                    }
+
+                    // utility.ajax() 함수를 사용하여 서버로 데이터를 보냅니다.
+                    utility.ajax('/bej/plan', sendData, 'put')
+                        .then((responseData) => {
+                            console.log('일정 수정 성공:', responseData);
+                            // 이벤트를 캘린더에서 모두 제거합니다.
+                            calendar.removeAllEvents();
+
+                            // 서버로부터 받은 데이터로 이벤트 리스트를 업데이트합니다.
+                            planList = responseData.list.map((data) => ({
+                                no: data.planNo,
+                                title: data.planTitle,
+                                start: new Date(data.planStartDate),
+                                end: data.planEndDate == null ? new Date(data.planStartDate) : new Date(data.planEndDate),
+                                allDay: true,
+                                backgroundColor: data.planColor,
+                                borderColor: data.planColor,
+                            }));
+
+                            planList.forEach((plan) => {
+                                if (plan.end) {
+                                    let endDate = new Date(plan.end);
+                                    endDate.setDate(endDate.getDate() + 1);
+                                    plan.end = endDate;
+                                }
+                                calendar.addEvent(plan);
+                            });
+                            calendar.render();
+                        })
+                        .catch((error) => {
+                            console.error('실패:', error);
+                        });
+
+                    $('#myModal').modal('hide');
+                });
+
+            $('#deleteBtn').on('click', function() {
+                let selectedPlanNo = info.event.extendedProps.no; // 선택된 이벤트의 고유 번호 가져오기
+
+                // 서버에 삭제 요청 보내기
+                utility.ajax('/bej/plan/', {planNo:selectedPlanNo}, 'delete')
                     .then((responseData) => {
-                        console.log('일정 수정 성공:', responseData);
-                        // 이벤트를 캘린더에서 모두 제거합니다.
+                        console.log('계획 삭제 성공:', responseData);
                         calendar.removeAllEvents();
 
                         // 서버로부터 받은 데이터로 이벤트 리스트를 업데이트합니다.
@@ -222,7 +255,6 @@ $(function () {
                         }));
 
                         planList.forEach((plan) => {
-                            // planEndDate를 하루 늘림
                             if (plan.end) {
                                 let endDate = new Date(plan.end);
                                 endDate.setDate(endDate.getDate() + 1);
@@ -233,18 +265,61 @@ $(function () {
                         calendar.render();
                     })
                     .catch((error) => {
-                        console.error('실패:', error);
+                        console.error('계획 삭제 실패:', error);
                     });
-
-                $('#myModal').modal('hide');
+                $('#myModal').modal('hide'); // 모달 닫기
             });
-        },eventDrop: function (info) {
+        },eventDrop: function(info) {
+            let selectedPlanNo = info.event.extendedProps.no;
+            let newStartDate = new Date(info.event.start);
+            let newEndDate = info.event.end ? new Date(info.event.end) : null; //
 
+            newStartDate.setHours(newStartDate.getHours() + 9);
+            if (newEndDate) {
+                newEndDate.setHours(newEndDate.getHours() + newEndDate.getTimezoneOffset() / 60);
+                newEndDate.setSeconds(newEndDate.getSeconds() - 1); // 1초를 빼주는 작업 추가
+            }
+
+            let sendData = {
+                planNo: selectedPlanNo,
+                planStartDate: newStartDate,
+                planEndDate: newEndDate
+            };
+
+            utility.ajax('/bej/date', sendData, 'put')
+                .then((responseData) => {
+                    console.log('일정 이동 성공:', responseData);
+                    // 서버로부터 받은 데이터로 이벤트 리스트를 업데이트합니다.
+                    plans = responseData.list;
+                    calendar.removeAllEvents();
+                    planList = responseData.list.map((data) => ({
+                        no: data.planNo,
+                        title: data.planTitle,
+                        start: new Date(data.planStartDate),
+                        end: data.planEndDate == null ? new Date(data.planStartDate) : new Date(data.planEndDate),
+                        allDay: true,
+                        backgroundColor: data.planColor,
+                        borderColor: data.planColor,
+                    }));
+
+                    planList.forEach((plan) => {
+                        if (plan.end) {
+                            let endDate = new Date(plan.end);
+                            endDate.setDate(endDate.getDate() + 1);
+                            plan.end = endDate;
+                        }
+                        calendar.addEvent(plan);
+                    });
+                    calendar.render();
+                })
+                .catch((error) => {
+                    console.error('일정 이동 실패:', error);
+                });
         }
+
     });
 
     planList.forEach((plan) => {
-        // planEndDate를 하루 늘림
         if (plan.end) {
             let endDate = new Date(plan.end);
             endDate.setDate(endDate.getDate() + 1);
@@ -266,6 +341,8 @@ $(function () {
             'border-color'    : currColor
         })
     })
+
+
 
     $('#add-new-event').click(function (e) {
         e.preventDefault()
@@ -315,6 +392,8 @@ $(function () {
     })
 })
 
+
+
 function updateModal(plan) {
     // 기존 코드를 초기화/삭제하세요
     $('#eventTitleInput').val('');
@@ -326,9 +405,6 @@ function updateModal(plan) {
     $('#regDate').text('');
     $('#statusSelect').val(0);
 
-    if (!plan) {
-        return;
-    }
 
     let title = plan.planTitle;
     let content = plan.planContent;
@@ -361,6 +437,8 @@ function formatDate(date) {
     const seconds = String(formattedDate.getSeconds()).padStart(2, '0');
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
+
+
 
 
 $(document).ready(function () {
@@ -416,7 +494,6 @@ $(document).ready(function () {
                 }));
 
                 planList.forEach((plan) => {
-                    // planEndDate를 하루 늘림
                     if (plan.end) {
                         let endDate = new Date(plan.end);
                         endDate.setDate(endDate.getDate() + 1);

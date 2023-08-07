@@ -1,436 +1,450 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Volka | BeJ</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Volka | BeJ</title>
 
-  <!-- fullCalendar -->
-  <link rel="stylesheet" href="/plugins/fullcalendar/main.css">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-  <!-- Tempusdominus Bootstrap 4 -->
-  <link rel="stylesheet" href="/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
-  <!-- iCheck -->
-  <link rel="stylesheet" href="/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-  <!-- JQVMap -->
-  <link rel="stylesheet" href="/plugins/jqvmap/jqvmap.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="/dist/css/adminlte.min.css">
-  <link rel="stylesheet" href="/dist/css/reset.css">
-  <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-  <!-- Daterange picker -->
-  <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css">
-  <!-- summernote -->
-  <link rel="stylesheet" href="/plugins/summernote/summernote-bs4.min.css">
-
-
-  <style>
-
-    .nav-link:hover {
-      color: black !important;
-    }
+    <!-- fullCalendar -->
+    <link rel="stylesheet" href="/plugins/fullcalendar/main.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- JQVMap -->
+    <link rel="stylesheet" href="/plugins/jqvmap/jqvmap.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="/dist/css/reset.css">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css">
+    <!-- summernote -->
+    <link rel="stylesheet" href="/plugins/summernote/summernote-bs4.min.css">
 
 
-    .nav li a {
-      background-color: white;
-    }
+    <style>
 
-     .nav-item .nav-link.active {
-       background-color: lightgrey; !important;
-     }
+        .nav-link:hover {
+            color: black !important;
+        }
 
-     .external-event{
-       font-weight: lighter;
-     }
 
-    .fc-header-toolbar .fc-prev-button,
-    .fc-header-toolbar .fc-next-button,
-    .fc-header-toolbar .fc-today-button {
-      background-color: #C0C0C0;
-      border-color : white;
-    }
+        .nav li a {
+            background-color: white;
+        }
 
-    .fc-header-toolbar .fc-toolbar-title {
-      color: black;
-    }
+        .nav-item .nav-link.active {
+            background-color: lightgrey;
+        !important;
+        }
 
-    .fc-header-toolbar .fc-dayGridMonth-button,
-    .fc-header-toolbar .fc-timeGridWeek-button,
-    .fc-header-toolbar .fc-timeGridDay-button {
-      background-color: #C0C0C0;
-      border-color : white;
+        .external-event {
+            font-weight: lighter;
+        }
 
-    }
+        .fc-header-toolbar .fc-prev-button,
+        .fc-header-toolbar .fc-next-button,
+        .fc-header-toolbar .fc-today-button {
+            background-color: #C0C0C0;
+            border-color: white;
+        }
 
-    .fc-header-toolbar .fc-dayGridMonth-button.active,
-    .fc-header-toolbar .fc-timeGridWeek-button.active,
-    .fc-header-toolbar .fc-timeGridDay-button.active {
-      background-color: #757575 !important;
-      border-color: #FFFFFF !important;
-    }
+        .fc-header-toolbar .fc-toolbar-title {
+            color: black;
+        }
 
-    .fc-color-picker a.selected i {
-      border: 2px solid #000; /* 선택된 색상에 검은 테두리 추가 */
-      padding: 2px; /* 테두리와 아이콘 사이의 여백 설정 */
-    }
+        .fc-header-toolbar .fc-dayGridMonth-button,
+        .fc-header-toolbar .fc-timeGridWeek-button,
+        .fc-header-toolbar .fc-timeGridDay-button {
+            background-color: #C0C0C0;
+            border-color: white;
 
-  </style>
+        }
+
+        .fc-header-toolbar .fc-dayGridMonth-button.active,
+        .fc-header-toolbar .fc-timeGridWeek-button.active,
+        .fc-header-toolbar .fc-timeGridDay-button.active {
+            background-color: #757575 !important;
+            border-color: #FFFFFF !important;
+        }
+
+        .fc-color-picker a.selected i {
+            border: 2px solid #000; /* 선택된 색상에 검은 테두리 추가 */
+            padding: 2px; /* 테두리와 아이콘 사이의 여백 설정 */
+        }
+
+    </style>
 </head>
 <body class="hold-transition sidebar-mini">
 
 <div class="wrapper">
-  <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-    <!-- Left navbar links -->
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-      </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="/volka" class="nav-link">Home</a>
-      </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="/bej/main" class="nav-link">BeJ</a>
-      </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="/setting/info" class="nav-link">Setting</a>
-      </li>
-    </ul>
-
-    <!-- Right navbar links -->
-    <ul class="navbar-nav ml-auto">
-      <li class="nav-item">
-        <a href="/logout" class="nav-link">Logout</a>
-      </li>
-    </ul>
-  </nav>
-  <!-- /.navbar -->
-  <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-primary elevation-4">
-    <!-- Brand Logo -->
-    <a href="/volka" class="brand-link py-4" style="border-bottom: 1px solid lightgrey;">
-      <img src="/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-bold" style="color: black;">VOLKA</span>
-    </a>
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <!-- Sidebar user panel (optional) -->
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex" style="border-bottom: 1px solid lightgrey;">
-        <div class="image">
-          <img src="/dist/img/volka.jpg" class="img-circle elevation-2" alt="User Image">
-        </div>
-        <div class="info">
-          <a class="d-block" th:text="${user.userNickName}" style="color: black; font-weight: bold;"></a>
-        </div>
-      </div>
-      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        <li class="nav-item menu-is-opening menu-open">
-          <a href="#" class="nav-link">
-            <i class="nav-icon far fa-calendar"></i>
-            <p>
-              BeJ
-              <i class="right fas fa-angle-left"></i>
-            </p>
-          </a>
-          <ul class="nav nav-treeview" style="display: block;">
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+        <!-- Left navbar links -->
+        <ul class="navbar-nav">
             <li class="nav-item">
-              <a href="/bej/main" class="nav-link active">
-                <i class="far fa-circle nav-icon"></i>
-                <p>main</p>
-              </a>
+                <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
             </li>
-          </ul>
-        </li>
-        <li class="nav-item">
-          <a href="#" class="nav-link">
-            <i class="nav-icon fas fa-user-cog"></i>
-            <p>
-              Setting
-              <i class="fas fa-angle-left right"></i>
-            </p>
-          </a>
-          <ul class="nav nav-treeview">
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="/volka" class="nav-link">Home</a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="/bej/main" class="nav-link">BeJ</a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="/setting/info" class="nav-link">Setting</a>
+            </li>
+        </ul>
+
+        <!-- Right navbar links -->
+        <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a href="/setting/info" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>개인정보 수정</p>
-              </a>
+                <a href="/logout" class="nav-link">Logout</a>
             </li>
-            <li class="nav-item">
-              <a href="/setting/password" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>비밀번호 변경</p>
-              </a>
-            </li>
-          </ul>
-        </li>
-      </ul>
-
-    </div>
-    <!-- /.sidebar -->
-  </aside>
-
-
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 th:text="${user.userNickName} + '의 일정'"></h1>
-          </div>
-          <div class="col-sm-6">
-
-          </div>
-        </div>
-      </div><!-- /.container-fluid -->
-    </section>
-
-    <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-md-3">
-            <div class="sticky-top mb-3">
-              <div class="card">
-                <div class="card-header">
-                  <h4 class="card-title">자주잡는 일정</h4>
+        </ul>
+    </nav>
+    <!-- /.navbar -->
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-primary elevation-4">
+        <!-- Brand Logo -->
+        <a href="/volka" class="brand-link py-4" style="border-bottom: 1px solid lightgrey;">
+            <img src="/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+                 style="opacity: .8">
+            <span class="brand-text font-weight-bold" style="color: black;">VOLKA</span>
+        </a>
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Sidebar user panel (optional) -->
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex" style="border-bottom: 1px solid lightgrey;">
+                <div class="image">
+                    <img src="/dist/img/volka.jpg" class="img-circle elevation-2" alt="User Image">
                 </div>
-                <div class="card-body">
-                  <!-- the events -->
-                  <div id="external-events">
-                    <!--동적으로 DB에서 가져와서 넣어줘야 한다.-->
-                    <div id="event-container">
-
-                    </div>
-<!--                    <div class="external-event bg-success">Lunch</div>-->
-<!--                    <div class="external-event bg-warning">Dinner</div>-->
-<!--                    <div class="external-event bg-info">Meeting</div>-->
-                    <div class="checkbox">
-                      <label for="drop-remove">
-                        <input type="checkbox" id="drop-remove">
-                        remove after drop
-                      </label>
-                    </div>
-                  </div>
+                <div class="info">
+                    <a class="d-block" th:text="${user.userNickName}" style="color: black; font-weight: bold;"></a>
                 </div>
-                <!-- /.card-body -->
-              </div>
-              <!-- /.card -->
-              <div class="card">
-                <div class="card-header">
-                  <h3 class="card-title">키워드 생성</h3>
-                </div>
-                <div class="card-body">
-                  <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
-                    <ul class="fc-color-picker" id="color-chooser">
-                      <li><a style="color: #C0C0C0;" href="#"><i class="fas fa-square"></i></a></li> <!-- 은색 -->
-                      <li><a style="color: #FFD700;" href="#"><i class="fas fa-square"></i></a></li> <!-- 금색 -->
-                      <li><a style="color: #FFC0CB;" href="#"><i class="fas fa-square"></i></a></li> <!-- 분홍색 -->
-                      <li><a style="color: #ADD8E6;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 파란색 -->
-                      <li><a style="color: #98FB98;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 녹색 -->
-                      <li><a style="color: #F08080;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 코랄색 -->
-                      <li><a style="color: #C19A6B;" href="#"><i class="fas fa-square"></i></a></li> <!-- 갈색 -->
-                      <li><a style="color: #BA55D3;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 보라색 -->
-                      <li><a style="color: #FF6347;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 빨간색-->
-                      <li><a style="color: #00CED1;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 청록색-->
+            </div>
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <li class="nav-item menu-is-opening menu-open">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon far fa-calendar"></i>
+                        <p>
+                            BeJ
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview" style="display: block;">
+                        <li class="nav-item">
+                            <a href="/bej/main" class="nav-link active">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>main</p>
+                            </a>
+                        </li>
                     </ul>
-                  </div>
-
-                  <!-- /btn-group -->
-                  <div class="input-group">
-                    <input id="new-event" type="text" class="form-control" placeholder="Event Title">
-
-                    <div class="input-group-append">
-                      <button id="add-new-event" type="button" class="btn btn-secondary">Add</button>
-                    </div>
-                    <!-- /btn-group -->
-                  </div>
-                  <!-- /input-group -->
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- /.col -->
-          <div class="col-md-6">
-            <div class="card card-primary">
-              <div class="card-body p-0">
-                <!-- THE CALENDAR -->
-                <div id="calendar"></div>
-              </div>
-              <div class="card-footer">
-                <button class="btn btn-secondary float-right " id="addPlanBtn">일정등록</button>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-          </div>
-          <!-- /.col -->
-          <div class="col-md-3">
-            <div class="card">
-
-              <div class="card-body" style="height: 80vh">
-                <ul class="list-group">
-
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <i class="fas fa-user mr-1"></i>친구1
-                    <span class="badge bg-light ml-auto">on</span>
-                  </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <i class="fas fa-user mr-1"></i>친구2
-                    <span class="badge bg-gray ml-auto">off</span>
-
-                </ul>
-              </div>
-              <!-- /.card-body -->
-            </div>
-          </div>
-
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-user-cog"></i>
+                        <p>
+                            Setting
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="/setting/info" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>개인정보 수정</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/setting/password" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>비밀번호 변경</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
 
         </div>
-        <!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
+        <!-- /.sidebar -->
+    </aside>
 
-  <footer class="main-footer">
-    <div class="float-right d-none d-sm-block">
-      <b>Version</b> 3.2.0
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 th:text="${user.userNickName} + '의 일정'"></h1>
+                    </div>
+                    <div class="col-sm-6">
+
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="sticky-top mb-3">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">자주잡는 일정</h4>
+                                </div>
+                                <div class="card-body">
+                                    <!-- the events -->
+                                    <div id="external-events">
+                                        <!--동적으로 DB에서 가져와서 넣어줘야 한다.-->
+                                        <div id="event-container">
+
+                                        </div>
+                                        <!--                    <div class="external-event bg-success">Lunch</div>-->
+                                        <!--                    <div class="external-event bg-warning">Dinner</div>-->
+                                        <!--                    <div class="external-event bg-info">Meeting</div>-->
+                                        <div class="checkbox">
+                                            <label for="drop-remove">
+                                                <input type="checkbox" id="drop-remove">
+                                                remove after drop
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">키워드 생성</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
+                                        <ul class="fc-color-picker" id="color-chooser">
+                                            <li><a style="color: #C0C0C0;" href="#"><i class="fas fa-square"></i></a>
+                                            </li> <!-- 은색 -->
+                                            <li><a style="color: #FFD700;" href="#"><i class="fas fa-square"></i></a>
+                                            </li> <!-- 금색 -->
+                                            <li><a style="color: #FFC0CB;" href="#"><i class="fas fa-square"></i></a>
+                                            </li> <!-- 분홍색 -->
+                                            <li><a style="color: #ADD8E6;" href="#"><i class="fas fa-square"></i></a>
+                                            </li> <!-- 밝은 파란색 -->
+                                            <li><a style="color: #98FB98;" href="#"><i class="fas fa-square"></i></a>
+                                            </li> <!-- 밝은 녹색 -->
+                                            <li><a style="color: #F08080;" href="#"><i class="fas fa-square"></i></a>
+                                            </li> <!-- 밝은 코랄색 -->
+                                            <li><a style="color: #C19A6B;" href="#"><i class="fas fa-square"></i></a>
+                                            </li> <!-- 갈색 -->
+                                            <li><a style="color: #BA55D3;" href="#"><i class="fas fa-square"></i></a>
+                                            </li> <!-- 밝은 보라색 -->
+                                            <li><a style="color: #FF6347;" href="#"><i class="fas fa-square"></i></a>
+                                            </li> <!-- 밝은 빨간색-->
+                                            <li><a style="color: #00CED1;" href="#"><i class="fas fa-square"></i></a>
+                                            </li> <!-- 밝은 청록색-->
+                                        </ul>
+                                    </div>
+
+                                    <!-- /btn-group -->
+                                    <div class="input-group">
+                                        <input id="new-event" type="text" class="form-control"
+                                               placeholder="Event Title">
+
+                                        <div class="input-group-append">
+                                            <button id="add-new-event" type="button" class="btn btn-secondary">Add
+                                            </button>
+                                        </div>
+                                        <!-- /btn-group -->
+                                    </div>
+                                    <!-- /input-group -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-md-6">
+                        <div class="card card-primary">
+                            <div class="card-body p-0">
+                                <!-- THE CALENDAR -->
+                                <div id="calendar"></div>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-secondary float-right " id="addPlanBtn">일정등록</button>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-md-3">
+                        <div class="card">
+
+                            <div class="card-body" style="height: 80vh">
+                                <ul class="list-group">
+
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <i class="fas fa-user mr-1"></i>친구1
+                                        <span class="badge bg-light ml-auto">on</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <i class="fas fa-user mr-1"></i>친구2
+                                        <span class="badge bg-gray ml-auto">off</span>
+
+                                </ul>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                    </div>
+
+
+                </div>
+                <!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
     </div>
-    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
-  </footer>
+    <!-- /.content-wrapper -->
 
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
+    <footer class="main-footer">
+        <div class="float-right d-none d-sm-block">
+            <b>Version</b> 3.2.0
+        </div>
+        <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
+    </footer>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered " role="document">
-    <div class="modal-content">
-      <div class="modal-header row">
-        <h4 class="col-3 text-center">
-          <strong>Title</strong>
-        </h4>
-        <input type="text" class="form-control col-7" id="eventTitleInput">
-        <button type="button" class="close " data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-4 row">
-          <div class="col-3"></div>
-          <div class="text-right col-md-6 p-0 pt-2 text-sm" id="regDate"></div>
-          <div class="col-md-3">
-            <select id="statusSelect" class="form-control">
-              <option value="0">대기</option>
-              <option value="1">진행중</option>
-              <option value="2">완료</option>
-              <option value="3">취소</option>
-            </select>
-          </div>
-        </div>
-        <div class="row mb-4">
-          <div class="col-6">
-            <p class="mt-0 mb-1"><strong>계획시작시간</strong></p>
-            <input type="datetime-local" id="startDate" class="form-control" style="font-size: 12px;">
-          </div>
-          <div class="col-6">
-            <p class="mt-0 mb-1"><strong>계획종료시간</strong></p>
-            <input type="datetime-local" id="endDate" class="form-control" style="font-size: 12px;">
-          </div>
-        </div>
-        <div class="row mb-4">
-          <div class="col">
-            <p class="mt-0 mb-1"><strong>계획 내용</strong></p>
-            <textarea id="textArea" class="form-control" rows="8"></textarea>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-6">
-            <p class="mt-0 mb-1"><strong>실제시작시간</strong></p>
-            <input type="datetime-local" id="realStartDate" class="form-control" style="font-size: 12px;">
-          </div>
-          <div class="col-6">
-            <p class="mt-0 mb-1"><strong>실제종료시간</strong></p>
-            <input type="datetime-local" id="realEndDate" class="form-control" style="font-size: 12px;">
-          </div>
-        </div>
+    <div class="modal-dialog modal-dialog-centered " role="document">
+        <div class="modal-content">
+            <div class="modal-header row">
+                <h4 class="col-3 text-center">
+                    <strong>Title</strong>
+                </h4>
+                <input type="text" class="form-control col-7" id="eventTitleInput">
+                <button type="button" class="close " data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-4 row">
+                    <div class="col-3"></div>
+                    <div class="text-right col-md-6 p-0 pt-2 text-sm" id="regDate"></div>
+                    <div class="col-md-3">
+                        <select id="statusSelect" class="form-control">
+                            <option value="0">대기</option>
+                            <option value="1">진행중</option>
+                            <option value="2">완료</option>
+                            <option value="3">취소</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-6">
+                        <p class="mt-0 mb-1"><strong>계획시작시간</strong></p>
+                        <input type="datetime-local" id="startDate" class="form-control" style="font-size: 12px;">
+                    </div>
+                    <div class="col-6">
+                        <p class="mt-0 mb-1"><strong>계획종료시간</strong></p>
+                        <input type="datetime-local" id="endDate" class="form-control" style="font-size: 12px;">
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col">
+                        <p class="mt-0 mb-1"><strong>계획 내용</strong></p>
+                        <textarea id="textArea" class="form-control" rows="8"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <p class="mt-0 mb-1"><strong>실제시작시간</strong></p>
+                        <input type="datetime-local" id="realStartDate" class="form-control" style="font-size: 12px;">
+                    </div>
+                    <div class="col-6">
+                        <p class="mt-0 mb-1"><strong>실제종료시간</strong></p>
+                        <input type="datetime-local" id="realEndDate" class="form-control" style="font-size: 12px;">
+                    </div>
+                </div>
 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary">저장</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-        <button type="button" class="btn btn-danger" id="deleteBtn">삭제</button>
-      </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">저장</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                <button type="button" class="btn btn-danger" id="deleteBtn">삭제</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
-<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered " role="document">
-    <div class="modal-content">
-      <div class="modal-header row">
-        <h4 class="col-3 text-center">
-          <strong>Title</strong>
-        </h4>
-        <input type="text" class="form-control col-7" id="addTitle">
-        <button type="button" class="close " data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <input type="hidden" id="selectedColor">
-        <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
-          <ul class="fc-color-picker" id="Addcolor-chooser">
-            <li><a style="color: #C0C0C0;" href="#"><i class="fas fa-square"></i></a></li> <!-- 은색 -->
-            <li><a style="color: #FFD700;" href="#"><i class="fas fa-square"></i></a></li> <!-- 금색 -->
-            <li><a style="color: #FFC0CB;" href="#"><i class="fas fa-square"></i></a></li> <!-- 분홍색 -->
-            <li><a style="color: #ADD8E6;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 파란색 -->
-            <li><a style="color: #98FB98;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 녹색 -->
-            <li><a style="color: #F08080;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 코랄색 -->
-            <li><a style="color: #C19A6B;" href="#"><i class="fas fa-square"></i></a></li> <!-- 갈색 -->
-            <li><a style="color: #BA55D3;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 보라색 -->
-            <li><a style="color: #FF6347;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 빨간색-->
-            <li><a style="color: #00CED1;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 청록색-->
-          </ul>
-        </div>
-        <div class="row mb-4">
-          <div class="col-6">
-            <p class="mt-0 mb-1"><strong>계획시작시간</strong></p>
-            <input type="datetime-local" id="addStartDate" class="form-control" style="font-size: 12px;">
-          </div>
-          <div class="col-6">
-            <p class="mt-0 mb-1"><strong>계획종료시간</strong></p>
-            <input type="datetime-local" id="addEndDate" class="form-control" style="font-size: 12px;">
-          </div>
-        </div>
-        <div class="row mb-4">
-          <div class="col">
-            <p class="mt-0 mb-1"><strong>계획 내용</strong></p>
-            <textarea id="addTextArea" class="form-control" rows="8"></textarea>
-          </div>
-        </div>
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered " role="document">
+        <div class="modal-content">
+            <div class="modal-header row">
+                <h4 class="col-3 text-center">
+                    <strong>Title</strong>
+                </h4>
+                <input type="text" class="form-control col-7" id="addTitle">
+                <button type="button" class="close " data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="selectedColor">
+                <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
+                    <ul class="fc-color-picker" id="Addcolor-chooser">
+                        <li><a style="color: #C0C0C0;" href="#"><i class="fas fa-square"></i></a></li> <!-- 은색 -->
+                        <li><a style="color: #FFD700;" href="#"><i class="fas fa-square"></i></a></li> <!-- 금색 -->
+                        <li><a style="color: #FFC0CB;" href="#"><i class="fas fa-square"></i></a></li> <!-- 분홍색 -->
+                        <li><a style="color: #ADD8E6;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 파란색 -->
+                        <li><a style="color: #98FB98;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 녹색 -->
+                        <li><a style="color: #F08080;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 코랄색 -->
+                        <li><a style="color: #C19A6B;" href="#"><i class="fas fa-square"></i></a></li> <!-- 갈색 -->
+                        <li><a style="color: #BA55D3;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 보라색 -->
+                        <li><a style="color: #FF6347;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 빨간색-->
+                        <li><a style="color: #00CED1;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 청록색-->
+                    </ul>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-6">
+                        <p class="mt-0 mb-1"><strong>계획시작시간</strong></p>
+                        <input type="datetime-local" id="addStartDate" class="form-control" style="font-size: 12px;">
+                    </div>
+                    <div class="col-6">
+                        <p class="mt-0 mb-1"><strong>계획종료시간</strong></p>
+                        <input type="datetime-local" id="addEndDate" class="form-control" style="font-size: 12px;">
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col">
+                        <p class="mt-0 mb-1"><strong>계획 내용</strong></p>
+                        <textarea id="addTextArea" class="form-control" rows="8"></textarea>
+                    </div>
+                </div>
 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" id="newBtn">저장</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-      </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="newBtn">저장</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
-
 
 
 <!-- jQuery -->
@@ -450,9 +464,9 @@
 
 <!-- Page specific script -->
 <script th:inline="javascript">
-  let plans = [[${planList}]];
-  console.log(plans);
-  let user = [[${user}]];
+    let plans = [[${planList}]];
+    console.log(plans);
+    let user = [[${user}]];
 </script>
 <script type="module" src="/dist/js/volka/bej/bejMain.js"></script>
 </body>

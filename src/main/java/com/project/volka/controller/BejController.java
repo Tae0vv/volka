@@ -78,6 +78,24 @@ public class BejController {
 
         return ResponseEntity.ok(responseData); // 클라이언트에게 JSON 응답을 보냄
     }
+    @DeleteMapping("/plan")
+    @ResponseBody
+    public ResponseEntity<?> planDelete(@AuthenticationPrincipal User user,
+                                      @RequestBody HashMap<String, Object> planMap) {
+
+        log.info(planMap);
+
+        UserInfo userInfo = userService.updateUserInfo((UserSecurityDTO) user);
+        planService.deletePlan(planMap);
+        List<Plan> planList = planService.getPlanList(userInfo);
+
+        HashMap<String, Object> responseData = new HashMap<>();
+        responseData.put("status", "success");
+        responseData.put("message", "요청이 성공적으로 처리되었습니다.");
+        responseData.put("list", planList);
+
+        return ResponseEntity.ok(responseData); // 클라이언트에게 JSON 응답을 보냄
+    }
 
     @PostMapping("/planList")
     @ResponseBody
@@ -137,14 +155,13 @@ public class BejController {
         log.info(planMap);
 
         UserInfo userInfo = userService.updateUserInfo((UserSecurityDTO) user);
-        planService.changeDate(userInfo,planMap);
+        planService.updatePlanDate(planMap);
         List<Plan> planList = planService.getPlanList(userInfo);
 
         HashMap<String, Object> responseData = new HashMap<>();
         responseData.put("status", "success");
         responseData.put("message", "요청이 성공적으로 처리되었습니다.");
         responseData.put("list", planList);
-
         return ResponseEntity.ok(responseData); // 클라이언트에게 JSON 응답을 보냄
     }
 
