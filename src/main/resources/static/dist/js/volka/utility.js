@@ -9,10 +9,9 @@ export default class Utility {
                 dataType: "json",
                 success: resolve,
                 error: reject,
-                contentType: "application/json" // 데이터를 JSON으로 보낼 때 Content-Type을 설정해줍니다.
+                contentType: "application/json"
             });
         });
-
     }
 }
 

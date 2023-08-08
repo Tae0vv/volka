@@ -30,12 +30,14 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public void signup(UserInfoDTO userInfoDTO) throws MidExistException {
+    public void signup(UserInfoDTO userInfoDTO) throws Exception {
         String userId = userInfoDTO.getUserId();
         boolean exist = userRepository.existsById(userId);
+
         if(exist){
-            throw new MidExistException();
+            throw new Exception();
         }
+
         UserInfo userInfo = modelMapper.map(userInfoDTO, UserInfo.class);
         userInfo.changePassword(passwordEncoder.encode(userInfoDTO.getUserPw()));
         userInfo.addRole(UserRole.USER);

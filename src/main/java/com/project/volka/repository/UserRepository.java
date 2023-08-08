@@ -23,6 +23,8 @@ public interface UserRepository extends JpaRepository<UserInfo,String> {
     @EntityGraph(attributePaths = "roleSet")
     Optional<UserInfo> findByUserEmail(String userEmail);
 
+    UserInfo findByUserNickName(String nickName);
+
     @Modifying
     @Transactional
     @Query("update UserInfo u set u.userPw = :userPw where u.userId = :userId")

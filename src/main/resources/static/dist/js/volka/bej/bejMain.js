@@ -15,7 +15,6 @@ let planList = plans.map((data) => ({
 
 
 //keyword 가져와서 화면에 뿌리기
-
 let keyword = user.userKeyword;
 let keywordList;
 if (keyword) {
@@ -27,7 +26,6 @@ if (keyword) {
     keywordList = [];
 }
 
-// 키워도 화면에 표시
 let eventContainer = $('#event-container');
 for (let i = 0; i < keywordList.length; i++) {
     let eventData = keywordList[i].split('=');
@@ -43,8 +41,6 @@ for (let i = 0; i < keywordList.length; i++) {
 
 $('#external-events').on('click', '.delete-icon', function () {
     // x 버튼 누를때 삭제 시키기
-
-    console.log($(this).parent());
     $(this).parent().remove();
     let deleteData = {keyword: $(this).parent().text(), color: $(this).parent().css('background-color')};
     utility.ajax('/bej/keyword',deleteData,'delete')
@@ -140,32 +136,9 @@ $(function () {
             let postPlanColor = info.draggedEl.style.backgroundColor;
             tmpDate.setHours(tmpDate.getHours()+9);
 
-            console.log('startDate');
-            console.log(postPlanStartDate);
             utility.ajax('/bej/plan', {title: postTitle ,planStartDate: tmpDate, color: postPlanColor}, 'POST')
                 .then((responseData) => {
-                    console.log('일정 등록 성공:', responseData);
-                    plans = responseData.list;
-                    calendar.removeAllEvents();
-                    planList = responseData.list.map((data) => ({
-                        no: data.planNo,
-                        title: data.planTitle,
-                        start: new Date(data.planStartDate),
-                        end: data.planEndDate == null ? new Date(data.planStartDate) : new Date(data.planEndDate),
-                        allDay: true,
-                        backgroundColor: data.planColor,
-                        borderColor: data.planColor,
-                    }));
-
-                    planList.forEach((plan) => {
-                        if (plan.end) {
-                            let endDate = new Date(plan.end);
-                            endDate.setDate(endDate.getDate() + 1);
-                            plan.end = endDate;
-                        }
-                        calendar.addEvent(plan);
-                    });
-                    calendar.render();
+                    updatePlan(responseData);
                 })
                 .catch((error) => {
                     console.error('실패:', error);
@@ -202,30 +175,7 @@ $(function () {
                     // utility.ajax() 함수를 사용하여 서버로 데이터를 보냅니다.
                     utility.ajax('/bej/plan', sendData, 'put')
                         .then((responseData) => {
-                            console.log('일정 수정 성공:', responseData);
-                            // 이벤트를 캘린더에서 모두 제거합니다.
-                            calendar.removeAllEvents();
-
-                            // 서버로부터 받은 데이터로 이벤트 리스트를 업데이트합니다.
-                            planList = responseData.list.map((data) => ({
-                                no: data.planNo,
-                                title: data.planTitle,
-                                start: new Date(data.planStartDate),
-                                end: data.planEndDate == null ? new Date(data.planStartDate) : new Date(data.planEndDate),
-                                allDay: true,
-                                backgroundColor: data.planColor,
-                                borderColor: data.planColor,
-                            }));
-
-                            planList.forEach((plan) => {
-                                if (plan.end) {
-                                    let endDate = new Date(plan.end);
-                                    endDate.setDate(endDate.getDate() + 1);
-                                    plan.end = endDate;
-                                }
-                                calendar.addEvent(plan);
-                            });
-                            calendar.render();
+                            updatePlan(responseData);
                         })
                         .catch((error) => {
                             console.error('실패:', error);
@@ -235,38 +185,30 @@ $(function () {
                 });
 
             $('#deleteBtn').on('click', function() {
-                let selectedPlanNo = info.event.extendedProps.no; // 선택된 이벤트의 고유 번호 가져오기
+                let selectedPlanNo = info.event.extendedProps.no;
 
-                // 서버에 삭제 요청 보내기
-                utility.ajax('/bej/plan/', {planNo:selectedPlanNo}, 'delete')
-                    .then((responseData) => {
-                        console.log('계획 삭제 성공:', responseData);
-                        calendar.removeAllEvents();
+                Swal.fire({
+                    title: '계획 삭제',
+                    text: '계획을 삭제하시겠습니까?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: '삭제',
+                    cancelButtonText: '취소'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // 확인 버튼이 클릭되었을 때의 처리
+                        utility.ajax('/bej/plan/', {planNo: selectedPlanNo}, 'delete')
+                            .then((responseData) => {
+                                updatePlan(responseData);
+                            })
+                            .catch((error) => {
+                                console.error('계획 삭제 실패:', error);
+                            });
+                    }
+                });
 
-                        // 서버로부터 받은 데이터로 이벤트 리스트를 업데이트합니다.
-                        planList = responseData.list.map((data) => ({
-                            no: data.planNo,
-                            title: data.planTitle,
-                            start: new Date(data.planStartDate),
-                            end: data.planEndDate == null ? new Date(data.planStartDate) : new Date(data.planEndDate),
-                            allDay: true,
-                            backgroundColor: data.planColor,
-                            borderColor: data.planColor,
-                        }));
-
-                        planList.forEach((plan) => {
-                            if (plan.end) {
-                                let endDate = new Date(plan.end);
-                                endDate.setDate(endDate.getDate() + 1);
-                                plan.end = endDate;
-                            }
-                            calendar.addEvent(plan);
-                        });
-                        calendar.render();
-                    })
-                    .catch((error) => {
-                        console.error('계획 삭제 실패:', error);
-                    });
                 $('#myModal').modal('hide'); // 모달 닫기
             });
         },eventDrop: function(info) {
@@ -288,35 +230,53 @@ $(function () {
 
             utility.ajax('/bej/date', sendData, 'put')
                 .then((responseData) => {
-                    console.log('일정 이동 성공:', responseData);
-                    // 서버로부터 받은 데이터로 이벤트 리스트를 업데이트합니다.
-                    plans = responseData.list;
-                    calendar.removeAllEvents();
-                    planList = responseData.list.map((data) => ({
-                        no: data.planNo,
-                        title: data.planTitle,
-                        start: new Date(data.planStartDate),
-                        end: data.planEndDate == null ? new Date(data.planStartDate) : new Date(data.planEndDate),
-                        allDay: true,
-                        backgroundColor: data.planColor,
-                        borderColor: data.planColor,
-                    }));
-
-                    planList.forEach((plan) => {
-                        if (plan.end) {
-                            let endDate = new Date(plan.end);
-                            endDate.setDate(endDate.getDate() + 1);
-                            plan.end = endDate;
-                        }
-                        calendar.addEvent(plan);
-                    });
-                    calendar.render();
+                    updatePlan(responseData);
                 })
                 .catch((error) => {
                     console.error('일정 이동 실패:', error);
                 });
-        }
+        },eventDragStop: function(info) {
+                let calendarWrapper = $(info.view.calendar.el);
 
+                if (!info.jsEvent.pageX) return;
+
+                let mouseX = info.jsEvent.pageX;
+                let mouseY = info.jsEvent.pageY;
+
+                let calendarOffset = calendarWrapper.offset();
+                let calendarTop = calendarOffset.top;
+                let calendarLeft = calendarOffset.left;
+                let calendarBottom = calendarTop + calendarWrapper.height();
+                let calendarRight = calendarLeft + calendarWrapper.width();
+
+            if (mouseX < calendarLeft || mouseX > calendarRight || mouseY < calendarTop || mouseY > calendarBottom) {
+                let selectedPlanNo = info.event.extendedProps.no;
+
+                // SweetAlert2를 사용하여 커스텀 디자인의 확인 대화 상자 표시
+                Swal.fire({
+                    title: '계획 삭제',
+                    text: '계획을 삭제하시겠습니까?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: '삭제',
+                    cancelButtonText: '취소'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // 확인 버튼이 클릭되었을 때의 처리
+                        utility.ajax('/bej/plan/', {planNo: selectedPlanNo}, 'delete')
+                            .then((responseData) => {
+                                updatePlan(responseData);
+                            })
+                            .catch((error) => {
+                                console.error('계획 삭제 실패:', error);
+                            });
+                    }
+                });
+            }
+
+        },
     });
 
     planList.forEach((plan) => {
@@ -355,7 +315,6 @@ $(function () {
         if (val.length == 0) {
             return;
         } else if (textArray.includes(val)) {
-            // 이미 등록된 텍스트인 경우, swal 띄우기
             Swal.fire({
                 icon: 'error',
                 title: '오류',
@@ -364,7 +323,6 @@ $(function () {
             });
             return;
         }
-        // 이벤트 생성
         var event = $('<div />')
         event.css({
             'background-color': currColor,
@@ -395,7 +353,7 @@ $(function () {
 
 
 function updateModal(plan) {
-    // 기존 코드를 초기화/삭제하세요
+
     $('#eventTitleInput').val('');
     $('#textArea').val('');
     $('#startDate').val('');
@@ -415,7 +373,6 @@ function updateModal(plan) {
     let planStatus = plan.planStatus;
     let regDate = plan.modDate;
 
-    // 여기서부터 기존 코드 사용
     $('#eventTitleInput').val(title);
     $('#textArea').val(content);
     $('#startDate').val(planStartDate);
@@ -480,30 +437,7 @@ $(document).ready(function () {
 
         utility.ajax('/bej/plan', data, 'POST')
             .then((responseData) => {
-                console.log('일정 등록 성공:', responseData);
-                plans = responseData.list;
-                calendar.removeAllEvents();
-                planList = responseData.list.map((data) => ({
-                    no: data.planNo,
-                    title: data.planTitle,
-                    start: new Date(data.planStartDate),
-                    end: data.planEndDate == null ? new Date(data.planStartDate) : new Date(data.planEndDate),
-                    allDay: true,
-                    backgroundColor: data.planColor,
-                    borderColor: data.planColor,
-                }));
-
-                planList.forEach((plan) => {
-                    if (plan.end) {
-                        let endDate = new Date(plan.end);
-                        endDate.setDate(endDate.getDate() + 1);
-                        plan.end = endDate;
-                    }
-                    calendar.addEvent(plan);
-                });
-
-
-                calendar.render();
+                updatePlan(responseData);
             })
             .catch((error) => {
                 console.error('실패:', error);
@@ -512,4 +446,34 @@ $(document).ready(function () {
         $('#addModal').modal('hide');
     });
 
+
 });
+
+function updatePlan(responseData){
+
+    plans = responseData.list;
+    calendar.removeAllEvents();
+    planList = responseData.list.map((data) => ({
+        no: data.planNo,
+        title: data.planTitle,
+        start: new Date(data.planStartDate),
+        end: data.planEndDate == null ? new Date(data.planStartDate) : new Date(data.planEndDate),
+        allDay: true,
+        backgroundColor: data.planColor,
+        borderColor: data.planColor,
+    }));
+
+    planList.forEach((plan) => {
+        if (plan.end) {
+            let endDate = new Date(plan.end);
+            endDate.setDate(endDate.getDate() + 1);
+            plan.end = endDate;
+        }
+        calendar.addEvent(plan);
+    });
+
+
+    calendar.render();
+}
+
+

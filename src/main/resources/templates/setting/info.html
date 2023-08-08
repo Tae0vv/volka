@@ -95,8 +95,19 @@
 <!-- AdminLTE App -->
 <script src="/dist/js/adminlte.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.15/dist/sweetalert2.all.min.js"></script>
-
 <script layout:fragment="script" th:inline="javascript">
+  const error = [[${error}]];
+
+  if (error && error === 'nickName') {
+    Swal.fire({
+      icon: 'error',
+      title: '오류',
+      text: '동일한 nickName 을 가진 계정이 존재합니다.',
+      confirmButtonText: '확인'
+    });
+  }
 </script>
+<script src="/dist/js/volka/friend.js"></script>
+
 </body>
 </html>

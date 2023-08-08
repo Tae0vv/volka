@@ -49,7 +49,7 @@ public class UserController {
 
         try {
             userService.signup(userInfoDTO);
-        }catch (UserService.MidExistException e){
+        }catch (Exception e){
 
             redirectAttributes.addFlashAttribute("error","userId");
             return "redirect:/user/signup";

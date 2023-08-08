@@ -128,54 +128,48 @@
     <!-- /.sidebar -->
   </aside>
   <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
     <br>
-    <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
         <div class="row">
 
-          <!-- /.col -->
           <div class="col-md-9">
             <div class="card">
 
               <div class="card-body" style="height: 90vh">
                 <img src="/dist/img/home.jpg" style="width: 100%; height: 100%; object-fit: cover;">
               </div>
-              <!-- /.card-body -->
             </div>
-            <!-- /.card -->
           </div>
-          <!-- /.col -->
           <div class="col-md-3">
             <div class="card">
+              <div class="card-body" style="height: 90vh;">
+                <i class="fas fa-plus plus-icon float-right" style="color: silver;"></i>
+                <br>
+                <div class="search-box" style="display: none">
+                  <div class="input-group">
+                    <input type="text" class="form-control border-0 rounded-0 py-2" style="width: 30%; background-color: white; color: gray; box-shadow: inset 0 1px 1px rgba(0,0,0,.075);" placeholder="친구추가" id="addFriend">
+                    <button class="btn btn-secondary rounded-0 py-2 px-3 ml-2" style="background-color: silver; color: white; border: none;" id="addFriendBtn">추가</button>
+                  </div>
+                </div>
 
-              <div class="card-body" style="height: 90vh">
-                <ul class="list-group">
-
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <i class="fas fa-user mr-1"></i>친구1
-                    <span class="badge bg-light ml-auto">on</span>
+                <ul class="list-group mt-3">
+                  <li class="list-group-item d-flex justify-content-between align-items-center" style="background-color: white;">
+                    <i class="fas fa-user mr-3" style="color: silver;"></i>친구1
+                    <span class="badge bg-light ml-auto" style="color: silver; background-color: white;">on</span>
                   </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <i class="fas fa-user mr-1"></i>친구1
-                    <span class="badge bg-gray ml-auto">off</span>
+                  <li class="list-group-item d-flex justify-content-between align-items-center" style="background-color: white;">
+                    <i class="fas fa-user mr-3" style="color: silver;"></i>친구1
+                    <span class="badge bg-light-gray ml-auto" style="color: gray; background-color: silver;">off</span>
                   </li>
-
                 </ul>
               </div>
-              <!-- /.card-body -->
             </div>
           </div>
-
-
         </div>
-        <!-- /.row -->
-      </div><!-- /.container-fluid -->
+      </div>
     </section>
-    <!-- /.content -->
   </div>
-  <!-- /.content-wrapper -->
 
   <footer class="main-footer">
     <div class="float-right d-none d-sm-block">
@@ -194,6 +188,7 @@
 <script src="/plugins/jquery/jquery.min.js"></script>
 <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="/dist/js/adminlte.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.15/dist/sweetalert2.all.min.js"></script>
+<script type="module" src="/dist/js/volka/friend.js"></script>
 </body>
 </html>

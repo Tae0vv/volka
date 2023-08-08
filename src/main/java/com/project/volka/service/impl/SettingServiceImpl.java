@@ -43,7 +43,7 @@ public class SettingServiceImpl implements SettingService {
     }
 
     @Override
-    public void changeInfo(UserInfoDTO userInfoDTO,User user) {
+    public void changeInfo(UserInfoDTO userInfoDTO,User user) throws Exception {
 
         UserSecurityDTO userDTO = (UserSecurityDTO) user;
         UserInfo userInfo = userRepository.findById(userDTO.getUserId()).orElseThrow();

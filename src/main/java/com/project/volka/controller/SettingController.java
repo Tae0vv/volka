@@ -36,8 +36,17 @@ public class SettingController {
     }
 
     @PostMapping("/info")
-    public String changeInfo(@AuthenticationPrincipal User user, UserInfoDTO userInfoDTO) {
-        settingService.changeInfo(userInfoDTO, user);
+    public String changeInfo(@AuthenticationPrincipal User user, UserInfoDTO userInfoDTO,RedirectAttributes redirectAttributes) {
+
+
+        try{
+            settingService.changeInfo(userInfoDTO, user);
+        }catch (Exception e){
+            redirectAttributes.addFlashAttribute("error","nickName");
+            return "redirect:/setting/info";
+        }
+
+        redirectAttributes.addFlashAttribute("result", "change");
         return "redirect:/volka";
     }
 

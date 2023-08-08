@@ -11,11 +11,9 @@ import java.util.Map;
 
 public interface UserService {
 
-    static class MidExistException extends Exception{
 
-    }
 
-    void signup(UserInfoDTO userInfoDTO) throws MidExistException;
+    void signup(UserInfoDTO userInfoDTO) throws Exception;
     void kakaoAddInfo(UserInfoDTO userInfoDTO);
     UserInfo updateUserInfo(UserSecurityDTO user);
     void addKeyword(UserInfo userInfo, Map<String,Object> keywordMap);

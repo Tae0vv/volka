@@ -48,7 +48,6 @@ public class BejController {
                                       @RequestBody HashMap<String, Object> planMap) {
 
         log.info(planMap);
-        log.info("시간테스트");
 
         UserInfo userInfo = userService.updateUserInfo((UserSecurityDTO) user);
         planService.makePlan(userInfo,planMap);

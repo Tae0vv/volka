@@ -11,7 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @ToString
 @Table
-public class Friend {
+public class Friend extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,15 +19,26 @@ public class Friend {
     private Long friendNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_MAIN_ID" ,nullable = false, referencedColumnName = "USER_ID")
-    private UserInfo UserMainNo;
+    @JoinColumn(name = "MAIN_USER_ID" ,nullable = false, referencedColumnName = "USER_ID")
+    private UserInfo mainUser;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_SUB_ID" ,nullable = false, referencedColumnName = "USER_ID")
-    private UserInfo UserSubNo;
+    @JoinColumn(name = "TARGET_USER_ID" ,nullable = false, referencedColumnName = "USER_ID")
+    private UserInfo targetUser;
 
-    @Column(name = "FRIEND_REMOVE" ,nullable = false)
-    private int friendRemove;
-    // 0이면 정상 1이면 숨김 2이면 삭제
+    @Column(name = "FRIEND_RELATION" ,nullable = false)
+    private int friendRelation;// 0대기 1수락 2거절 3숨김 4차단
 
+    public void accept() {
+        this.friendRelation = 1;
+    }
+    public void reject() {
+        this.friendRelation = 2;
+    }
+    public void hide() {
+        this.friendRelation = 3;
+    }
+    public void block() {
+        this.friendRelation = 4;
+    }
 }
