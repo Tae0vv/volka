@@ -2,6 +2,7 @@ package com.project.volka.controller;
 
 import com.project.volka.entity.UserInfo;
 import com.project.volka.security.dto.UserSecurityDTO;
+import com.project.volka.service.interfaces.FriendService;
 import com.project.volka.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -13,6 +14,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 @Controller
 @Log4j2
 @RequestMapping("volka")
@@ -20,14 +23,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class VolkaController {
 
     private final UserService userService;
+    private final FriendService friendService;
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("")
     public String home( @AuthenticationPrincipal User user,Model model){
         log.info(user);
         UserInfo userinfo = userService.updateUserInfo((UserSecurityDTO) user);
-
+        List<String> friends = friendService.getFriendsNickName(userinfo, 1);
         model.addAttribute("user", userinfo);
+        model.addAttribute("friends", friends);
         return "/volka/home";
     }
 

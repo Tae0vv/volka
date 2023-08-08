@@ -25,6 +25,8 @@ $(document).ready(function () {
                         text: responseData.message,
                     });
                 }
+
+                $('#addFriend').val('');
             })
             .catch((error) => {
                 console.log(error);

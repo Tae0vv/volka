@@ -9,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @Service
 @Log4j2
@@ -104,6 +106,19 @@ public class FriendServiceImpl implements FriendService {
                 friendRepository.save(friend);
             }
         }
+    }
+
+    @Override
+    public List<String> getFriendsNickName(UserInfo userInfo, int relation) {
+
+        List<Friend> friends =  friendRepository.findByMainUserAndFriendRelation(userInfo,relation);
+        List<String> nickNameList = new ArrayList<>();
+
+        for(Friend friend : friends){
+            nickNameList.add(friend.getTargetUser().getUserName());
+        }
+
+        return nickNameList;
     }
 
 

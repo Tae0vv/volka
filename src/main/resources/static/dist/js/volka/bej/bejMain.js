@@ -279,6 +279,7 @@ $(function () {
         },
     });
 
+
     planList.forEach((plan) => {
         if (plan.end) {
             let endDate = new Date(plan.end);
@@ -291,6 +292,7 @@ $(function () {
 
     calendar.render();
 
+
     var currColor = '#3c8dbc' // 기본적으로 빨간색
     // 색상 선택 버튼
     $('#color-chooser > li > a').click(function (e) {
@@ -301,7 +303,6 @@ $(function () {
             'border-color'    : currColor
         })
     })
-
 
 
     $('#add-new-event').click(function (e) {
@@ -472,8 +473,5 @@ function updatePlan(responseData){
         calendar.addEvent(plan);
     });
 
-
     calendar.render();
 }
-
-

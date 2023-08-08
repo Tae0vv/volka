@@ -1,8 +1,10 @@
 package com.project.volka.repositoy;
 
 import com.project.volka.dto.PlanDTO;
+import com.project.volka.entity.Friend;
 import com.project.volka.entity.Plan;
 import com.project.volka.entity.UserInfo;
+import com.project.volka.repository.FriendRepository;
 import com.project.volka.repository.PlanRepository;
 import com.project.volka.repository.UserRepository;
 import lombok.extern.log4j.Log4j2;
@@ -28,15 +30,20 @@ public class FriendRepositoryTests {
     private PlanRepository planRepository;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private FriendRepository friendRepository;
 
 
 
 
     @Test
-    public void findByUserInfoTest(){
-        UserInfo userInfo = userRepository.findById("test").orElseThrow();
-        List<Plan> plans = planRepository.findByPlanUserNo(userInfo);
-        log.info(plans);
+    public void selectFriendTest(){
+        UserInfo userInfo = userRepository.findById("kty2451@gmail.com").orElseThrow();
+        List<Friend> list =  friendRepository.findByMainUserAndFriendRelation(userInfo,1);
+
+        log.info(list);
     }
+
+
 
 }

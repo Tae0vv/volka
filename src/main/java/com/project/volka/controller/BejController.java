@@ -3,6 +3,7 @@ package com.project.volka.controller;
 import com.project.volka.entity.Plan;
 import com.project.volka.entity.UserInfo;
 import com.project.volka.security.dto.UserSecurityDTO;
+import com.project.volka.service.interfaces.FriendService;
 import com.project.volka.service.interfaces.PlanService;
 import com.project.volka.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class BejController {
 
     private final UserService userService;
     private final PlanService planService;
+    private final FriendService friendService;
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/main")
@@ -37,9 +39,11 @@ public class BejController {
 
         UserInfo userInfo = userService.updateUserInfo((UserSecurityDTO) user);
         List<Plan> planList = planService.getPlanList(userInfo);
+        List<String> friends = friendService.getFriendsNickName(userInfo, 1);
 
         model.addAttribute("user", userInfo);
         model.addAttribute("planList", planList);
+        model.addAttribute("friends", friends);
     }
 
     @PostMapping("/plan")

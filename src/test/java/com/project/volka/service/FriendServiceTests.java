@@ -35,4 +35,13 @@ public class FriendServiceTests {
             log.info("없다");
         }
     }
+
+    @Test
+    public void accept(){
+        UserInfo userInfo = userRepository.findById("b").orElseThrow();
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("nickName","tae0");
+
+        friendService.acceptFriendship(userInfo, hashMap);
+    }
 }
