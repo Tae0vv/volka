@@ -3,114 +3,87 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>volka | 회원가입 </title>
+  <title>volka 회원가입</title>
 
   <link rel="stylesheet" href="/dist/css/reset.css">
-  <!-- Font Awesome -->
+  <link rel="stylesheet" href="/dist/css/user-info.css">
   <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
-  <!-- icheck bootstrap -->
   <link rel="stylesheet" href="/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-  <!-- Theme style -->
   <link rel="stylesheet" href="/dist/css/adminlte.min.css">
 
 </head>
 <body class="hold-transition register-page">
 <div class="register-box">
-  <div class="card card-outline card-primary">
+  <div class="card card-outline card-silver">
     <div class="card-header text-center">
-      <a href="#" class="h1"><b>VOLKA</b></a>
+      <a href="/user/login" class="h1"><b>VOLKA</b></a>
     </div>
     <div class="card-body">
-      <p class="login-box-msg">Register a new membership</p>
+      <p class="login-box-msg">volka에 회원가입이 필요합니다.</p>
 
       <form action="/user/signup" method="post" id="signupForm">
-        <div class="input-group mb-3">
-          <div class="input-group mb-3">
-            <input type="email" class="form-control" placeholder="Email" name="userEmail">
-            <div class="input-group-append">
-              <div class="input-group-text">
-                <span class="fas fa-envelope"></span>
-              </div>
-            </div>
+        <div class="form-group row">
+          <label for="userEmail" class="col-sm-4 col-form-label" style="font-size: 14px;">Email</label>
+          <div class="col-sm-8">
+            <input type="email" class="form-control" id="userEmail" name="userEmail">
           </div>
         </div>
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="ID" name="userId">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-user"></span>
-            </div>
+        <div class="form-group row">
+          <label for="userId" class="col-sm-4 col-form-label" style="font-size: 14px;">아이디</label>
+          <div class="col-sm-8">
+            <input type="text" class="form-control" id="userId" name="userId">
           </div>
         </div>
-        <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="PASSWORD" name="userPw">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
-            </div>
+        <div class="form-group row">
+          <label for="userPw" class="col-sm-4 col-form-label" style="font-size: 14px;">비밀번호</label>
+          <div class="col-sm-8">
+            <input type="password" class="form-control" id="userPw" name="userPw">
           </div>
         </div>
-        <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="RETYPE PASSWORD" id="userPwConfirm">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
-            </div>
+        <div class="form-group row">
+          <label for="userPwConfirm" class="col-sm-4 col-form-label" style="font-size: 14px;">비밀번호(확인)</label>
+          <div class="col-sm-8">
+            <input type="password" class="form-control" id="userPwConfirm">
           </div>
         </div>
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="USERNAME" name="userName">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-user"></span>
-            </div>
+        <div class="form-group row">
+          <label for="userName" class="col-sm-4 col-form-label" style="font-size: 14px;">이름</label>
+          <div class="col-sm-8">
+            <input type="text" class="form-control" id="userName" name="userName">
           </div>
         </div>
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="NICKNAME" name="userNickName">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-user"></span>
-            </div>
+        <div class="form-group row">
+          <label for="userNickName" class="col-sm-4 col-form-label" style="font-size: 14px;">닉네임</label>
+          <div class="col-sm-8">
+            <input type="text" class="form-control" id="userNickName" name="userNickName">
           </div>
         </div>
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="PHONE" name="userPhone">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-user"></span>
-            </div>
+        <div class="form-group row">
+          <label for="userPhone" class="col-sm-4 col-form-label" style="font-size: 14px;">휴대폰</label>
+          <div class="col-sm-8">
+            <input type="text" class="form-control" id="userPhone" name="userPhone" placeholder="숫자만 입력하세요">
           </div>
         </div>
         <div class="row">
           <div class="col-8">
-            <div class="icheck-primary">
+            <div class="icheck-silver">
               <input type="checkbox" id="agreeTerms" name="terms" value="agree">
               <label for="agreeTerms">
-                회원가입을 <a href="#">동의합니다.</a>
+                회원가입을 동의합니다.
               </label>
             </div>
           </div>
-          <!-- /.col -->
           <div class="col-4">
-            <button type="submit" class="btn btn-primary btn-block">가입하기</button>
+            <button type="submit" class="btn-silver btn-block">가입하기</button>
           </div>
-          <!-- /.col -->
         </div>
       </form>
-
-      <a href="/user/login" class="text-center">로그인 화면으로</a>
     </div>
-    <!-- /.form-box -->
-  </div><!-- /.card -->
+  </div>
 </div>
-<!-- /.register-box -->
 
-<!-- jQuery -->
 <script src="/plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
 <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- AdminLTE App -->
 <script src="/dist/js/adminlte.min.js"></script>
 <script src="/dist/js/volka/user/signup.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.15/dist/sweetalert2.all.min.js"></script>
@@ -122,7 +95,7 @@
     Swal.fire({
       icon: 'error',
       title: '오류',
-      text: '동일한 ID,Email,nickName 을 가진 계정이 존재합니다.',
+      text: '동일한 ID, Email, nickName을 가진 계정이 존재합니다.',
       confirmButtonText: '확인'
     });
   }
