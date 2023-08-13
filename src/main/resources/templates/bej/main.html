@@ -30,6 +30,9 @@
 
     <style>
 
+
+
+
         .nav-link:hover {
             color: black !important;
         }
@@ -312,20 +315,15 @@
 
 <!-- jQuery -->
 <script src="/plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap -->
 <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- jQuery UI -->
 <script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
-<!-- AdminLTE App -->
 <script src="/dist/js/adminlte.min.js"></script>
-<!-- fullCalendar 2.2.5 -->
 <script src="/plugins/moment/moment.min.js"></script>
 <script src="/plugins/fullcalendar/main.js"></script>
-<!-- AdminLTE for demo purposes -->
 <script src="/dist/js/demo.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.15/dist/sweetalert2.all.min.js"></script>
-
-<!-- Page specific script -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.4/stomp.min.js"></script>
 <script th:inline="javascript">
     let plans = [[${planList}]];
     console.log(plans);

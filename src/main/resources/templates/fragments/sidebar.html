@@ -108,7 +108,7 @@
                 </div>
             </div>
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <li class="nav-item menu-is-opening menu-open">
+                <li th:class="${#httpServletRequest.getRequestURI() == '/bej/main' ? 'nav-item menu-is-opening menu-open' : 'nav-item'}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon far fa-calendar"></i>
                         <p>
@@ -116,9 +116,9 @@
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
-                    <ul class="nav nav-treeview" style="display: block;">
+                    <ul class="nav nav-treeview" th:style="${#httpServletRequest.getRequestURI() == '/bej/main' ? 'display: block;' : 'display: none;'}">
                         <li class="nav-item">
-                            <a href="/bej/main" class="nav-link active">
+                            <a href="/bej/main" th:class="${#httpServletRequest.getRequestURI() == '/bej/main' ? 'nav-link active' : 'nav-link'}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>main</p>
                             </a>

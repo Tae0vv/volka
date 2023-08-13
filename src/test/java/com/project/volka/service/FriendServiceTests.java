@@ -40,7 +40,7 @@ public class FriendServiceTests {
     public void accept(){
         UserInfo userInfo = userRepository.findById("b").orElseThrow();
         HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("nickName","tae0");
+        hashMap.put("nickName","태영");
 
         friendService.acceptFriendship(userInfo, hashMap);
     }

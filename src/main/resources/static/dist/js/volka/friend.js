@@ -32,4 +32,35 @@ $(document).ready(function () {
                 console.log(error);
             });
     });
+
+    // 친구 리스트의 아이템 클릭 시 메뉴 토글
+    $('ul.list-group').on('click', 'li.list-group-item', function() {
+        $(this).find('.friend-menu').toggle();
+    });
+
+    $('#scheduleButton').click(function() {
+        // '일정보기' 버튼이 클릭되었을 때 수행할 동작
+        // 예를 들어, 일정 정보를 표시하는 로직을 추가
+    });
+
+    $('#appointmentButton').click(function() {
+        // '약속잡기' 버튼이 클릭되었을 때 수행할 동작
+        // 예를 들어, 약속 잡는 기능을 구현하는 로직을 추가
+    });
+
+    $('#chatButton').click(function() {
+        // '채팅' 버튼이 클릭되었을 때 수행할 동작
+        // 예를 들어, 채팅창을 열고 관련 로직을 추가
+    });
+
+    $('#blockButton').click(function() {
+        // '차단' 버튼이 클릭되었을 때 수행할 동작
+        // 예를 들어, 사용자를 차단하는 로직을 추가
+    });
+
+    $('#hideButton').click(function() {
+        // '숨김' 버튼이 클릭되었을 때 수행할 동작
+        // 예를 들어, 사용자를 목록에서 숨기는 로직을 추가
+    });
+
 });
