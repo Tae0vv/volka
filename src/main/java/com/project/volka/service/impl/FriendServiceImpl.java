@@ -115,7 +115,7 @@ public class FriendServiceImpl implements FriendService {
         List<String> nickNameList = new ArrayList<>();
 
         for(Friend friend : friends){
-            nickNameList.add(friend.getTargetUser().getUserName());
+            nickNameList.add(friend.getTargetUser().getUserNickName());
         }
 
         return nickNameList;

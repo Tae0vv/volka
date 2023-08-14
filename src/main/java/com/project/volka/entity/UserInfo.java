@@ -44,7 +44,7 @@ public class UserInfo extends BaseEntity{
     @Column(nullable = false, name = "USER_SOCIAL")
     private boolean userSocial;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
     private Set<UserRole> roleSet = new HashSet<>();
 

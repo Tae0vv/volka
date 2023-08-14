@@ -18,6 +18,7 @@ public interface UserService {
     UserInfo updateUserInfo(UserSecurityDTO user);
     void addKeyword(UserInfo userInfo, Map<String,Object> keywordMap);
     void deleteKeyword(UserInfo userInfo, Map<String,Object> keywordMap);
-
+    String getUserNickName(String id);
+    UserInfo getUserInfo(String nickName);
 
 }

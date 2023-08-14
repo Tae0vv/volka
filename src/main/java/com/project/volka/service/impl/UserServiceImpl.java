@@ -15,10 +15,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import javax.transaction.Transactional;
+import java.util.*;
 
 @Log4j2
 @Service
@@ -113,6 +111,17 @@ public class UserServiceImpl implements UserService {
         }
 
         userRepository.save(userInfo);
+    }
+
+    @Override
+    public String getUserNickName(String id) {
+        UserInfo userInfo = userRepository.findById(id).orElseThrow();
+        return userInfo.getUserNickName();
+    }
+
+    @Override
+    public UserInfo getUserInfo(String nickName) {
+        return userRepository.findByUserNickName(nickName);
     }
 }
 

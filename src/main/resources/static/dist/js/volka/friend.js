@@ -85,8 +85,7 @@ function onOffconnect() {
         stompOnOffClient.send("/app/status", {}, JSON.stringify({ nickName : nickName, status : 'on' }));
         stompOnOffClient.subscribe('/topic/onoff', function(onoff) {
             // 서버한테 메시지를 받았을때 실행할 메서드
-            // 여기서는 유저 li에있는 on off를 변경해야된다.
-            updateUserStatus(JSON.parse(onoff.body)); // .content를 삭제
+            updateUserStatus(JSON.parse(onoff.body));
         });
     },function (error){
         console.log(error);
@@ -95,5 +94,6 @@ function onOffconnect() {
 
 function updateUserStatus(message) {
     //li를 for문 돌면서 친구가 있으면 on 없으면 off로 변경하는 메서드
+    console.log("메시지받음?")
     console.log(message);
 }
