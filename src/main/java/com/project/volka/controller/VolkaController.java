@@ -29,10 +29,12 @@ public class VolkaController {
     @GetMapping("")
     public String home( @AuthenticationPrincipal User user,Model model){
         log.info(user);
-        UserInfo userinfo = userService.updateUserInfo((UserSecurityDTO) user);
-        List<String> friends = friendService.getFriendsNickName(userinfo, 1);
-        model.addAttribute("user", userinfo);
+        UserInfo userInfo = userService.updateUserInfo((UserSecurityDTO) user);
+        List<String> friends = friendService.getFriendsNickName(userInfo, 1);
+        List<String> friendRequests = friendService.getFriendsNickName(userInfo, 0);
+        model.addAttribute("user", userInfo);
         model.addAttribute("friends", friends);
+        model.addAttribute("friendRequests", friendRequests);
         return "/volka/home";
     }
 

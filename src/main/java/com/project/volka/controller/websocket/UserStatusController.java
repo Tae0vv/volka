@@ -25,7 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequiredArgsConstructor
 public class UserStatusController {
 
-    private final SimpMessagingTemplate messagingTemplate;
+    private final SimpMessagingTemplate simpMessagingTemplate;
     private final ConcurrentHashMap<String, String> loginAllUsers = new ConcurrentHashMap<>(); // 스레드에 안전한 자료구조
     private final UserService userService;
     private final FriendService friendService;
@@ -63,8 +63,8 @@ public class UserStatusController {
             String senderDestination = "/queue/onoff/" + nickName;
 
             log.info("전송 준비: {}, 내용: {}", senderDestination, userStatusJson);
-            messagingTemplate.convertAndSend(senderDestination, userStatusJson);
-            messagingTemplate.convertAndSend("/topic/onoff", message);
+            simpMessagingTemplate.convertAndSend(senderDestination, userStatusJson);
+            simpMessagingTemplate.convertAndSend("/topic/onoff", message);
         }catch (Exception e){
             log.info(e);
         }
@@ -91,7 +91,7 @@ public class UserStatusController {
                 String userStatusJson = objectMapper.writeValueAsString(disconnectedUserStatus);
 
                 // 상태 업데이트를 위해 메시지를 보냄
-                messagingTemplate.convertAndSend("/topic/onoff", userStatusJson);
+                simpMessagingTemplate.convertAndSend("/topic/onoff", userStatusJson);
             } catch (Exception e) {
                 log.info(e);
             }

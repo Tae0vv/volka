@@ -45,5 +45,11 @@ public class FriendRepositoryTests {
     }
 
 
+    @Test
+    public void friendRequestTest(){
+        UserInfo userInfo = userRepository.findById("kty2451@gmail.com").orElseThrow();
+        List<Friend> list =  friendRepository.findByMainUserAndFriendRelation(userInfo,0);
+        log.info(list);
+    }
 
 }

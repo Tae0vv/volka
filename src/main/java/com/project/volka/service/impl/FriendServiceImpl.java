@@ -31,7 +31,7 @@ public class FriendServiceImpl implements FriendService {
             Friend req = Friend.builder()
                     .mainUser(userInfo)
                     .targetUser(resUser)
-                    .friendRelation(0)
+                    .friendRelation(-1)
                     .build();
 
             Friend res = Friend.builder()

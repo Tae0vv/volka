@@ -27,7 +27,7 @@ public class Friend extends BaseEntity{
     private UserInfo targetUser;
 
     @Column(name = "FRIEND_RELATION" ,nullable = false)
-    private int friendRelation;// 0대기 1수락 2거절 3숨김 4차단
+    private int friendRelation;//-1최조에 걸었을때 건사람 0대기 1수락 2거절 3숨김 4차단
 
     public void accept() {
         this.friendRelation = 1;

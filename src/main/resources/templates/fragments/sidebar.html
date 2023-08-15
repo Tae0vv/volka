@@ -48,15 +48,22 @@
             <li class="nav-item dropdown" id="friendship">
                 <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false">
                     <i class="fas fa-users"></i>
-                    <span class="badge badge-warning navbar-badge">1</span>
+                    <span class="badge badge-warning navbar-badge req-count" th:text="${#lists.size(friendRequests)}"></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px;">
-                    <span class="dropdown-item dropdown-header">1개의 알림</span>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-users mr-2"></i> b님의 친구 신청
-                        <span class="float-right text-muted text-sm">3 mins</span>
-                    </a>
+                    <span class="dropdown-item dropdown-header req-num" th:text="${#lists.size(friendRequests)} + '개의 알림'"></span>
+                    <div th:each="friend : ${friendRequests}" class="friend-requests">
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item req-name">
+                            <i class="fas fa-users mr-2"></i> [[${friend}]]님의 친구 신청
+                            <div class="float-right">
+                                <div class="btn-group">
+                                    <button class="btn btn-outline-success btn-xs mr-2">수락</button>
+                                    <button class="btn btn-outline-danger btn-xs">거절</button>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </li>
 

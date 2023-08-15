@@ -40,10 +40,12 @@ public class BejController {
         UserInfo userInfo = userService.updateUserInfo((UserSecurityDTO) user);
         List<Plan> planList = planService.getPlanList(userInfo);
         List<String> friends = friendService.getFriendsNickName(userInfo, 1);
+        List<String> friendRequests = friendService.getFriendsNickName(userInfo, 0);
 
         model.addAttribute("user", userInfo);
         model.addAttribute("planList", planList);
         model.addAttribute("friends", friends);
+        model.addAttribute("friendRequests", friendRequests);
     }
 
     @PostMapping("/plan")
