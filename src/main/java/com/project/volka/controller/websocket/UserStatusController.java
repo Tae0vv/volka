@@ -14,6 +14,7 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,9 +57,11 @@ public class UserStatusController {
                     friendMap.put(userNickName, "on");
                 }
             }
+
             ObjectMapper serverToClient = new ObjectMapper();
             String userStatusJson = serverToClient.writeValueAsString(friendMap);
             String senderDestination = "/queue/onoff/" + nickName;
+
             log.info("전송 준비: {}, 내용: {}", senderDestination, userStatusJson);
             messagingTemplate.convertAndSend(senderDestination, userStatusJson);
             messagingTemplate.convertAndSend("/topic/onoff", message);
@@ -76,9 +79,24 @@ public class UserStatusController {
         if (headerAccessor.getUser() != null) {
             String disconnectedUser = headerAccessor.getUser().getName();
             String disconnectedUserNickName = userService.getUserNickName(disconnectedUser);
-            log.info("팅김 : " + disconnectedUserNickName);
             loginAllUsers.remove(disconnectedUserNickName);
+
+            Map<String, String> disconnectedUserStatus = new HashMap<>();
+            disconnectedUserStatus.put("nickName", disconnectedUserNickName);
+            disconnectedUserStatus.put("status", "off");
+
+            try {
+                // Map을 JSON 문자열로 변환
+                ObjectMapper objectMapper = new ObjectMapper();
+                String userStatusJson = objectMapper.writeValueAsString(disconnectedUserStatus);
+
+                // 상태 업데이트를 위해 메시지를 보냄
+                messagingTemplate.convertAndSend("/topic/onoff", userStatusJson);
+            } catch (Exception e) {
+                log.info(e);
+            }
         }
     }
+
 
 }
