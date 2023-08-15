@@ -83,8 +83,14 @@ function onOffconnect() {
         // 연결 성공시 실행할 메서드
         console.log('Connected: ' + frame);
         stompOnOffClient.send("/app/status", {}, JSON.stringify({ nickName : nickName, status : 'on' }));
+        stompOnOffClient.subscribe('/queue/onoff/' + nickName, function(onoff) {
+            // 개인 토픽에 대한 처리
+            console.log("로그인시");
+            updateUserStatus(JSON.parse(onoff.body));
+        });
         stompOnOffClient.subscribe('/topic/onoff', function(onoff) {
-            // 서버한테 메시지를 받았을때 실행할 메서드
+            // 퍼블릭 토픽에 대한 처리
+            console.log("다른사람이 로그인 했을때");
             updateUserStatus(JSON.parse(onoff.body));
         });
     },function (error){
@@ -97,3 +103,5 @@ function updateUserStatus(message) {
     console.log("메시지받음?")
     console.log(message);
 }
+
+

@@ -56,18 +56,18 @@ public class UserStatusController {
                     friendMap.put(userNickName, "on");
                 }
             }
-            log.info("변환전 " + friendMap);
             ObjectMapper serverToClient = new ObjectMapper();
             String userStatusJson = serverToClient.writeValueAsString(friendMap);
-            log.info("변환후 : " + userStatusJson);
-            // 새로운 사람이 접속할때마다 새로운 사람의 친구의 정보가 모두에게 넘어가는 문제발생
-            // 이 handleUserStatus()는 보낸사람에게만 돌아가게 설정해야겠다.
-            // 그리고 누군가가 새로 접속하거나 connect이 끊길때 접속한 사람들한테 각자의 친구리스트 보내줘야돼
-            messagingTemplate.convertAndSend("/topic/onoff", userStatusJson);
+            String senderDestination = "/queue/onoff/" + nickName;
+            log.info("전송 준비: {}, 내용: {}", senderDestination, userStatusJson);
+            messagingTemplate.convertAndSend(senderDestination, userStatusJson);
+            messagingTemplate.convertAndSend("/topic/onoff", message);
         }catch (Exception e){
             log.info(e);
         }
     }
+
+
 
     @EventListener
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
