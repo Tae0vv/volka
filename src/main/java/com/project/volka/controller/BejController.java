@@ -1,5 +1,6 @@
 package com.project.volka.controller;
 
+import com.project.volka.entity.Friend;
 import com.project.volka.entity.Plan;
 import com.project.volka.entity.UserInfo;
 import com.project.volka.security.dto.UserSecurityDTO;
@@ -170,4 +171,35 @@ public class BejController {
         return ResponseEntity.ok(responseData); // 클라이언트에게 JSON 응답을 보냄
     }
 
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/schedule")
+    public String scheduleGet(@AuthenticationPrincipal User user, Model model, @RequestParam String friend) {
+
+        log.info("들어옴?");
+        log.info(friend);
+
+        UserInfo userInfo = userService.updateUserInfo((UserSecurityDTO) user);
+        UserInfo friendInfo = userService.getUserInfo(friend);
+        List<String> friendsOfFriend = friendService.getFriendsNickName(friendInfo,1);
+        boolean isFriend = false;
+
+        for(String friendOfFriend : friendsOfFriend){
+            if(userInfo.getUserNickName().equals(friendOfFriend)){
+                isFriend = true;
+                break;
+            }
+        }
+
+
+        if (isFriend) {
+            List<Plan> planList = planService.getPlanList(friendInfo);
+
+            model.addAttribute("user", friendInfo);
+            model.addAttribute("planList", planList);
+            return "bej/schedule";
+        } else {
+            return "bej/nofriend";
+        }
+
+    }
 }

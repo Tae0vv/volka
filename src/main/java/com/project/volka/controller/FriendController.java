@@ -1,5 +1,6 @@
 package com.project.volka.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.volka.dto.UserInfoDTO;
 import com.project.volka.entity.UserInfo;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.List;
@@ -64,13 +64,21 @@ public class FriendController {
     @PostMapping("accept")
     @ResponseBody
     public ResponseEntity<?> friendAccept(@AuthenticationPrincipal User user,
-                                        @RequestBody HashMap<String,String> friendMap) {
+                                        @RequestBody HashMap<String,String> friendMap) throws JsonProcessingException {
 
         UserInfo userInfo = userService.updateUserInfo((UserSecurityDTO) user);
         HashMap<String, Object> responseData = new HashMap<>();
         friendService.acceptFriendship(userInfo,friendMap);
         List<String> friends = friendService.getFriendsNickName(userInfo, 1);
         List<String> friendRequests = friendService.getFriendsNickName(userInfo, 0);
+
+        UserInfo waitUser = userService.getUserInfo(friendMap.get("nickName"));
+        List<String> waitUserFriends = friendService.getFriendsNickName(waitUser, 1);
+        ObjectMapper serverToClient = new ObjectMapper();
+        String waitUserFriendsJson = serverToClient.writeValueAsString(waitUserFriends);
+        log.info("보내기전 : " + waitUserFriendsJson);
+
+        simpMessagingTemplate.convertAndSend("/queue/accept/" +  friendMap.get("nickName"),waitUserFriendsJson);
         responseData.put("friends",friends);
         responseData.put("friendRequests",friendRequests);
         return ResponseEntity.ok(responseData);
@@ -86,6 +94,32 @@ public class FriendController {
         friendService.rejectFriendship(userInfo,friendMap);
         List<String> friendRequests = friendService.getFriendsNickName(userInfo, 0);
         responseData.put("friendRequests",friendRequests);
+        return ResponseEntity.ok(responseData);
+    }
+
+    @PostMapping("hide")
+    @ResponseBody
+    public ResponseEntity<?> friendHide(@AuthenticationPrincipal User user,
+                                        @RequestBody HashMap<String,String> friendMap) {
+
+        UserInfo userInfo = userService.updateUserInfo((UserSecurityDTO) user);
+        HashMap<String, Object> responseData = new HashMap<>();
+        friendService.hideFriendship(userInfo,friendMap);
+        List<String> friends = friendService.getFriendsNickName(userInfo, 1);
+        responseData.put("friends",friends);
+        return ResponseEntity.ok(responseData);
+    }
+
+    @PostMapping("block")
+    @ResponseBody
+    public ResponseEntity<?> friendBlock(@AuthenticationPrincipal User user,
+                                        @RequestBody HashMap<String,String> friendMap) {
+
+        UserInfo userInfo = userService.updateUserInfo((UserSecurityDTO) user);
+        HashMap<String, Object> responseData = new HashMap<>();
+        friendService.blockFriendship(userInfo,friendMap);
+        List<String> friends = friendService.getFriendsNickName(userInfo, 1);
+        responseData.put("friends",friends);
         return ResponseEntity.ok(responseData);
     }
 }

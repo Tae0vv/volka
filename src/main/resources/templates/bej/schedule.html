@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${user.userNickName} + '님의 스케줄'"></title>
+
+    <!-- fullCalendar -->
+    <link rel="stylesheet" href="/plugins/fullcalendar/main.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- JQVMap -->
+    <link rel="stylesheet" href="/plugins/jqvmap/jqvmap.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="/dist/css/reset.css">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css">
+    <!-- summernote -->
+    <link rel="stylesheet" href="/plugins/summernote/summernote-bs4.min.css">
+
+    <style>
+        .external-event {
+            font-weight: lighter;
+        }
+
+        .fc-header-toolbar .fc-prev-button,
+        .fc-header-toolbar .fc-next-button,
+        .fc-header-toolbar .fc-today-button {
+            background-color: #C0C0C0;
+            border-color: white;
+        }
+
+        .fc-header-toolbar .fc-toolbar-title {
+            color: black;
+        }
+
+        .fc-header-toolbar .fc-dayGridMonth-button,
+        .fc-header-toolbar .fc-timeGridWeek-button,
+        .fc-header-toolbar .fc-timeGridDay-button {
+            background-color: #C0C0C0;
+            border-color: white;
+
+        }
+
+        .fc-header-toolbar .fc-dayGridMonth-button.active,
+        .fc-header-toolbar .fc-timeGridWeek-button.active,
+        .fc-header-toolbar .fc-timeGridDay-button.active {
+            background-color: #757575 !important;
+            border-color: #FFFFFF !important;
+        }
+
+        .header-text {
+            background-color:  silver;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-text h1 {
+            font-size: 24px;
+            color: #fff;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body style="background-color: #f4f6f9">
+    <div >
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-md-12 header-text">
+                    <h1 th:text="${user.userNickName} + '님의 일정'"></h1>
+                </div>
+            </div>
+        </div>
+        <br>
+        <br>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="sticky-top mb-3">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card card-primary">
+                        <div class="card-body p-0">
+                            <!-- THE CALENDAR -->
+                            <div id="calendar"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/plugins/jquery/jquery.min.js"></script>
+    <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="/dist/js/adminlte.min.js"></script>
+    <script src="/plugins/moment/moment.min.js"></script>
+    <script src="/plugins/fullcalendar/main.js"></script>
+    <script src="/dist/js/demo.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.0.2/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.15/dist/sweetalert2.all.min.js"></script>
+    <script th:inline="javascript">
+        let plans = [[${planList}]];
+        let user = [[${user}]];
+    </script>
+    <script type="module" src="/dist/js/volka/bej/schedule.js"></script>
+</body>
+</html>
