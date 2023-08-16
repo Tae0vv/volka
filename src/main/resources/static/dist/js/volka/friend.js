@@ -8,6 +8,7 @@ $(document).ready(function () {
     initEvent();
     onOffconnect();
     friendRequestConnect();
+    promiseRequestConnect();
 });
 
 let stompOnOffClient = null;
@@ -20,18 +21,63 @@ function onOffconnect() {
         // 연결 성공시 실행할 메서드
         stompOnOffClient.send("/app/status", {}, JSON.stringify({ nickName : nickName, status : 'on' }));
 
-        stompOnOffClient.subscribe('/queue/onoff/' + nickName, function(onoff) {
-            friendsStatus = JSON.parse(onoff.body);
+        stompOnOffClient.subscribe('/queue/onoff/' + nickName, function(msg) {
+            friendsStatus = JSON.parse(msg.body);
             loginUserStatus(friendsStatus);
         });
-        stompOnOffClient.subscribe('/topic/onoff', function(onoff) {
+        stompOnOffClient.subscribe('/topic/onoff', function(msg) {
             console.log('wait... friend');
-            updateUserStatus(JSON.parse(onoff.body));
+            updateUserStatus(JSON.parse(msg.body));
         });
     },function (error){
         console.log(error);
     });
 }
+
+let stompFriendRequestClient = null;
+function friendRequestConnect() {
+    let socket = new SockJS('/friend');
+    stompFriendRequestClient = Stomp.over(socket);
+    stompFriendRequestClient.connect({}, function(frame) {
+        stompFriendRequestClient.subscribe('/queue/friend/' + nickName, function(msg) {
+            friendRequests = JSON.parse(msg.body);
+            renderFriendRequests();
+        });
+        stompFriendRequestClient.subscribe('/queue/accept/' + nickName, function(msg) {
+            friends = JSON.parse(msg.body);
+            console.log('수락완료');
+            console.log(friends);
+            renderFriends();
+        });
+
+    },function (error){
+        console.log(error);
+    });
+}
+
+let stompPromiseRequestClient = null;
+function promiseRequestConnect() {
+    let socket = new SockJS('/promise');
+    stompPromiseRequestClient = Stomp.over(socket);
+    stompPromiseRequestClient.connect({}, function(frame) {
+        stompPromiseRequestClient.subscribe('/queue/promise/' + nickName, function(msg) {
+            //알림
+        });
+        stompFriendRequestClient.subscribe('/queue/agree/' + nickName, function(msg) {
+            //data가 생겨서 calendar render가 되어야함
+        });
+
+    },function (error){
+        console.log(error);
+    });
+}
+
+
+
+
+
+
+
 
 function loginUserStatus(message) {
     $(".user-li").each(function() {
@@ -71,28 +117,6 @@ function updateUserStatus(message) {
 }
 
 
-let stompFriendRequestClient = null;
-
-function friendRequestConnect() {
-    let socket = new SockJS('/req');
-    stompFriendRequestClient = Stomp.over(socket);
-    stompFriendRequestClient.connect({}, function(frame) {
-        stompFriendRequestClient.subscribe('/queue/req/' + nickName, function(onoff) {
-            friendRequests = JSON.parse(onoff.body);
-            renderFriendRequests();
-        });
-        stompFriendRequestClient.subscribe('/queue/accept/' + nickName, function(onoff) {
-            friends = JSON.parse(onoff.body);
-            console.log('수락완료');
-            console.log(friends);
-            renderFriends();
-        });
-
-    },function (error){
-        console.log(error);
-    });
-}
-
 function initEvent(){
 
     $(".plus-icon").off('click').click(function() {
@@ -106,8 +130,15 @@ function initEvent(){
         $('#friendModal').modal('hide');
     });
 
+    $('.fc-color-picker a').off('click').click(function() {
+        $('.fc-color-picker a.selected').removeClass('selected');
+        $(this).addClass('selected');
+        let selectedColor = $(this).css('color');
+        $('#selectedColor').val(selectedColor);
+    });
 
     $('#appointmentButton').off('click').click(function() {
+        $('#friendModal').modal('hide');
         console.log('약속잡기');
         $('#addTitleReq').val('');
         $('#selectedColorReq').val('');
@@ -116,9 +147,7 @@ function initEvent(){
         $('#addTextAreaReq').val('');
         $('.fc-color-picker a.selected').removeClass('selected');
         $('#promiseModal').modal('show');
-        $('#friendModal').modal('hide');
     });
-
 
     $('#chatButton').off('click').click(function() {
         console.log('채팅');
@@ -153,8 +182,8 @@ function initEvent(){
         $('#friendModal').modal('hide');
     });
 
-    $('#promise-req').on('click', function() {
-
+    $('#promise-req').off('click').click( function() {
+        console.log('promise ajax post');
         let userNickName = $('.user-name').text().split('님')[0].trim();
         const title = $('#addTitleReq').val();
         const selectedColor = $('#selectedColorReq').val();
@@ -170,7 +199,7 @@ function initEvent(){
             content: content,
             friendName: userNickName
         };
-
+        $('#promiseModal').modal('hide');
         utility.ajax('/promise/request', data, 'POST')
             .then((responseData) => {
                 console.log(responseData);
@@ -180,18 +209,12 @@ function initEvent(){
                     icon: 'success',
                     showConfirmButton: false,
                     timer: 800
-                })
+                });
             })
             .catch((error) => {
                 console.error('실패:', error);
             });
-
-        $('#addModal').modal('hide');
     });
-
-
-
-
 
     $('.user-li').off('click').on('click', function (event) {
         let modal = $('#friendModal .modal-dialog');
@@ -214,7 +237,7 @@ function initEvent(){
                         icon: 'success',
                         showConfirmButton: false,
                         timer: 800
-                    })
+                    });
                 } else if (responseData.status === 'fail') {
                     // 친구 요청 실패시 처리
                     Swal.fire({
@@ -266,9 +289,7 @@ function initEvent(){
             .catch((error) => {
                 console.log(error);
             });
-
     });
-
 }
 
 
@@ -309,10 +330,10 @@ function renderFriendRequests() {
 }
 
 function sortUserList() {
-    let $friendList = $("#friends-list");
-    let $onlineUsers = $friendList.find("li:has(.bg-light)").sort();
-    let $offlineUsers = $friendList.find("li:not(:has(.bg-light))").sort();
+    let renderFriendList = $("#friends-list");
+    let onlineUsers = renderFriendList.find("li:has(.bg-light)").sort();
+    let offlineUsers = renderFriendList.find("li:not(:has(.bg-light))").sort();
 
-    $friendList.empty().append($onlineUsers).append($offlineUsers);
+    renderFriendList.empty().append(onlineUsers).append(offlineUsers);
     initEvent();
 }

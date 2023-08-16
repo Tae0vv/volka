@@ -6,5 +6,5 @@ import com.project.volka.entity.UserInfo;
 import java.util.HashMap;
 
 public interface PromiseService {
-    Promise makePromise(UserInfo userInfo, HashMap<String, Object> promiseInfo);
+    void makePromise(UserInfo userInfo, HashMap<String, Object> promiseInfo);
 }

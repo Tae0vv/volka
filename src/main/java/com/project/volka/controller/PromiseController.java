@@ -35,13 +35,13 @@ public class PromiseController {
     @PostMapping("/request")
     @ResponseBody
     public ResponseEntity<?> promisePost(@AuthenticationPrincipal User user,
-                                         @RequestBody HashMap<String, Object> planMap) {
+                                         @RequestBody HashMap<String, Object> promiseMap) {
 
-        log.info("들어옴?");
-        log.info(planMap);
+        log.info(promiseMap);
 
         UserInfo userInfo = userService.updateUserInfo((UserSecurityDTO) user);
-        Promise promise = promiseService.makePromise(userInfo, planMap);
+        promiseService.makePromise(userInfo, promiseMap);
+
         HashMap<String, Object> responseData = new HashMap<>();
         responseData.put("status", "success");
         responseData.put("message", "약속을 요청했습니다.");

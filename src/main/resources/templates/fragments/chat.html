@@ -64,10 +64,10 @@
                         <a href="#">
                             <img class="contacts-list-img" src="../dist/img/user1-128x128.jpg" alt="User Avatar">
                             <div class="contacts-list-info">
-<span class="contacts-list-name">
-Count Dracula
-<small class="contacts-list-date float-right">2/28/2015</small>
-</span>
+                                <span class="contacts-list-name">
+                                Count Dracula
+                                <small class="contacts-list-date float-right">2/28/2015</small>
+                                </span>
                                 <span class="contacts-list-msg">How have you been? I was...</span>
                             </div>
                         </a>
@@ -80,11 +80,24 @@ Count Dracula
                 <div class="input-group">
                     <input type="text" name="message" placeholder="Type Message ..." class="form-control">
                     <span class="input-group-append">
-<button type="submit" class="btn btn-success">Send</button>
-</span>
+                        <button type="submit" class="btn btn-success">Send</button>
+                        </span>
                 </div>
             </form>
         </div>
     </div>
+    <script src="/plugins/jquery/jquery.min.js"></script>
+    <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="/dist/js/adminlte.min.js"></script>
+    <script src="/plugins/moment/moment.min.js"></script>
+    <script src="/plugins/fullcalendar/main.js"></script>
+    <script src="/dist/js/demo.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.0.2/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.15/dist/sweetalert2.all.min.js"></script>
+    <script th:inline="javascript">
+        let user = [[${user}]];
+    </script>
 </body>
 </html>

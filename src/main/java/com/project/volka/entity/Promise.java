@@ -28,7 +28,7 @@ public class Promise {
     private UserInfo targetUser;
 
     @Column(name = "PROMISE_STATUS" ,nullable = false)
-    private int promiseStatus; // 0.건사람 1.대기 2.수락 3.거절
+    private int promiseStatus; // -1:건사람 0:대기 1:수락 2:거절
 
     @Column(name = "PLAN_TITLE" ,nullable = false)
     private String planTitle;
@@ -46,11 +46,11 @@ public class Promise {
     private String planColor;
 
     public void acceptPromise() {
-        this.promiseStatus = 2;
+        this.promiseStatus = 1;
     }
 
     public void rejectPromise() {
-        this.promiseStatus = 3;
+        this.promiseStatus = 2;
     }
 }
 

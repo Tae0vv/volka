@@ -88,14 +88,16 @@
       icon: 'success',
       title: '완료',
       text: '회원가입이 완료되었습니다.',
-      confirmButtonText: '확인'
+      showConfirmButton: false,
+      timer: 800
     });
   } else if (result && result === 'change') {
     Swal.fire({
       icon: 'success',
       title: '완료',
       text: '비밀번호가 변경되었습니다.',
-      confirmButtonText: '확인'
+      showConfirmButton: false,
+      timer: 800
     });
   }
 </script>

@@ -51,7 +51,7 @@ public class FriendController {
             ObjectMapper serverToClient = new ObjectMapper();
             String friendRequestsJson = serverToClient.writeValueAsString(friendRequests);
             log.info("보내기전 : " + friendRequestsJson);
-            simpMessagingTemplate.convertAndSend("/queue/req/" +  friendMap.get("nickName"),friendRequestsJson);
+            simpMessagingTemplate.convertAndSend("/queue/friend/" +  friendMap.get("nickName"),friendRequestsJson);
 
         }catch (Exception e){
             responseData.put("status", "fail");

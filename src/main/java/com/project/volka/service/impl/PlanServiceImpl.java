@@ -94,8 +94,6 @@ public class PlanServiceImpl implements PlanService {
             Long longPlanNo = (long) planNo;
             Plan plan = planRepository.findById(longPlanNo).orElseThrow();
 
-
-
             if (planMap.containsKey("planStartDate")) {
                 String dateString = planMap.get("planStartDate").toString();
                 if (!dateString.isEmpty()) {
