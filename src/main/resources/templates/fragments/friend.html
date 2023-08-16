@@ -42,8 +42,60 @@
         </div>
     </div>
 </div>
-<!-- This is a sample Bootstrap modal markup -->
 
+<div th:fragment="promiseModal" class="modal fade" id="promiseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered " role="document">
+        <div class="modal-content">
+            <div class="modal-header row">
+                <h4 class="col-3 text-center">
+                    <strong>Title</strong>
+                </h4>
+                <input type="text" class="form-control col-7" id="addTitleReq">
+                <button type="button" class="close " data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="selectedColorReq">
+                <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
+                    <ul class="fc-color-picker" id="Addcolor-chooser">
+                        <li><a style="color: #C0C0C0;" href="#"><i class="fas fa-square"></i></a></li> <!-- 은색 -->
+                        <li><a style="color: #FFD700;" href="#"><i class="fas fa-square"></i></a></li> <!-- 금색 -->
+                        <li><a style="color: #FFC0CB;" href="#"><i class="fas fa-square"></i></a></li> <!-- 분홍색 -->
+                        <li><a style="color: #ADD8E6;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 파란색 -->
+                        <li><a style="color: #98FB98;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 녹색 -->
+                        <li><a style="color: #F08080;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 코랄색 -->
+                        <li><a style="color: #C19A6B;" href="#"><i class="fas fa-square"></i></a></li> <!-- 갈색 -->
+                        <li><a style="color: #BA55D3;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 보라색 -->
+                        <li><a style="color: #FF6347;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 빨간색-->
+                        <li><a style="color: #00CED1;" href="#"><i class="fas fa-square"></i></a></li> <!-- 밝은 청록색-->
+                    </ul>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-6">
+                        <p class="mt-0 mb-1"><strong>계획시작시간</strong></p>
+                        <input type="datetime-local" id="addStartDateReq" class="form-control" style="font-size: 12px;">
+                    </div>
+                    <div class="col-6">
+                        <p class="mt-0 mb-1"><strong>계획종료시간</strong></p>
+                        <input type="datetime-local" id="addEndDateReq" class="form-control" style="font-size: 12px;">
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col">
+                        <p class="mt-0 mb-1"><strong>계획 내용</strong></p>
+                        <textarea id="addTextAreaReq" class="form-control" rows="8"></textarea>
+                    </div>
+                </div>
 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" id="promise-req">약속신청</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

@@ -200,6 +200,5 @@ public class BejController {
         } else {
             return "bej/nofriend";
         }
-
     }
 }

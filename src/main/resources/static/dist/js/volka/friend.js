@@ -65,6 +65,8 @@ function updateUserStatus(message) {
             }
         }
     });
+
+    sortUserList();
     initEvent();
 }
 
@@ -107,8 +109,16 @@ function initEvent(){
 
     $('#appointmentButton').off('click').click(function() {
         console.log('약속잡기');
+        $('#addTitleReq').val('');
+        $('#selectedColorReq').val('');
+        $('#addStartDateReq').val('');
+        $('#addEndDateReq').val('');
+        $('#addTextAreaReq').val('');
+        $('.fc-color-picker a.selected').removeClass('selected');
+        $('#promiseModal').modal('show');
         $('#friendModal').modal('hide');
     });
+
 
     $('#chatButton').off('click').click(function() {
         console.log('채팅');
@@ -143,6 +153,46 @@ function initEvent(){
         $('#friendModal').modal('hide');
     });
 
+    $('#promise-req').on('click', function() {
+
+        let userNickName = $('.user-name').text().split('님')[0].trim();
+        const title = $('#addTitleReq').val();
+        const selectedColor = $('#selectedColorReq').val();
+        const startDate = $('#addStartDateReq').val();
+        const endDate = $('#addEndDateReq').val();
+        const content = $('#addTextAreaReq').val();
+
+        const data = {
+            title: title,
+            color: selectedColor,
+            planStartDate: startDate,
+            planEndDate: endDate,
+            content: content,
+            friendName: userNickName
+        };
+
+        utility.ajax('/promise/request', data, 'POST')
+            .then((responseData) => {
+                console.log(responseData);
+                Swal.fire({
+                    title: '알림',
+                    text: responseData.message,
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 800
+                })
+            })
+            .catch((error) => {
+                console.error('실패:', error);
+            });
+
+        $('#addModal').modal('hide');
+    });
+
+
+
+
+
     $('.user-li').off('click').on('click', function (event) {
         let modal = $('#friendModal .modal-dialog');
         modal.css('position', 'fixed');
@@ -159,10 +209,12 @@ function initEvent(){
                 if (responseData.status === 'success') {
                     // 친구 요청 성공시 처리
                     Swal.fire({
-                        icon: 'success',
-                        title: '성공',
+                        title: '알림',
                         text: responseData.message,
-                    });
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 800
+                    })
                 } else if (responseData.status === 'fail') {
                     // 친구 요청 실패시 처리
                     Swal.fire({
@@ -256,3 +308,11 @@ function renderFriendRequests() {
     $('.req-count').text(friendRequests.length);
 }
 
+function sortUserList() {
+    let $friendList = $("#friends-list");
+    let $onlineUsers = $friendList.find("li:has(.bg-light)").sort();
+    let $offlineUsers = $friendList.find("li:not(:has(.bg-light))").sort();
+
+    $friendList.empty().append($onlineUsers).append($offlineUsers);
+    initEvent();
+}

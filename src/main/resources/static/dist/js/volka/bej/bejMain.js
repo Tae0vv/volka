@@ -446,8 +446,6 @@ $(document).ready(function () {
 
         $('#addModal').modal('hide');
     });
-
-
 });
 
 function updatePlan(responseData){

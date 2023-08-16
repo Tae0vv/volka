@@ -3,13 +3,14 @@ package com.project.volka.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"promiseReq","promiseBreakeUser"})
+@ToString
 @Table
 public class Promise {
 
@@ -18,20 +19,39 @@ public class Promise {
     @Column(name = "PROMISE_NO")
     private Long promiseNo;
 
-    @JoinColumn(name = "PROMISE_REQ")
-    @OneToOne(fetch = FetchType.LAZY)
-    private PromiseReq promiseReq;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "MAIN_USER_ID" ,nullable = false, referencedColumnName = "USER_ID")
+    private UserInfo mainUser;
 
-    @Column(name = "PROMISE_STATUS")
-    private int promiseStatus; //0대기 1진행중 2완료 3파토
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "TARGET_USER_ID" ,nullable = false, referencedColumnName = "USER_ID")
+    private UserInfo targetUser;
 
-    @Column(name = "PROMISE_BREAKE_REASON")
-    private String promiseBreakeReason;
+    @Column(name = "PROMISE_STATUS" ,nullable = false)
+    private int promiseStatus; // 0.건사람 1.대기 2.수락 3.거절
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PROMISE_BREAKE_USER_ID", referencedColumnName = "USER_ID")
-    private UserInfo promiseBreakeUser ;
+    @Column(name = "PLAN_TITLE" ,nullable = false)
+    private String planTitle;
 
+    @Column(name = "PLAN_CONTENT",length = 5000)
+    private String planContent;
+
+    @Column(name = "PLAN_START_DATE",nullable = false)
+    private LocalDateTime planStartDate;
+
+    @Column(name = "PLAN_END_DATE")
+    private LocalDateTime planEndDate;
+
+    @Column(name = "PLAN_COLOR")
+    private String planColor;
+
+    public void acceptPromise() {
+        this.promiseStatus = 2;
+    }
+
+    public void rejectPromise() {
+        this.promiseStatus = 3;
+    }
 }
 
 

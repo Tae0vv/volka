@@ -41,6 +41,11 @@
       font-weight: lighter;
     }
 
+    #promiseModal .fc-color-picker a.selected i {
+      border: 2px solid #000; /* 선택된 색상에 검은 테두리 추가 */
+      padding: 2px; /* 테두리와 아이콘 사이의 여백 설정 */
+    }
+
   </style>
 </head>
 <body class="hold-transition sidebar-mini">
@@ -77,6 +82,7 @@
   <!-- /.control-sidebar -->
 </div>
 <div th:replace="fragments/friend :: friendModal"></div>
+<div th:replace="fragments/friend :: promiseModal"></div>
 <!-- ./wrapper -->
 <script src="/plugins/jquery/jquery.min.js"></script>
 <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
