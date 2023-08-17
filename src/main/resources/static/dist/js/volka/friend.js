@@ -61,6 +61,8 @@ function promiseRequestConnect() {
     stompPromiseRequestClient = Stomp.over(socket);
     stompPromiseRequestClient.connect({}, function(frame) {
         stompPromiseRequestClient.subscribe('/queue/promise/' + nickName, function(msg) {
+            console.log('약속요청이 왔어');
+            console.log(msg.body);
             //알림
         });
         stompFriendRequestClient.subscribe('/queue/agree/' + nickName, function(msg) {

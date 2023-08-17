@@ -57,7 +57,7 @@ $(function () {
      -----------------------------------------------------------------*/
     function ini_events(ele) {
         ele.each(function () {
-            var eventObject = {
+            let eventObject = {
                 title: $.trim($(this).text()) // 이벤트의 제목으로 요소의 텍스트를 사용합니다.
             }
 
@@ -74,17 +74,17 @@ $(function () {
     // 외부 이벤트를 초기화합니다.
     ini_events($('#external-events div.external-event'))
 
-    var date = new Date()
-    var d    = date.getDate(),
+    let date = new Date()
+    let d    = date.getDate(),
         m    = date.getMonth(),
         y    = date.getFullYear()
 
-    var Calendar = FullCalendar.Calendar;
-    var Draggable = FullCalendar.Draggable;
+    let Calendar = FullCalendar.Calendar;
+    let Draggable = FullCalendar.Draggable;
 
-    var containerEl = document.getElementById('external-events');
-    var checkbox = document.getElementById('drop-remove');
-    var calendarEl = document.getElementById('calendar');
+    let containerEl = document.getElementById('external-events');
+    let checkbox = document.getElementById('drop-remove');
+    let calendarEl = document.getElementById('calendar');
 
 
     // 달력을 초기화합니다.

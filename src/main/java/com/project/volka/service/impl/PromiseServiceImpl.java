@@ -3,6 +3,7 @@ package com.project.volka.service.impl;
 
 import com.project.volka.dto.PasswordDTO;
 import com.project.volka.dto.PromiseDTO;
+import com.project.volka.dto.PromiseReqDTO;
 import com.project.volka.dto.UserInfoDTO;
 import com.project.volka.entity.Friend;
 import com.project.volka.entity.Promise;
@@ -22,7 +23,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @Log4j2
 @Service
@@ -86,6 +89,21 @@ public class PromiseServiceImpl implements PromiseService {
 
         promiseRepository.save(promiseReq);
         promiseRepository.save(promiseRes);
+    }
+
+
+    @Override
+    public List<PromiseReqDTO> getPromiseReqDTOList(UserInfo userInfo, int promiseStatus) {
+        List<Promise> promises = promiseRepository.findByMainUserAndPromiseStatus(userInfo,promiseStatus);
+        List<PromiseReqDTO> promiseReqDTOList = new ArrayList<>();
+
+        for(Promise promise : promises){
+            PromiseReqDTO promiseReqDTO = new PromiseReqDTO();
+            promiseReqDTO.entityToDTO(promise);
+            promiseReqDTOList.add(promiseReqDTO);
+        }
+
+        return promiseReqDTOList;
     }
 }
 
