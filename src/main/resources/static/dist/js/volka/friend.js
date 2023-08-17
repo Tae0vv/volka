@@ -1,10 +1,11 @@
 import Utility from './utility.js';
-const utility = new Utility();
+let utility = new Utility();
 
 let nickName = user.userNickName;
 
-
 $(document).ready(function () {
+    console.log("프로미스");
+    console.log(promiseRequests);
     initEvent();
     onOffconnect();
     friendRequestConnect();
@@ -61,9 +62,8 @@ function promiseRequestConnect() {
     stompPromiseRequestClient = Stomp.over(socket);
     stompPromiseRequestClient.connect({}, function(frame) {
         stompPromiseRequestClient.subscribe('/queue/promise/' + nickName, function(msg) {
-            console.log('약속요청이 왔어');
-            console.log(msg.body);
-            //알림
+            promiseRequests = JSON.parse(msg.body);
+            renderPromiseRequests();
         });
         stompFriendRequestClient.subscribe('/queue/agree/' + nickName, function(msg) {
             //data가 생겨서 calendar render가 되어야함
@@ -119,27 +119,27 @@ function updateUserStatus(message) {
 }
 
 
-function initEvent(){
+function initEvent() {
 
-    $(".plus-icon").off('click').click(function() {
+    $(".plus-icon").off('click').click(function () {
         $(".search-box").toggle();
     });
 
-    $('#scheduleButton').off('click').click(function() {
+    $('#scheduleButton').off('click').click(function () {
         let friendNickName = $('.user-name').text().split('님')[0].trim();
         console.log('일정보기');
         window.open('/bej/schedule?friend=' + friendNickName, '_blank');
         $('#friendModal').modal('hide');
     });
 
-    $('.fc-color-picker a').off('click').click(function() {
+    $('.fc-color-picker a').off('click').click(function () {
         $('.fc-color-picker a.selected').removeClass('selected');
         $(this).addClass('selected');
         let selectedColor = $(this).css('color');
-        $('#selectedColor').val(selectedColor);
+        $('#selectedColorReq').val(selectedColor);
     });
 
-    $('#appointmentButton').off('click').click(function() {
+    $('#appointmentButton').off('click').click(function () {
         $('#friendModal').modal('hide');
         console.log('약속잡기');
         $('#addTitleReq').val('');
@@ -151,14 +151,14 @@ function initEvent(){
         $('#promiseModal').modal('show');
     });
 
-    $('#chatButton').off('click').click(function() {
+    $('#chatButton').off('click').click(function () {
         console.log('채팅');
         $('#friendModal').modal('hide');
     });
 
-    $('#blockButton').off('click').click(function() {
+    $('#blockButton').off('click').click(function () {
         let userNickName = $('.user-name').text().split('님')[0].trim();
-        utility.ajax('/friend/block', {nickName : userNickName}, 'post')
+        utility.ajax('/friend/block', {nickName: userNickName}, 'post')
             .then((responseData) => {
                 friends = responseData.friends;
 
@@ -170,9 +170,9 @@ function initEvent(){
         $('#friendModal').modal('hide');
     });
 
-    $('#hideButton').off('click').click(function() {
+    $('#hideButton').off('click').click(function () {
         let userNickName = $('.user-name').text().split('님')[0].trim();
-        utility.ajax('/friend/hide', {nickName : userNickName}, 'post')
+        utility.ajax('/friend/hide', {nickName: userNickName}, 'post')
             .then((responseData) => {
                 friends = responseData.friends;
 
@@ -184,16 +184,16 @@ function initEvent(){
         $('#friendModal').modal('hide');
     });
 
-    $('#promise-req').off('click').click( function() {
+    $('#promise-req').off('click').click(function () {
         console.log('promise ajax post');
         let userNickName = $('.user-name').text().split('님')[0].trim();
-        const title = $('#addTitleReq').val();
-        const selectedColor = $('#selectedColorReq').val();
-        const startDate = $('#addStartDateReq').val();
-        const endDate = $('#addEndDateReq').val();
-        const content = $('#addTextAreaReq').val();
+        let title = $('#addTitleReq').val();
+        let selectedColor = $('#selectedColorReq').val();
+        let startDate = $('#addStartDateReq').val();
+        let endDate = $('#addEndDateReq').val();
+        let content = $('#addTextAreaReq').val();
 
-        const data = {
+        let data = {
             title: title,
             color: selectedColor,
             planStartDate: startDate,
@@ -229,7 +229,7 @@ function initEvent(){
     });
 
     $('#addFriendBtn').off('click').on('click', function () {
-        utility.ajax('/friend/request', {nickName : $('#addFriend').val()}, 'post')
+        utility.ajax('/friend/request', {nickName: $('#addFriend').val()}, 'post')
             .then((responseData) => {
                 if (responseData.status === 'success') {
                     // 친구 요청 성공시 처리
@@ -256,13 +256,13 @@ function initEvent(){
             });
     });
 
-    $(document).off('click', '.btn-outline-success').on('click', '.btn-outline-success', function () {
+    $(document).off('click', '.friend-req-accept').on('click', '.friend-req-accept', function () {
 
         let friendRequestElement = $(this).closest('.friend-requests');
         let elementText = friendRequestElement.find('.req-name').text();
         let friendNickName = elementText.split('님의 친구')[0].trim();
 
-        utility.ajax('/friend/accept', {nickName : friendNickName}, 'post')
+        utility.ajax('/friend/accept', {nickName: friendNickName}, 'post')
             .then((responseData) => {
                 friends = responseData.friends;
                 friendRequests = responseData.friendRequests;
@@ -275,67 +275,141 @@ function initEvent(){
             });
     });
 
-    $(document).off('click', '.btn-outline-danger').on('click', '.btn-outline-danger', function () {
+    $(document).off('click', '#promise-request-alarm').on('click', '#promise-request-alarm', function () {
+        console.log('일정누름');
 
-        let friendRequestElement = $(this).closest('.friend-requests');
-        let elementText = friendRequestElement.find('.req-name').text();
-        let friendNickName = elementText.split('님의 친구')[0].trim();
+        $('#addTitleRes').val('');
+        $('#addStartDateRes').val('');
+        $('#addEndDateRes').val('');
+        $('#addTextAreaRes').val('');
+        $('#modal-promise-no').val('');
 
-        utility.ajax('/friend/reject', {nickName : friendNickName}, 'post')
+        let selectPromiseNo = $(this).find('.promiseNo').val();
+        let selectPromise = null;
+
+        for (let promise of promiseRequests) {
+            if (promise.promiseNo == selectPromiseNo) {
+                selectPromise = promise;
+                break;
+            }
+        }
+
+        $('#modal-promise-no').val(selectPromiseNo);
+        $('#addTitleRes').val(selectPromise.planTitle);
+        $('#addStartDateRes').val(selectPromise.planStartDate);
+        $('#addEndDateRes').val(selectPromise.planEndDate);
+        $('#addTextAreaRes').val(selectPromise.planContent);
+
+       $('#promiseResModal').show();
+    });
+
+    $(document).off('click', '#res-modal-close-btn').on('click', '#res-modal-close-btn', function () {
+        $('#promiseResModal').hide();
+    });
+
+    $(document).off('click', '#promise-res-agree-btn').on('click', '#promise-res-agree-btn', function () {
+        let promiseReq = "";
+        for (let promise of promiseRequests) {
+
+            if (promise.promiseNo == $('#modal-promise-no').val()) {
+                promiseReq = promise;
+                break;
+            }
+        }
+
+        utility.ajax('/promise/accept', promiseReq, 'post')
             .then((responseData) => {
+                //받을 값 plans, promiseRequest
+                plans = responseData.plans;
                 friendRequests = responseData.friendRequests;
-                console.log('render전');
-                console.log(friendRequests);
+
                 renderFriendRequests();
+                // 달력 랜더 새로하기
             })
             .catch((error) => {
                 console.log(error);
             });
-    });
-}
 
+        $('#promiseResModal').hide();
 
-function renderFriends(){
-    let friendsList = $('#friends-list');
-    friendsList.empty();
-
-    friends.forEach(function(friend) {
-        let listItem = $('<li>').addClass('list-group-item d-flex justify-content-between align-items-center user-li').css('background-color', 'white');
-        let icon = $('<i>').addClass('fas fa-user mr-3').css('color', 'silver');
-        let nameSpan = $('<span>').addClass('user-i').text(friend);
-        listItem.append(icon, nameSpan);
-        friendsList.append(listItem);
-    });
-    stompOnOffClient.send("/app/status", {}, JSON.stringify({ nickName : nickName, status : 'on' }));
-}
-
-function renderFriendRequests() {
-    $('.friend-requests').remove();
-
-    friendRequests.forEach(function(friend) {
-        let friendReqDiv = $('<div class="friend-requests"></div>');
-        let dropdownDivider = $('<div class="dropdown-divider"></div>');
-        let reqName = $('<a href="#" class="dropdown-item req-name"></a>');
-
-        reqName.html('<i class="fas fa-users mr-2"></i>' + friend + '님의 친구 신청');
-        reqName.append('<div class="float-right"><div class="btn-group"><button class="btn btn-outline-success btn-xs mr-2">수락</button><button class="btn btn-outline-danger btn-xs">거절</button></div></div>');
-
-        friendReqDiv.append(dropdownDivider);
-        friendReqDiv.append(reqName);
-
-        $('.dropdown-menu.dropdown-menu-lg.dropdown-menu-right').append(friendReqDiv);
     });
 
-    initEvent();
-    $('.req-num').text(friendRequests.length + '개의 알림');
-    $('.req-count').text(friendRequests.length);
-}
+    $(document).off('click', '#promise-res-reject-btn').on('click', '#promise-res-reject-btn', function () {
+        $('#promiseResModal').hide();
+    });
 
-function sortUserList() {
-    let renderFriendList = $("#friends-list");
-    let onlineUsers = renderFriendList.find("li:has(.bg-light)").sort();
-    let offlineUsers = renderFriendList.find("li:not(:has(.bg-light))").sort();
 
-    renderFriendList.empty().append(onlineUsers).append(offlineUsers);
-    initEvent();
 }
+    function renderFriends() {
+        let friendsList = $('#friends-list');
+        friendsList.empty();
+
+        friends.forEach(function (friend) {
+            let listItem = $('<li>').addClass('list-group-item d-flex justify-content-between align-items-center user-li').css('background-color', 'white');
+            let icon = $('<i>').addClass('fas fa-user mr-3').css('color', 'silver');
+            let nameSpan = $('<span>').addClass('user-i').text(friend);
+            listItem.append(icon, nameSpan);
+            friendsList.append(listItem);
+        });
+        stompOnOffClient.send("/app/status", {}, JSON.stringify({nickName: nickName, status: 'on'}));
+    }
+
+    function renderFriendRequests() {
+        $('.friend-requests').remove();
+
+        friendRequests.forEach(function (friend) {
+            let friendReqDiv = $('<div class="friend-requests"></div>');
+            let dropdownDivider = $('<div class="dropdown-divider"></div>');
+            let reqName = $('<a href="#" class="dropdown-item req-name"></a>');
+
+            reqName.html('<i class="fas fa-users mr-2"></i>' + friend + '님의 친구 신청');
+            reqName.append('<div class="float-right"><div class="btn-group"><button class="btn btn-outline-success btn-xs mr-2 friend-req-accept">수락</button><button class="btn btn-outline-danger btn-xs friend-req-reject">거절</button></div></div>');
+
+            friendReqDiv.append(dropdownDivider);
+            friendReqDiv.append(reqName);
+
+            $('.dropdown-menu.dropdown-menu-lg.dropdown-menu-right').append(friendReqDiv);
+        });
+
+        initEvent();
+        $('.req-num').text(friendRequests.length + '개의 알림');
+        $('.req-count').text(friendRequests.length);
+    }
+
+    function renderPromiseRequests() {
+        $('.promise-requests').remove();
+        console.log('프로미스 랜더');
+        console.log(promiseRequests);
+        promiseRequests.forEach(function (promise) {
+            let friendReqDiv = $('<div class="promise-requests"></div>');
+            let dropdownDivider = $('<div class="dropdown-divider"></div>');
+            let reqName = $('<a href="#" class="dropdown-item promise-name"></a>');
+
+            reqName.html('<i class="fas fa-users mr-2"></i>' + promise.targetUser + '님의 약속 요청');
+
+            let promiseNoInput = $('<input class="promiseNo" type="hidden">');
+            promiseNoInput.val(promise.promiseNo);
+            reqName.append(promiseNoInput);
+
+            reqName.append('<div class="float-right"><div class="btn-group"><button class="btn btn-outline-success btn-xs promise-request-btn">보기</button></div></div>');
+
+            friendReqDiv.append(dropdownDivider);
+            friendReqDiv.append(reqName);
+
+            $('.dropdown-menu.dropdown-menu-lg.dropdown-menu-right').append(friendReqDiv);
+        });
+
+        $('.promise-num').text(promiseRequests.length + '개의 알림');
+        $('.promise-count').text(promiseRequests.length);
+        initEvent();
+    }
+
+
+    function sortUserList() {
+        let renderFriendList = $("#friends-list");
+        let onlineUsers = renderFriendList.find("li:has(.bg-light)").sort();
+        let offlineUsers = renderFriendList.find("li:not(:has(.bg-light))").sort();
+
+        renderFriendList.empty().append(onlineUsers).append(offlineUsers);
+        initEvent();
+    }

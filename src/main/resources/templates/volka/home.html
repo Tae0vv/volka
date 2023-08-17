@@ -83,6 +83,7 @@
 </div>
 <div th:replace="fragments/friend :: friendModal"></div>
 <div th:replace="fragments/friend :: promiseModal"></div>
+<div th:replace="fragments/friend :: promiseResModal"></div>
 <!-- ./wrapper -->
 <script src="/plugins/jquery/jquery.min.js"></script>
 <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -94,6 +95,7 @@
   let user = [[${user}]];
   let friends = [[${friends}]];
   let friendRequests = [[${friendRequests}]];
+  let promiseRequests = [[${promiseRequests}]];
 </script>
 <script type="module" src="/dist/js/volka/friend.js"></script>
 </body>

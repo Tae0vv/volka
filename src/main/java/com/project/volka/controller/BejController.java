@@ -1,11 +1,12 @@
 package com.project.volka.controller;
 
-import com.project.volka.entity.Friend;
+import com.project.volka.dto.PromiseReqDTO;
 import com.project.volka.entity.Plan;
 import com.project.volka.entity.UserInfo;
 import com.project.volka.security.dto.UserSecurityDTO;
 import com.project.volka.service.interfaces.FriendService;
 import com.project.volka.service.interfaces.PlanService;
+import com.project.volka.service.interfaces.PromiseService;
 import com.project.volka.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -17,9 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 
@@ -32,6 +30,7 @@ public class BejController {
     private final UserService userService;
     private final PlanService planService;
     private final FriendService friendService;
+    private final PromiseService promiseService;
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/main")
@@ -42,11 +41,13 @@ public class BejController {
         List<Plan> planList = planService.getPlanList(userInfo);
         List<String> friends = friendService.getFriendsNickName(userInfo, 1);
         List<String> friendRequests = friendService.getFriendsNickName(userInfo, 0);
+        List<PromiseReqDTO> promiseRequests = promiseService.getPromiseReqDTOList(userInfo, 0);
 
         model.addAttribute("user", userInfo);
         model.addAttribute("planList", planList);
         model.addAttribute("friends", friends);
         model.addAttribute("friendRequests", friendRequests);
+        model.addAttribute("promiseRequests", promiseRequests);
     }
 
     @PostMapping("/plan")

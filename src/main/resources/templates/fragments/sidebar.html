@@ -27,20 +27,15 @@
         <ul class="navbar-nav ml-auto">
             <li class="nav-item dropdown" id="message">
                 <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false">
-                    <i class="far fa-envelope"></i>
+                    <i class="far fa-comment"></i>
                     <span class="badge badge-primary navbar-badge">2</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px;">
                     <span class="dropdown-item dropdown-header">2개의 알림</span>
                     <div class="dropdown-divider"></div>
                     <a href="#" class="dropdown-item">
-                        <i class="fas fa-envelope mr-2"></i> a님과의 채팅방
+                        <i class="far fa-comment"></i>a님과의 채팅방
                         <span class="float-right text-muted text-sm">3 mins</span>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-envelope mr-2"></i> b님과의 채팅방
-                        <span class="float-right text-muted text-sm">5 mins</span>
                     </a>
                 </div>
             </li>
@@ -58,8 +53,8 @@
                             <i class="fas fa-users mr-2"></i> [[${friend}]]님의 친구 신청
                             <div class="float-right">
                                 <div class="btn-group">
-                                    <button class="btn btn-outline-success btn-xs mr-2">수락</button>
-                                    <button class="btn btn-outline-danger btn-xs">거절</button>
+                                    <button class="btn btn-outline-success btn-xs mr-2 friend-req-accept">수락</button>
+                                    <button class="btn btn-outline-danger btn-xs friend-req-reject">거절</button>
                                 </div>
                             </div>
                         </a>
@@ -67,26 +62,25 @@
                 </div>
             </li>
 
-            <li class="nav-item dropdown" id="all">
+            <li class="nav-item dropdown" id="promise-request-alarm">
                 <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false">
-                    <i class="far fa-bell"></i>
-                    <span class="badge badge-danger navbar-badge">3</span>
+                    <i class="far fa-envelope"></i>
+                    <span class="badge badge-danger navbar-badge promise-count" th:text="${#lists.size(promiseRequests)}"></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px;">
-                    <span class="dropdown-item dropdown-header">3개의 알림</span>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-envelope mr-2"></i> a님의 약속 요청
-                        <span class="float-right text-muted text-sm">3 mins</span>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-users mr-2"></i> b님의 친구 신청
-                        <span class="float-right text-muted text-sm">3 mins</span>
-                    </a>
-                    <div class="dropdown-divider"></div>
-
-                    <a href="#" class="dropdown-item dropdown-footer">읽음으로 표시</a>
+                    <span class="dropdown-item dropdown-header promise-num" th:text="${#lists.size(promiseRequests)} + '개의 알림'"></span>
+                    <div th:each="promise : ${promiseRequests}" class="promise-requests">
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item promise-name">
+                            <i class="far fa-envelope mr-2"></i> [[${promise.targetUser}]]님의 약속 요청
+                            <input class="promiseNo" type="hidden" th:value="${promise.promiseNo}">
+                            <div class="float-right">
+                                <div class="btn-group">
+                                    <button class="btn btn-outline-success btn-xs promise-request-btn">보기</button>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </li>
             <li class="nav-item">

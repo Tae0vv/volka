@@ -75,14 +75,14 @@ public class PromiseServiceImpl implements PromiseService {
         
         if (promiseMap.containsKey("friendName")) {
             UserInfo promiseRequestUser = userService.getUserInfo(promiseMap.get("friendName").toString());
-            promiseReqDTO.setMainUser(promiseRequestUser);
-            promiseResDTO.setMainUser(userInfo);
+            promiseReqDTO.setMainUser(userInfo);
+            promiseResDTO.setMainUser(promiseRequestUser);
+            promiseReqDTO.setTargetUser(promiseRequestUser);
+            promiseResDTO.setTargetUser(userInfo);
         }
 
         promiseReqDTO.setPromiseStatus(-1);
-        promiseReqDTO.setTargetUser(userInfo);
         promiseResDTO.setPromiseStatus(0);
-        promiseResDTO.setTargetUser(userInfo);
 
         Promise promiseReq = modelMapper.map(promiseReqDTO, Promise.class);
         Promise promiseRes = modelMapper.map(promiseResDTO, Promise.class);

@@ -2,6 +2,7 @@ package com.project.volka.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.project.volka.dto.PromiseReqDTO;
 import com.project.volka.entity.Plan;
 import com.project.volka.entity.Promise;
@@ -40,22 +41,24 @@ public class PromiseController {
     public ResponseEntity<?> promisePost(@AuthenticationPrincipal User user,
                                          @RequestBody HashMap<String, Object> promiseMap) {
 
-        log.info(promiseMap);
-
+        String resUserNickName = promiseMap.get("friendName").toString();
         UserInfo userInfo = userService.updateUserInfo((UserSecurityDTO) user);
+        UserInfo promiseResUser = userService.getUserInfo(resUserNickName);
+
         promiseService.makePromise(userInfo, promiseMap);
-        // promise 가져오기
-        List<PromiseReqDTO> promiseReqDTOList = promiseService.getPromiseReqDTOList(userInfo, 0);
-        //객체를 던지는게 맞다 그래야 약속보기를 눌렀을때 약속을 보낸 내용을 확인할 수가 있음
+
+        List<PromiseReqDTO> promiseResDTOList = promiseService.getPromiseReqDTOList(promiseResUser, 0);
+
         HashMap<String, Object> responseData = new HashMap<>();
         responseData.put("status", "success");
         responseData.put("message", "약속을 요청했습니다.");
-        log.info(promiseReqDTOList);
-        //파싱에러났음
+
         ObjectMapper serverToClient = new ObjectMapper();
+        serverToClient.registerModule(new JavaTimeModule());
+
         String promiseReqDTOListJson = "";
         try{
-             promiseReqDTOListJson = serverToClient.writeValueAsString(promiseReqDTOList);
+             promiseReqDTOListJson = serverToClient.writeValueAsString(promiseResDTOList);
         }catch (JsonProcessingException e){
             log.error("parsingError : ");
             log.error(e);
@@ -64,6 +67,24 @@ public class PromiseController {
         simpMessagingTemplate.convertAndSend("/queue/promise/" +  promiseMap.get("friendName"),promiseReqDTOListJson);
         return ResponseEntity.ok(responseData); // 클라이언트에게 JSON 응답을 보냄
     }
+
+    @PostMapping("/accept")
+    @ResponseBody
+    public ResponseEntity<?> promiseAccept(@AuthenticationPrincipal User user,
+                                         @RequestBody PromiseReqDTO promiseReqDTO) {
+
+        log.info(promiseReqDTO); //수락으로 바꿔야 되는 promise
+        UserInfo userInfo = userService.updateUserInfo((UserSecurityDTO) user); //수락한사람
+        UserInfo promiseReqUser = userService.getUserInfo(promiseReqDTO.getTargetUser());
+
+
+        HashMap<String, Object> responseData = new HashMap<>();
+        responseData.put("status", "success");
+        responseData.put("message", "약속을 요청했습니다.");
+
+        return ResponseEntity.ok(responseData); // 클라이언트에게 JSON 응답을 보냄
+    }
+
 
 
 }

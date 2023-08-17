@@ -281,7 +281,7 @@
             <div class="modal-body">
                 <input type="hidden" id="selectedColor">
                 <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
-                    <ul class="fc-color-picker" id="Addcolor-chooser">
+                    <ul class="fc-color-picker">
                         <li><a style="color: #C0C0C0;" href="#"><i class="fas fa-square"></i></a></li> <!-- 은색 -->
                         <li><a style="color: #FFD700;" href="#"><i class="fas fa-square"></i></a></li> <!-- 금색 -->
                         <li><a style="color: #FFC0CB;" href="#"><i class="fas fa-square"></i></a></li> <!-- 분홍색 -->
@@ -319,9 +319,9 @@
         </div>
     </div>
 </div>
-
 <div th:replace="fragments/friend :: friendModal"></div>
 <div th:replace="fragments/friend :: promiseModal"></div>
+<div th:replace="fragments/friend :: promiseResModal"></div>
 
 <script src="/plugins/jquery/jquery.min.js"></script>
 <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -338,6 +338,7 @@
     let user = [[${user}]];
     let friends = [[${friends}]];
     let friendRequests = [[${friendRequests}]];
+    let promiseRequests = [[${promiseRequests}]];
 </script>
 <script type="module" src="/dist/js/volka/friend.js"></script>
 <script type="module" src="/dist/js/volka/bej/bejMain.js"></script>
