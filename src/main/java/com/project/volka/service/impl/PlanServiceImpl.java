@@ -202,9 +202,7 @@ public class PlanServiceImpl implements PlanService {
 
     @Override
     public List<Plan> getPlanList(UserInfo userInfo) {
-
         return planRepository.findByPlanUserNo(userInfo);
     }
-
 
 }

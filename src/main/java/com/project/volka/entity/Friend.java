@@ -29,6 +29,9 @@ public class Friend extends BaseEntity{
     @Column(name = "FRIEND_RELATION" ,nullable = false)
     private int friendRelation;//-1최조에 걸었을때 건사람 0대기 1수락 2거절 3숨김 4차단
 
+    @Column(name = "PAIR_NO")
+    private Long pairNo;
+
     public void accept() {
         this.friendRelation = 1;
     }
@@ -40,5 +43,8 @@ public class Friend extends BaseEntity{
     }
     public void block() {
         this.friendRelation = 4;
+    }
+    public void regPair(Long pairNo){
+        this.pairNo = pairNo;
     }
 }

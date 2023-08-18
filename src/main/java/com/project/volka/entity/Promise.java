@@ -45,12 +45,19 @@ public class Promise {
     @Column(name = "PLAN_COLOR")
     private String planColor;
 
+    @Column(name = "PAIR_NO")
+    private Long pairNo;
+
     public void acceptPromise() {
         this.promiseStatus = 1;
     }
 
     public void rejectPromise() {
         this.promiseStatus = 2;
+    }
+
+    public void regPair(Long pairNo){
+        this.pairNo = pairNo;
     }
 }
 

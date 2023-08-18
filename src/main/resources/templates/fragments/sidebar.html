@@ -50,10 +50,11 @@
                     <div th:each="friend : ${friendRequests}" class="friend-requests">
                         <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item req-name">
-                            <i class="fas fa-users mr-2"></i> [[${friend}]]님의 친구 신청
+                            <input type="hidden" class="friend-no" th:value="${friend.friendNo}">
+                            <i class="fas fa-users mr-2"></i> [[${friend.friendNickName}]]님의 친구신청
                             <div class="float-right">
                                 <div class="btn-group">
-                                    <button class="btn btn-outline-success btn-xs mr-2 friend-req-accept">수락</button>
+                                    <button class="btn btn-outline-success btn-xs ml-2 mr-1 friend-req-accept">수락</button>
                                     <button class="btn btn-outline-danger btn-xs friend-req-reject">거절</button>
                                 </div>
                             </div>

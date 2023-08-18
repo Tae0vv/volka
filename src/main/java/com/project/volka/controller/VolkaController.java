@@ -1,5 +1,6 @@
 package com.project.volka.controller;
 
+import com.project.volka.dto.FriendReqDTO;
 import com.project.volka.dto.PromiseReqDTO;
 import com.project.volka.entity.UserInfo;
 import com.project.volka.security.dto.UserSecurityDTO;
@@ -33,11 +34,9 @@ public class VolkaController {
     public String home( @AuthenticationPrincipal User user,Model model){
         UserInfo userInfo = userService.updateUserInfo((UserSecurityDTO) user);
         List<String> friends = friendService.getFriendsNickName(userInfo, 1);
-        List<String> friendRequests = friendService.getFriendsNickName(userInfo, 0);
+        List<FriendReqDTO> friendRequests = friendService.getFriendRequests(userInfo);
         List<PromiseReqDTO> promiseRequests = promiseService.getPromiseReqDTOList(userInfo, 0);
 
-        log.info("volka requests ");
-        log.info(promiseRequests);
         model.addAttribute("user", userInfo);
         model.addAttribute("friends", friends);
         model.addAttribute("friendRequests", friendRequests);

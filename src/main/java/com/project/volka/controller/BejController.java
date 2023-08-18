@@ -1,5 +1,6 @@
 package com.project.volka.controller;
 
+import com.project.volka.dto.FriendReqDTO;
 import com.project.volka.dto.PromiseReqDTO;
 import com.project.volka.entity.Plan;
 import com.project.volka.entity.UserInfo;
@@ -40,7 +41,7 @@ public class BejController {
         UserInfo userInfo = userService.updateUserInfo((UserSecurityDTO) user);
         List<Plan> planList = planService.getPlanList(userInfo);
         List<String> friends = friendService.getFriendsNickName(userInfo, 1);
-        List<String> friendRequests = friendService.getFriendsNickName(userInfo, 0);
+        List<FriendReqDTO> friendRequests = friendService.getFriendRequests(userInfo);
         List<PromiseReqDTO> promiseRequests = promiseService.getPromiseReqDTOList(userInfo, 0);
 
         model.addAttribute("user", userInfo);

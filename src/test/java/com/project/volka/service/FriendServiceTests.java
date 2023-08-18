@@ -1,5 +1,6 @@
 package com.project.volka.service;
 
+import com.project.volka.dto.FriendReqDTO;
 import com.project.volka.entity.UserInfo;
 import com.project.volka.repository.FriendRepository;
 import com.project.volka.repository.UserRepository;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @SpringBootTest
@@ -38,10 +40,19 @@ public class FriendServiceTests {
 
     @Test
     public void accept(){
-        UserInfo userInfo = userRepository.findById("b").orElseThrow();
-        HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("nickName","태영");
-
-        friendService.acceptFriendship(userInfo, hashMap);
+        FriendReqDTO friendReqDTO = new FriendReqDTO();
+        friendReqDTO.setFriendNo(28L);
+        friendReqDTO.setFriendNickName("volka");
+        friendService.acceptFriendship(friendReqDTO);
     }
+
+    @Test
+    public void getTests(){
+        UserInfo userInfo = userRepository.findById("volka").orElseThrow();
+        List<FriendReqDTO> friendRequests = friendService.getFriendRequests(userInfo);
+        log.info("인포");
+        log.info(friendRequests);
+    }
+
+
 }

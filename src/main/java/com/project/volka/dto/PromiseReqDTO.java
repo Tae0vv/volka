@@ -2,7 +2,9 @@ package com.project.volka.dto;
 
 import com.project.volka.entity.Promise;
 import com.project.volka.entity.UserInfo;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 

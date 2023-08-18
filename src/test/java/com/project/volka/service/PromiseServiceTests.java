@@ -28,6 +28,4 @@ public class PromiseServiceTests {
     @Test
     public void getPromiseList(){
     }
-
-
 }

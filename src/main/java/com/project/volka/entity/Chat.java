@@ -26,7 +26,13 @@ public class Chat extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     private UserInfo chatUserNo;
 
-    @Column(name = "CHAT_STRING",length = 5000, nullable = false)
+    @Column(name = "CHAT_CONTENT",length = 5000, nullable = false)
     private String chatContent;
 
+    @Column(name = "CHAT_READ")
+    private int chatRead;
+
+    public void read() {
+        this.chatRead = chatRead -1;
+    }
 }

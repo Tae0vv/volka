@@ -2,9 +2,10 @@ import Utility from './utility.js';
 let utility = new Utility();
 
 let nickName = user.userNickName;
-
 $(document).ready(function () {
-    console.log("프로미스");
+    console.log('friendreq');
+    console.log(friendRequests);
+
     console.log(promiseRequests);
     initEvent();
     onOffconnect();
@@ -45,10 +46,11 @@ function friendRequestConnect() {
             renderFriendRequests();
         });
         stompFriendRequestClient.subscribe('/queue/accept/' + nickName, function(msg) {
-            friends = JSON.parse(msg.body);
-            console.log('수락완료');
-            console.log(friends);
+            let responseData = JSON.parse(msg.body);
+            friends = responseData.friends;
+            friendRequests = responseData.friendRequests;
             renderFriends();
+            renderFriendRequests();
         });
 
     },function (error){
@@ -229,40 +231,78 @@ function initEvent() {
     });
 
     $('#addFriendBtn').off('click').on('click', function () {
-        utility.ajax('/friend/request', {nickName: $('#addFriend').val()}, 'post')
-            .then((responseData) => {
-                if (responseData.status === 'success') {
-                    // 친구 요청 성공시 처리
-                    Swal.fire({
-                        title: '알림',
-                        text: responseData.message,
-                        icon: 'success',
-                        showConfirmButton: false,
-                        timer: 800
-                    });
-                } else if (responseData.status === 'fail') {
-                    // 친구 요청 실패시 처리
-                    Swal.fire({
-                        icon: 'error',
-                        title: '실패',
-                        text: responseData.message,
-                    });
-                }
+        console.log('친추');
+        let existFriend = false;
 
-                $('#addFriend').val('');
-            })
-            .catch((error) => {
-                console.log(error);
+        for(let i = 0; i < friends.length; i++){
+            if(friends[i] == $('#addFriend').val()){
+                existFriend = true;
+                break;
+            }
+        }
+
+        if(existFriend){
+            Swal.fire({
+                title: '실패',
+                text: '이미 존재하는 친구입니다.',
+                icon: 'error',
+                showConfirmButton: false,
+                timer: 800
             });
+        }else if($('#addFriend').val() == nickName){
+            Swal.fire({
+                title: '실패',
+                text: '자신에게는 친구 요청을 보낼수 없습니다.',
+                icon: 'error',
+                showConfirmButton: false,
+                timer: 800
+            });
+        }else{
+            utility.ajax('/friend/request', {nickName: $('#addFriend').val()}, 'post')
+                .then((responseData) => {
+                    if (responseData.status === 'success') {
+                        Swal.fire({
+                            title: '알림',
+                            text: responseData.message,
+                            icon: 'success',
+                            showConfirmButton: false,
+                            timer: 800
+                        });
+                    } else if (responseData.status === 'fail') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: '실패',
+                            text: responseData.message,
+                        });
+                    }
+
+                    $('#addFriend').val('');
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+
     });
 
     $(document).off('click', '.friend-req-accept').on('click', '.friend-req-accept', function () {
 
         let friendRequestElement = $(this).closest('.friend-requests');
-        let elementText = friendRequestElement.find('.req-name').text();
-        let friendNickName = elementText.split('님의 친구')[0].trim();
+        let selectFriendNo = friendRequestElement.find('.friend-no').val();
+        let friendReqDTO = null;
 
-        utility.ajax('/friend/accept', {nickName: friendNickName}, 'post')
+        console.log(selectFriendNo);
+        for(let friend of friendRequests){
+            if(friend.friendNo == selectFriendNo){
+                friendReqDTO = friend;
+                break;
+            }
+        }
+
+        console.log('수락');
+        console.log(friendReqDTO);
+
+        utility.ajax('/friend/accept', friendReqDTO, 'post')
             .then((responseData) => {
                 friends = responseData.friends;
                 friendRequests = responseData.friendRequests;
@@ -362,8 +402,10 @@ function initEvent() {
             let dropdownDivider = $('<div class="dropdown-divider"></div>');
             let reqName = $('<a href="#" class="dropdown-item req-name"></a>');
 
-            reqName.html('<i class="fas fa-users mr-2"></i>' + friend + '님의 친구 신청');
-            reqName.append('<div class="float-right"><div class="btn-group"><button class="btn btn-outline-success btn-xs mr-2 friend-req-accept">수락</button><button class="btn btn-outline-danger btn-xs friend-req-reject">거절</button></div></div>');
+            reqName.html('<i class="fas fa-users mr-2"></i>' + friend.friendNickName + '님의 친구신청');
+            reqName.append('<div class="float-right"><div class="btn-group"><button class="btn btn-outline-success btn-xs ml-2 mr-1 friend-req-accept">수락</button><button class="btn btn-outline-danger btn-xs friend-req-reject">거절</button></div></div>');
+            let inputTag = $('<input type="hidden" class ="friend-no"/>').attr('value', friend.friendNo);
+            reqName.prepend(inputTag);
 
             friendReqDiv.append(dropdownDivider);
             friendReqDiv.append(reqName);
@@ -378,14 +420,13 @@ function initEvent() {
 
     function renderPromiseRequests() {
         $('.promise-requests').remove();
-        console.log('프로미스 랜더');
         console.log(promiseRequests);
         promiseRequests.forEach(function (promise) {
             let friendReqDiv = $('<div class="promise-requests"></div>');
             let dropdownDivider = $('<div class="dropdown-divider"></div>');
             let reqName = $('<a href="#" class="dropdown-item promise-name"></a>');
 
-            reqName.html('<i class="fas fa-users mr-2"></i>' + promise.targetUser + '님의 약속 요청');
+            reqName.html('<i class="fas fa-users mr-2"></i>' + promise.targetUser + '님의 약속요청');
 
             let promiseNoInput = $('<input class="promiseNo" type="hidden">');
             promiseNoInput.val(promise.promiseNo);

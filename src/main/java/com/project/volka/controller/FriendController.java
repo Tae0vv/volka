@@ -2,6 +2,7 @@ package com.project.volka.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.volka.dto.FriendReqDTO;
 import com.project.volka.dto.UserInfoDTO;
 import com.project.volka.entity.UserInfo;
 import com.project.volka.security.dto.UserSecurityDTO;
@@ -43,13 +44,12 @@ public class FriendController {
 
         try{
             friendService.requestFriendship(userInfo,friendMap);
-
             responseData.put("status", "success");
             responseData.put("message", "친구요청이 성공적으로 처리되었습니다.");
             UserInfo resUser = userService.getUserInfo(friendMap.get("nickName"));
-            List<String> friendRequests = friendService.getFriendsNickName(resUser, 0);
+            List<FriendReqDTO> friendReqDTOList = friendService.getFriendRequests(resUser);
             ObjectMapper serverToClient = new ObjectMapper();
-            String friendRequestsJson = serverToClient.writeValueAsString(friendRequests);
+            String friendRequestsJson = serverToClient.writeValueAsString(friendReqDTOList);
             log.info("보내기전 : " + friendRequestsJson);
             simpMessagingTemplate.convertAndSend("/queue/friend/" +  friendMap.get("nickName"),friendRequestsJson);
 
@@ -64,21 +64,27 @@ public class FriendController {
     @PostMapping("accept")
     @ResponseBody
     public ResponseEntity<?> friendAccept(@AuthenticationPrincipal User user,
-                                        @RequestBody HashMap<String,String> friendMap) throws JsonProcessingException {
+                                        @RequestBody FriendReqDTO friendReqDTO) throws JsonProcessingException {
+
+        log.info("들어옴");
+        log.info(friendReqDTO);
 
         UserInfo userInfo = userService.updateUserInfo((UserSecurityDTO) user);
         HashMap<String, Object> responseData = new HashMap<>();
-        friendService.acceptFriendship(userInfo,friendMap);
+        friendService.acceptFriendship(friendReqDTO);
         List<String> friends = friendService.getFriendsNickName(userInfo, 1);
-        List<String> friendRequests = friendService.getFriendsNickName(userInfo, 0);
+        List<FriendReqDTO> friendRequests = friendService.getFriendRequests(userInfo);
 
-        UserInfo waitUser = userService.getUserInfo(friendMap.get("nickName"));
+        UserInfo waitUser = userService.getUserInfo(friendReqDTO.getFriendNickName());
+        HashMap<String, Object> waitUserData = new HashMap<>();
         List<String> waitUserFriends = friendService.getFriendsNickName(waitUser, 1);
-        ObjectMapper serverToClient = new ObjectMapper();
-        String waitUserFriendsJson = serverToClient.writeValueAsString(waitUserFriends);
-        log.info("보내기전 : " + waitUserFriendsJson);
+        List<FriendReqDTO> waitFriendRequests = friendService.getFriendRequests(waitUser);
+        waitUserData.put("friends",waitUserFriends);
+        waitUserData.put("friendRequests",waitFriendRequests);
 
-        simpMessagingTemplate.convertAndSend("/queue/accept/" +  friendMap.get("nickName"),waitUserFriendsJson);
+        ObjectMapper serverToClient = new ObjectMapper();
+        String waitUserDataJson = serverToClient.writeValueAsString(waitUserData);
+        simpMessagingTemplate.convertAndSend("/queue/accept/" +  friendReqDTO.getFriendNickName(),waitUserDataJson);
         responseData.put("friends",friends);
         responseData.put("friendRequests",friendRequests);
         return ResponseEntity.ok(responseData);
