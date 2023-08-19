@@ -1,19 +1,20 @@
 package com.project.volka.service.impl;
 
 import com.project.volka.dto.PlanDTO;
+import com.project.volka.dto.PromiseReqDTO;
 import com.project.volka.entity.Plan;
 import com.project.volka.entity.UserInfo;
 import com.project.volka.repository.PlanRepository;
 import com.project.volka.service.interfaces.PlanService;
+import com.project.volka.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +24,37 @@ import java.util.Map;
 public class PlanServiceImpl implements PlanService {
 
     private final PlanRepository planRepository;
+    private final UserService userService;
     private final ModelMapper modelMapper;
+
+    @Override
+    public void makePromisePlan(PromiseReqDTO promiseReqDTO) {
+
+        Plan reqPlan = Plan.builder()
+                .planUserNo(userService.getUserInfo(promiseReqDTO.getTargetUser()))
+                .planTitle(promiseReqDTO.getPlanTitle())
+                .planContent(promiseReqDTO.getPlanContent())
+                .planColor(promiseReqDTO.getPlanColor())
+                .planStartDate(promiseReqDTO.getPlanStartDate())
+                .planEndDate(promiseReqDTO.getPlanEndDate())
+                .planStatus(0)
+                .build();
+
+        Plan resPlan = Plan.builder()
+                .planUserNo(userService.getUserInfo(promiseReqDTO.getMainUser()))
+                .planTitle(promiseReqDTO.getPlanTitle())
+                .planContent(promiseReqDTO.getPlanContent())
+                .planColor(promiseReqDTO.getPlanColor())
+                .planStartDate(promiseReqDTO.getPlanStartDate())
+                .planEndDate(promiseReqDTO.getPlanEndDate())
+                .planStatus(0)
+                .build();
+
+        planRepository.save(reqPlan);
+        planRepository.save(resPlan);
+
+
+    }
 
     @Override
     public void makePlan(UserInfo userInfo, Map<String, Object> planMap) {
@@ -180,7 +211,7 @@ public class PlanServiceImpl implements PlanService {
                     }
                     plan.changePlanEndDate(endDate);
                 } else {
-                    plan.changePlanEndDate(null); // 종료일이 없는 경우 null로 업데이트
+                    plan.changePlanEndDate(null);
                 }
             }
 
@@ -201,8 +232,14 @@ public class PlanServiceImpl implements PlanService {
 
 
     @Override
-    public List<Plan> getPlanList(UserInfo userInfo) {
-        return planRepository.findByPlanUserNo(userInfo);
+    public List<PlanDTO> getPlanList(UserInfo userInfo) {
+
+        List<Plan> plans =  planRepository.findByPlanUserNo(userInfo);
+        List<PlanDTO> planDTOList = new ArrayList<>();
+        for(int i = 0; i < plans.size(); i++){
+            planDTOList.add(modelMapper.map(plans.get(i), PlanDTO.class));
+        }
+        return planDTOList;
     }
 
 }

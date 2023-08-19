@@ -3,10 +3,9 @@ let utility = new Utility();
 
 let nickName = user.userNickName;
 $(document).ready(function () {
-    console.log('friendreq');
-    console.log(friendRequests);
+    console.log('plans');
+    console.log(plans);
 
-    console.log(promiseRequests);
     initEvent();
     onOffconnect();
     friendRequestConnect();
@@ -64,7 +63,6 @@ function promiseRequestConnect() {
     stompPromiseRequestClient = Stomp.over(socket);
     stompPromiseRequestClient.connect({}, function(frame) {
         stompPromiseRequestClient.subscribe('/queue/promise/' + nickName, function(msg) {
-            console.log("웹소켓 받은 후");
             promiseRequests = JSON.parse(msg.body);
             for(let promiseReq of promiseRequests){
 
@@ -78,8 +76,12 @@ function promiseRequestConnect() {
             renderPromiseRequests();
         });
         stompFriendRequestClient.subscribe('/queue/agree/' + nickName, function(msg) {
-            //data가 생겨서 calendar render가 되어야함
-            console.log('promise agree');
+            console.log('promise agree websocket');
+            let responseData = JSON.parse(msg.body);
+            console.log(responseData);
+            plans = responseData.plans;
+            friendRequests = responseData.friendRequests;
+            // calendar render
         });
 
     },function (error){
@@ -371,11 +373,13 @@ function initEvent() {
         utility.ajax('/promise/accept', promiseReq, 'post')
             .then((responseData) => {
                 //받을 값 plans, promiseRequest
+                console.log('accept');
+                console.log('ajax');
+                console.log(responseData);
                 plans = responseData.plans;
                 friendRequests = responseData.friendRequests;
-
                 renderFriendRequests();
-                // 달력 랜더 새로하기
+                // calendar render
             })
             .catch((error) => {
                 console.log(error);

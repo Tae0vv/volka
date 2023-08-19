@@ -1,10 +1,12 @@
 package com.project.volka.controller;
 
 import com.project.volka.dto.FriendReqDTO;
+import com.project.volka.dto.PlanDTO;
 import com.project.volka.dto.PromiseReqDTO;
 import com.project.volka.entity.UserInfo;
 import com.project.volka.security.dto.UserSecurityDTO;
 import com.project.volka.service.interfaces.FriendService;
+import com.project.volka.service.interfaces.PlanService;
 import com.project.volka.service.interfaces.PromiseService;
 import com.project.volka.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
@@ -28,16 +30,19 @@ public class VolkaController {
     private final UserService userService;
     private final FriendService friendService;
     private final PromiseService promiseService;
+    private final PlanService planService;
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("")
     public String home( @AuthenticationPrincipal User user,Model model){
         UserInfo userInfo = userService.updateUserInfo((UserSecurityDTO) user);
+        List<PlanDTO> planList = planService.getPlanList(userInfo);
         List<String> friends = friendService.getFriendsNickName(userInfo, 1);
         List<FriendReqDTO> friendRequests = friendService.getFriendRequests(userInfo);
         List<PromiseReqDTO> promiseRequests = promiseService.getPromiseReqDTOList(userInfo, 0);
 
         model.addAttribute("user", userInfo);
+        model.addAttribute("planList", planList);
         model.addAttribute("friends", friends);
         model.addAttribute("friendRequests", friendRequests);
         model.addAttribute("promiseRequests", promiseRequests);

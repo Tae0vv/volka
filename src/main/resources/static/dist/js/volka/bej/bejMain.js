@@ -385,6 +385,8 @@ function updateModal(plan) {
 
 
 function formatDate(date) {
+    console.log('등록일');
+    console.log(date);
     const formattedDate = new Date(date);
     const year = formattedDate.getFullYear();
     const month = String(formattedDate.getMonth() + 1).padStart(2, '0');

@@ -12,6 +12,5 @@ import java.util.List;
 public interface PromiseRepository extends JpaRepository<Promise,Long> {
 
     List<Promise> findByMainUserAndPromiseStatus(UserInfo main, int promiseStatus);
-
 }
 

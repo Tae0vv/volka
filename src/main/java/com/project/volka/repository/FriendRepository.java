@@ -14,7 +14,6 @@ public interface FriendRepository extends JpaRepository<Friend,Long> {
 
     Friend findByMainUserAndTargetUser(UserInfo mainUser, UserInfo targetUser);
     List<Friend> findByMainUserAndFriendRelation(UserInfo main, int friendRelation);
-    List<Friend> findByMainUserAndTargetUserAndFriendRelation(UserInfo main,UserInfo target, int friendRelation);
 
     @Transactional
     @Modifying
