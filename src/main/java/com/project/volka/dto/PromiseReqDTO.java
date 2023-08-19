@@ -21,6 +21,8 @@ public class PromiseReqDTO {
     private LocalDateTime planStartDate;
     private LocalDateTime planEndDate;
     private String planColor;
+    private Long pairNo;
+
 
 
     public void entityToDTO(Promise promise){
@@ -33,6 +35,8 @@ public class PromiseReqDTO {
         this.planStartDate = promise.getPlanStartDate();
         this.planEndDate = promise.getPlanEndDate();
         this.planColor = promise.getPlanColor();
+        this.pairNo = promise.getPairNo();
+
     }
 }
 

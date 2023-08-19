@@ -18,6 +18,7 @@ public class PromiseDTO {
     private LocalDateTime planStartDate;
     private LocalDateTime planEndDate;
     private String planColor;
+    private Long pairNo;
 }
 
 

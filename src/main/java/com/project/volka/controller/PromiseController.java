@@ -63,7 +63,8 @@ public class PromiseController {
             log.error("parsingError : ");
             log.error(e);
         }
-
+        log.info("요기");
+        log.info(promiseReqDTOListJson);
         simpMessagingTemplate.convertAndSend("/queue/promise/" +  promiseMap.get("friendName"),promiseReqDTOListJson);
         return ResponseEntity.ok(responseData); // 클라이언트에게 JSON 응답을 보냄
     }

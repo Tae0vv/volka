@@ -109,7 +109,6 @@ $(function () {
             right : 'dayGridMonth,timeGridWeek,timeGridDay'
         },
         themeSystem: 'bootstrap',
-        // 랜덤한 기본 이벤트들을 설정합니다.
         events: [
 
         ],

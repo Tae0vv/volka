@@ -21,6 +21,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class PromiseServiceImpl implements PromiseService {
     private final UserService userService;
     private final ModelMapper modelMapper;
     @Override
+    @Transactional
     public void makePromise(UserInfo userInfo, HashMap<String, Object> promiseMap) {
 
         log.info(promiseMap);
@@ -88,7 +90,11 @@ public class PromiseServiceImpl implements PromiseService {
         Promise promiseRes = modelMapper.map(promiseResDTO, Promise.class);
 
         promiseRepository.save(promiseReq);
+        promiseRes.regPair(promiseReq.getPromiseNo());
         promiseRepository.save(promiseRes);
+        promiseReq.regPair(promiseRes.getPromiseNo());
+        promiseRepository.save(promiseReq);
+
     }
 
 

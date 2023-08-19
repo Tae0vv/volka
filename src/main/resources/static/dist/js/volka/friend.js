@@ -64,11 +64,22 @@ function promiseRequestConnect() {
     stompPromiseRequestClient = Stomp.over(socket);
     stompPromiseRequestClient.connect({}, function(frame) {
         stompPromiseRequestClient.subscribe('/queue/promise/' + nickName, function(msg) {
+            console.log("웹소켓 받은 후");
             promiseRequests = JSON.parse(msg.body);
+            for(let promiseReq of promiseRequests){
+
+                let startDateArr = promiseReq.planStartDate;
+                let endDateArr = promiseReq.planEndDate;
+                let startDate = new Date(startDateArr[0], startDateArr[1] - 1, startDateArr[2], startDateArr[3], startDateArr[4]);
+                let endDate = new Date(endDateArr[0], endDateArr[1] - 1, endDateArr[2], endDateArr[3], endDateArr[4]);
+                promiseReq.planStartDate = startDate.toISOString().slice(0, -5);
+                promiseReq.planEndDate = endDate.toISOString().slice(0, -5);
+            }
             renderPromiseRequests();
         });
         stompFriendRequestClient.subscribe('/queue/agree/' + nickName, function(msg) {
             //data가 생겨서 calendar render가 되어야함
+            console.log('promise agree');
         });
 
     },function (error){
@@ -315,9 +326,8 @@ function initEvent() {
             });
     });
 
-    $(document).off('click', '#promise-request-alarm').on('click', '#promise-request-alarm', function () {
+    $(document).off('click', '.promise-requests').on('click', '.promise-requests', function () {
         console.log('일정누름');
-
         $('#addTitleRes').val('');
         $('#addStartDateRes').val('');
         $('#addEndDateRes').val('');
@@ -325,6 +335,7 @@ function initEvent() {
         $('#modal-promise-no').val('');
 
         let selectPromiseNo = $(this).find('.promiseNo').val();
+        console.log(selectPromiseNo);
         let selectPromise = null;
 
         for (let promise of promiseRequests) {
@@ -348,7 +359,7 @@ function initEvent() {
     });
 
     $(document).off('click', '#promise-res-agree-btn').on('click', '#promise-res-agree-btn', function () {
-        let promiseReq = "";
+        let promiseReq = null;
         for (let promise of promiseRequests) {
 
             if (promise.promiseNo == $('#modal-promise-no').val()) {
