@@ -89,11 +89,11 @@ public class PromiseController {
 
         HashMap<String, Object> responseData = new HashMap<>();
         responseData.put("plans", promiseResUserPlans);
-        responseData.put("friendRequests", promiseResList);
+        responseData.put("promiseRequests", promiseResList);
 
         HashMap<String, Object> waitUserData = new HashMap<>();
         waitUserData.put("plans",promiseReqUserPlans);
-        waitUserData.put("friendRequests",promiseReqList);
+        waitUserData.put("promiseRequests",promiseReqList);
 
         String waitUserDataJson = "";
 
@@ -107,8 +107,23 @@ public class PromiseController {
             log.error(e);
         }
 
-        log.info(waitUserDataJson);
         simpMessagingTemplate.convertAndSend("/queue/agree/" +  promiseReqDTO.getTargetUser(),waitUserDataJson);
+        return ResponseEntity.ok(responseData);
+    }
+
+    @PostMapping("/reject")
+    @ResponseBody
+    public ResponseEntity<?> promiseReject(@AuthenticationPrincipal User user,
+                                         @RequestBody PromiseReqDTO promiseReqDTO) {
+
+        UserInfo promiseResUser = userService.updateUserInfo((UserSecurityDTO) user); //수락한 유저
+
+        promiseService.promiseReject(promiseReqDTO);
+        List<PromiseReqDTO> promiseResList =  promiseService.getPromiseReqDTOList(promiseResUser,0);
+
+        HashMap<String, Object> responseData = new HashMap<>();
+        responseData.put("promiseRequests", promiseResList);
+
         return ResponseEntity.ok(responseData);
     }
 

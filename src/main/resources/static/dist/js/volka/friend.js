@@ -3,8 +3,6 @@ let utility = new Utility();
 
 let nickName = user.userNickName;
 $(document).ready(function () {
-    console.log('plans');
-    console.log(plans);
 
     initEvent();
     onOffconnect();
@@ -361,6 +359,7 @@ function initEvent() {
     });
 
     $(document).off('click', '#promise-res-agree-btn').on('click', '#promise-res-agree-btn', function () {
+
         let promiseReq = null;
         for (let promise of promiseRequests) {
 
@@ -372,13 +371,9 @@ function initEvent() {
 
         utility.ajax('/promise/accept', promiseReq, 'post')
             .then((responseData) => {
-                //받을 값 plans, promiseRequest
-                console.log('accept');
-                console.log('ajax');
-                console.log(responseData);
                 plans = responseData.plans;
-                friendRequests = responseData.friendRequests;
-                renderFriendRequests();
+                promiseRequests = responseData.promiseRequests;
+                renderPromiseRequests();
                 // calendar render
             })
             .catch((error) => {
@@ -390,11 +385,28 @@ function initEvent() {
     });
 
     $(document).off('click', '#promise-res-reject-btn').on('click', '#promise-res-reject-btn', function () {
+
+        let promiseReq = null;
+        for (let promise of promiseRequests) {
+
+            if (promise.promiseNo == $('#modal-promise-no').val()) {
+                promiseReq = promise;
+                break;
+            }
+        }
+        utility.ajax('/promise/reject', promiseReq, 'post')
+            .then((responseData) => {
+                promiseRequests = responseData.promiseRequests;
+                renderPromiseRequests();
+            })
+            .catch((error) => {
+                console.log(error);
+            });
         $('#promiseResModal').hide();
     });
-
-
 }
+
+
     function renderFriends() {
         let friendsList = $('#friends-list');
         friendsList.empty();
@@ -434,8 +446,9 @@ function initEvent() {
     }
 
     function renderPromiseRequests() {
+
         $('.promise-requests').remove();
-        console.log(promiseRequests);
+
         promiseRequests.forEach(function (promise) {
             let friendReqDiv = $('<div class="promise-requests"></div>');
             let dropdownDivider = $('<div class="dropdown-divider"></div>');
