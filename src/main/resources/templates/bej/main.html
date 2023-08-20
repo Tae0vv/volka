@@ -40,7 +40,6 @@
             color: black !important;
         }
 
-
         .nav li a {
             background-color: white;
         }
@@ -81,13 +80,13 @@
         }
 
         #addModal .fc-color-picker a.selected i {
-            border: 2px solid #000; /* 선택된 색상에 검은 테두리 추가 */
-            padding: 2px; /* 테두리와 아이콘 사이의 여백 설정 */
+            border: 2px solid #000;
+            padding: 2px;
         }
 
         #promiseModal .fc-color-picker a.selected i {
-            border: 2px solid #000; /* 선택된 색상에 검은 테두리 추가 */
-            padding: 2px; /* 테두리와 아이콘 사이의 여백 설정 */
+            border: 2px solid #000;
+            padding: 2px;
         }
 
     </style>
@@ -203,7 +202,7 @@
 </div>
 <!-- ./wrapper -->
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered " role="document">
         <div class="modal-content">
             <div class="modal-header row">
@@ -265,7 +264,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered " role="document">
         <div class="modal-content">
@@ -281,7 +280,7 @@
             <div class="modal-body">
                 <input type="hidden" id="selectedColor">
                 <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
-                    <ul class="fc-color-picker">
+                    <ul class="fc-color-picker" id="modal-picker">
                         <li><a style="color: #C0C0C0;" href="#"><i class="fas fa-square"></i></a></li> <!-- 은색 -->
                         <li><a style="color: #FFD700;" href="#"><i class="fas fa-square"></i></a></li> <!-- 금색 -->
                         <li><a style="color: #FFC0CB;" href="#"><i class="fas fa-square"></i></a></li> <!-- 분홍색 -->
@@ -340,7 +339,7 @@
     let friendRequests = [[${friendRequests}]];
     let promiseRequests = [[${promiseRequests}]];
 </script>
-<script type="module" src="/dist/js/volka/friend.js"></script>
 <script type="module" src="/dist/js/volka/bej/bejMain.js"></script>
+<script type="module" src="/dist/js/volka/friend.js"></script>
 </body>
 </html>

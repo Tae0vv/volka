@@ -2,8 +2,8 @@ import Utility from '../utility.js';
 const utility = new Utility();
 
 let calendar;
-
-let planList = plans.map((data) => ({
+let planList;
+planList = plans.map((data) => ({
     no: data.planNo,
     title: data.planTitle,
     start: new Date(data.planStartDate),
@@ -110,7 +110,6 @@ $(function () {
         },
         themeSystem: 'bootstrap',
         events: [
-
         ],
         editable  : true,      // 이벤트를 편집 가능하도록 합니다.
         droppable : true,      // 이벤트를 달력에 놓을 수 있도록 합니다.
@@ -292,21 +291,20 @@ $(function () {
     calendar.render();
 
 
-    var currColor = '#3c8dbc' // 기본적으로 빨간색
+    let currColor = '#3c8dbc'
     // 색상 선택 버튼
-    $('#color-chooser > li > a').click(function (e) {
-        e.preventDefault()
-        currColor = $(this).css('color')
+
+    $("#color-chooser li").click(function() {
+        currColor = $(this).find("a").css("color");
         $('#add-new-event').css({
             'background-color': currColor,
             'border-color'    : currColor
         })
-    })
-
+    });
 
     $('#add-new-event').click(function (e) {
         e.preventDefault()
-        var val = $('#new-event').val()
+        let val = $('#new-event').val()
         let texts = $('#external-events')[0].innerText;
         let textArray = texts.split('\n');
 
@@ -348,8 +346,47 @@ $(function () {
         // 텍스트 입력란에서 이벤트 삭제
         $('#new-event').val('')
     })
-})
 
+    $("#addPlanBtn").off('click').click(function () {
+        $('#addTitle').val('');
+        $('#selectedColor').val('');
+        $('#addStartDate').val('');
+        $('#addEndDate').val('');
+        $('#addTextArea').val('');
+        $('.fc-color-picker a.selected').removeClass('selected');
+
+        $("#addModal").modal("show");
+    });
+
+    $('#newBtn').off('click').click(function () {
+
+        let title = $('#addTitle').val();
+        let selectedColor = $('#selectedColor').val();
+        let startDate = $('#addStartDate').val();
+        let endDate = $('#addEndDate').val();
+        let content = $('#addTextArea').val();
+
+        console.log('색');
+        console.log(selectedColor);
+        const data = {
+            title: title,
+            color: selectedColor,
+            planStartDate: startDate,
+            planEndDate: endDate,
+            content: content
+        };
+
+        utility.ajax('/bej/plan', data, 'POST')
+            .then((responseData) => {
+                updatePlan(responseData);
+            })
+            .catch((error) => {
+                console.error('실패:', error);
+            });
+
+        $('#addModal').modal('hide');
+    });
+})
 
 
 function updateModal(plan) {
@@ -397,57 +434,6 @@ function formatDate(date) {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
-
-
-
-$(document).ready(function () {
-
-    $('.fc-color-picker a').on('click', function() {
-        $('.fc-color-picker a.selected').removeClass('selected');
-        $(this).addClass('selected');
-        let selectedColor = $(this).css('color');
-        $('#selectedColor').val(selectedColor);
-    });
-
-
-    $("#addPlanBtn").on("click", function () {
-        $('#addTitle').val('');
-        $('#selectedColor').val('');
-        $('#addStartDate').val('');
-        $('#addEndDate').val('');
-        $('#addTextArea').val('');
-        $('.fc-color-picker a.selected').removeClass('selected');
-
-        $("#addModal").modal("show");
-    });
-
-    $('#newBtn').on('click', function() {
-
-        const title = $('#addTitle').val();
-        const selectedColor = $('#selectedColor').val();
-        const startDate = $('#addStartDate').val();
-        const endDate = $('#addEndDate').val();
-        const content = $('#addTextArea').val();
-
-        const data = {
-            title: title,
-            color: selectedColor,
-            planStartDate: startDate,
-            planEndDate: endDate,
-            content: content
-        };
-
-        utility.ajax('/bej/plan', data, 'POST')
-            .then((responseData) => {
-                updatePlan(responseData);
-            })
-            .catch((error) => {
-                console.error('실패:', error);
-            });
-
-        $('#addModal').modal('hide');
-    });
-});
 
 function updatePlan(responseData){
 

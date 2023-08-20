@@ -374,7 +374,6 @@ function initEvent() {
                 plans = responseData.plans;
                 promiseRequests = responseData.promiseRequests;
                 renderPromiseRequests();
-                // calendar render
             })
             .catch((error) => {
                 console.log(error);
