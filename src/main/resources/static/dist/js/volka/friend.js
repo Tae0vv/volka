@@ -79,7 +79,15 @@ function promiseRequestConnect() {
             console.log(responseData);
             plans = responseData.plans;
             friendRequests = responseData.friendRequests;
-            // calendar render
+
+            Swal.fire({
+                title: '알림',
+                text: '약속이 수락됐습니다. Bej의 Main으로 가주세요',
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 1000
+            });
+
         });
 
     },function (error){
@@ -145,11 +153,12 @@ function initEvent() {
         $('#friendModal').modal('hide');
     });
 
-    $('.fc-color-picker a').off('click').click(function () {
-        $('.fc-color-picker a.selected').removeClass('selected');
-        $(this).addClass('selected');
-        let selectedColor = $(this).css('color');
-        $('#selectedColorReq').val(selectedColor);
+    $('#promise-chooser li').off('click').click(function() {
+        $('#promise-chooser li a').removeClass('selected');
+        $(this).find("a").addClass('selected');
+        let promiseChooserColor = $(this).find("a").css("color");
+        $('#selectedColorReq').val(promiseChooserColor);
+        console.log(promiseChooserColor);
     });
 
     $('#appointmentButton').off('click').click(function () {
@@ -160,13 +169,14 @@ function initEvent() {
         $('#addStartDateReq').val('');
         $('#addEndDateReq').val('');
         $('#addTextAreaReq').val('');
-        $('.fc-color-picker a.selected').removeClass('selected');
+        $('#promise-chooser a.selected').removeClass('selected');
         $('#promiseModal').modal('show');
     });
 
     $('#chatButton').off('click').click(function () {
         console.log('채팅');
         $('#friendModal').modal('hide');
+        //window.open(chat)
     });
 
     $('#blockButton').off('click').click(function () {
@@ -218,6 +228,7 @@ function initEvent() {
         utility.ajax('/promise/request', data, 'POST')
             .then((responseData) => {
                 console.log(responseData);
+
                 Swal.fire({
                     title: '알림',
                     text: responseData.message,
@@ -327,7 +338,6 @@ function initEvent() {
     });
 
     $(document).off('click', '.promise-requests').on('click', '.promise-requests', function () {
-        console.log('일정누름');
         $('#addTitleRes').val('');
         $('#addStartDateRes').val('');
         $('#addEndDateRes').val('');
@@ -335,7 +345,6 @@ function initEvent() {
         $('#modal-promise-no').val('');
 
         let selectPromiseNo = $(this).find('.promiseNo').val();
-        console.log(selectPromiseNo);
         let selectPromise = null;
 
         for (let promise of promiseRequests) {
@@ -374,13 +383,17 @@ function initEvent() {
                 plans = responseData.plans;
                 promiseRequests = responseData.promiseRequests;
                 renderPromiseRequests();
+                let currentURL = window.location.href;
+
+                if (currentURL.includes("bej/main")) {
+                    history.go(0);
+                }
             })
             .catch((error) => {
                 console.log(error);
             });
 
         $('#promiseResModal').hide();
-
     });
 
     $(document).off('click', '#promise-res-reject-btn').on('click', '#promise-res-reject-btn', function () {

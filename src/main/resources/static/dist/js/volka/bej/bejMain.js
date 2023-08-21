@@ -14,7 +14,6 @@ planList = plans.map((data) => ({
 }));
 
 
-//keyword 가져와서 화면에 뿌리기
 let keyword = user.userKeyword;
 let keywordList;
 if (keyword) {
@@ -353,7 +352,7 @@ $(function () {
         $('#addStartDate').val('');
         $('#addEndDate').val('');
         $('#addTextArea').val('');
-        $('.fc-color-picker a.selected').removeClass('selected');
+        $('#modal-chooser a.selected').removeClass('selected');
 
         $("#addModal").modal("show");
     });
@@ -386,6 +385,15 @@ $(function () {
 
         $('#addModal').modal('hide');
     });
+
+    $("#modal-chooser li").click(function() {
+        $('#modal-chooser li a').removeClass('selected');
+        $(this).find("a").addClass('selected');
+        let modalChooserColor = $(this).find("a").css("color");
+        $('#selectedColor').val(modalChooserColor);
+        console.log(modalChooserColor);
+    });
+
 })
 
 
