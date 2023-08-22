@@ -24,7 +24,7 @@ public class Chat extends BaseEntity{
 
     @JoinColumn(name = "CHAT_USER_ID",nullable = false, referencedColumnName = "USER_ID")
     @ManyToOne(fetch = FetchType.EAGER)
-    private UserInfo chatUserNo;
+    private UserInfo chatUserId;
 
     @Column(name = "CHAT_CONTENT",length = 5000, nullable = false)
     private String chatContent;

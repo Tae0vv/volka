@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
@@ -31,16 +32,37 @@ public class ChatRepositoryTests {
 
 
     @Test
+    public void createChatRoom(){
+        UserInfo userInfo = userRepository.findById("kty2451@gmail.com").orElseThrow();
+
+        List<ChatRoom> allChatRooms = chatRoomRepository.findAll();
+        List<ChatRoom> chatRooms = new ArrayList<>();
+        for (ChatRoom chatRoom : allChatRooms) {
+            String participants = chatRoom.getChatRoomParticipants();
+            if (participants != null) {
+                String[] participantIds = participants.split("\\|"); // 파이프를 기준으로 문자열 분할
+                for (String participantId : participantIds) {
+                    if (participantId.equals(userInfo.getUserId())) {
+                        chatRooms.add(chatRoom);
+                        break;
+                    }
+                }
+            }
+        }
+
+        log.info(chatRooms);
+    }
+
+    @Test
     public void sendChat(){
         ChatRoom chatRoom = chatRoomRepository.findById(1L).orElseThrow();
         UserInfo userInfo = userRepository.findById("kty2451@gmail.com").orElseThrow();
         UserInfo userInfo2 = userRepository.findById("volka").orElseThrow();
 
-
         Chat chat = Chat.builder()
                 .chatRoomNo(chatRoom)
-                .chatUserNo(userInfo2)
-                .chatContent("안녕 22")
+                .chatUserId(userInfo2)
+                .chatContent("안녕 난 volka야")
                 .chatRead(1)
                 .build();
 
@@ -50,7 +72,7 @@ public class ChatRepositoryTests {
     @Test
     public void getChatInfo(){
         ChatRoom chatRoom = chatRoomRepository.findById(1L).orElseThrow();
-        List<Chat> chats = chatRepository.findByChatRoomNoOrderByChatNoDesc(chatRoom);
+        List<Chat> chats = chatRepository.findByChatRoomNo(chatRoom);
         log.info(chats);
     }
 
