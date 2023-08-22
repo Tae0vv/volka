@@ -149,7 +149,8 @@ function initEvent() {
     $('#scheduleButton').off('click').click(function () {
         let friendNickName = $('.user-name').text().split('님')[0].trim();
         console.log('일정보기');
-        window.open('/bej/schedule?friend=' + friendNickName, '_blank');
+        openPopup('/bej/schedule?friend=' + friendNickName,800,800);
+
         $('#friendModal').modal('hide');
     });
 
@@ -177,6 +178,7 @@ function initEvent() {
         console.log('채팅');
         $('#friendModal').modal('hide');
         //window.open(chat)
+        openPopup('/volka/chat', 400, 800);
     });
 
     $('#blockButton').off('click').click(function () {
@@ -493,4 +495,17 @@ function initEvent() {
 
         renderFriendList.empty().append(onlineUsers).append(offlineUsers);
         initEvent();
+    }
+
+    function openPopup(url,width,height) {
+
+        let _width = width +'';
+        let _height = height + '';
+
+        // 팝업을 가운데 위치시키기 위해 아래와 같이 값 구하기
+        let _left = Math.ceil(( window.screen.width - _width )/2);
+        let _top = Math.ceil(( window.screen.height - _height )/2);
+
+        window.open(url, 'schedule', 'width='+ _width +', height='+ _height +', left=' + _left + ', top='+ _top );
+
     }

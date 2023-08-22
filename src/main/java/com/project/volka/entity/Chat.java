@@ -18,12 +18,12 @@ public class Chat extends BaseEntity{
     @Column(name = "CHAT_NO")
     private Long chatNo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "CHAT_ROOM_NO" ,nullable = false, referencedColumnName = "CHAT_ROOM_NO")
     private ChatRoom chatRoomNo;
 
     @JoinColumn(name = "CHAT_USER_ID",nullable = false, referencedColumnName = "USER_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private UserInfo chatUserNo;
 
     @Column(name = "CHAT_CONTENT",length = 5000, nullable = false)
