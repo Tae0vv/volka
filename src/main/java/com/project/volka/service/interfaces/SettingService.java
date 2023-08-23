@@ -9,3 +9,4 @@ public interface SettingService {
     void changePw(PasswordDTO passwordDTO, @AuthenticationPrincipal User user) throws Exception;
     void changeInfo(UserInfoDTO userInfoDTO, @AuthenticationPrincipal User user) throws Exception;
 }
+1042
