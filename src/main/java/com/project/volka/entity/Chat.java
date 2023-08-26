@@ -1,5 +1,6 @@
 package com.project.volka.entity;
 
+import com.project.volka.dto.ChatDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -34,5 +35,17 @@ public class Chat extends BaseEntity{
 
     public void read() {
         this.chatRead = chatRead -1;
+    }
+
+    public ChatDTO entityToDto(){
+        ChatDTO chatDTO = new ChatDTO();
+        chatDTO.setChatNo(this.chatNo);
+        chatDTO.setChatRoomNo(this.getChatRoomNo().getChatRoomNo());
+        chatDTO.setChatUserId(this.getChatUserId().getUserId());
+        chatDTO.setChatContent(this.getChatContent());
+        chatDTO.setChatRead(this.getChatRead());
+        chatDTO.setRegDate(this.getRegDate());
+        chatDTO.setModDate(this.getModDate());
+        return chatDTO;
     }
 }

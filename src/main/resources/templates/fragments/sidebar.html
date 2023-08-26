@@ -28,15 +28,18 @@
             <li class="nav-item dropdown" id="message">
                 <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false">
                     <i class="far fa-comment"></i>
-                    <span class="badge badge-primary navbar-badge">2</span>
+                    <span class="badge badge-primary navbar-badge" th:text="${#lists.size(unreadChats)}"></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px;">
-                    <span class="dropdown-item dropdown-header">2개의 알림</span>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <i class="far fa-comment"></i>a님과의 채팅방
-                        <span class="float-right text-muted text-sm">3 mins</span>
-                    </a>
+                    <span class="dropdown-item dropdown-header" th:text="${#lists.size(unreadChats)} + '개의 알림'"></span>
+                    <div th:each="unReadChatRoom : ${unReadChatRooms}" class="unread-chatrooms">
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item chat-name">
+                            <input type="hidden" class="chatroom-no" th:value="${unReadChatRoom.chatRoomNo}">
+                            <i class="far fa-comment"></i>
+                            <span class="float-right text-muted text-sm"></span>
+                        </a>
+                    </div>
                 </div>
             </li>
 

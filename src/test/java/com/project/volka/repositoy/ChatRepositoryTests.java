@@ -25,11 +25,6 @@ public class ChatRepositoryTests {
     private ChatRepository chatRepository;
     @Autowired
     private ChatRoomRepository chatRoomRepository;
-    @Autowired
-    private ModelMapper modelMapper;
-
-
-
 
     @Test
     public void createChatRoom(){

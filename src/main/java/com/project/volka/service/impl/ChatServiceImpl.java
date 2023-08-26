@@ -29,9 +29,23 @@ public class ChatServiceImpl implements ChatService {
     private final UserRepository userRepository;
 
     @Override
-    public List<Chat> getChat(ChatRoom chatRoom) {
-        List<Chat> chats = chatRepository.findByChatRoomNo(chatRoom);
-        return chats;
+    public List<ChatDTO> getChats(Long chatRoomNo) {
+        List<Chat> chats = chatRepository.findByChatRoomNo(chatRoomRepository.findById(chatRoomNo).orElseThrow());
+        List<ChatDTO> ChatDTOList = new ArrayList<>();
+        for(Chat chat : chats){
+            ChatDTOList.add(chat.entityToDto());
+        }
+        return ChatDTOList;
+    }
+
+    @Override
+    public List<ChatDTO> getUnreadChats(UserInfo userInfo) {
+        List<Chat> unreadChats = chatRepository.findUnreadChats(userInfo);
+        List<ChatDTO> unreadChatDTOList = new ArrayList<>();
+        for(Chat chat : unreadChats){
+            unreadChatDTOList.add(chat.entityToDto());
+        }
+        return unreadChatDTOList;
     }
 
     @Override
@@ -40,7 +54,7 @@ public class ChatServiceImpl implements ChatService {
                 .chatContent(chatDTO.getChatContent())
                 .chatRoomNo(chatRoomRepository.findById(chatDTO.getChatRoomNo()).orElseThrow())
                 .chatUserId(userRepository.findById(chatDTO.getChatUserId()).orElseThrow())
-                .chatRead(chatDTO.getChatRead()) //js에서 setting해서 보내기
+                .chatRead(chatDTO.getChatRead())
                 .build();
         chatRepository.save(chat);
     }

@@ -1,15 +1,12 @@
 package com.project.volka.controller;
 
-import com.project.volka.dto.FriendReqDTO;
-import com.project.volka.dto.PlanDTO;
-import com.project.volka.dto.PromiseReqDTO;
+import com.project.volka.dto.*;
+import com.project.volka.entity.Chat;
+import com.project.volka.entity.ChatRoom;
 import com.project.volka.entity.Plan;
 import com.project.volka.entity.UserInfo;
 import com.project.volka.security.dto.UserSecurityDTO;
-import com.project.volka.service.interfaces.FriendService;
-import com.project.volka.service.interfaces.PlanService;
-import com.project.volka.service.interfaces.PromiseService;
-import com.project.volka.service.interfaces.UserService;
+import com.project.volka.service.interfaces.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +30,8 @@ public class BejController {
     private final PlanService planService;
     private final FriendService friendService;
     private final PromiseService promiseService;
+    private final ChatRoomService chatRoomService;
+    private final ChatService chatService;
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/main")
@@ -44,12 +43,18 @@ public class BejController {
         List<String> friends = friendService.getFriendsNickName(userInfo, 1);
         List<FriendReqDTO> friendRequests = friendService.getFriendRequests(userInfo);
         List<PromiseReqDTO> promiseRequests = promiseService.getPromiseReqDTOList(userInfo, 0);
+        List<ChatRoomDTO> chatRooms = chatRoomService.getChatRooms(userInfo.getUserId());
+        List<ChatDTO> unreadChats = chatService.getUnreadChats(userInfo);
+        List<ChatRoomDTO> unReadChatRooms = chatRoomService.getUnReadChatRooms(unreadChats);
 
         model.addAttribute("user", userInfo);
         model.addAttribute("planList", planList);
         model.addAttribute("friends", friends);
         model.addAttribute("friendRequests", friendRequests);
         model.addAttribute("promiseRequests", promiseRequests);
+        model.addAttribute("chatRooms", chatRooms);
+        model.addAttribute("unreadChats", unreadChats);
+        model.addAttribute("unReadChatRooms", unReadChatRooms);
     }
 
     @PostMapping("/plan")

@@ -1,5 +1,6 @@
 package com.project.volka.entity;
 
+import com.project.volka.dto.ChatDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,4 +21,5 @@ public class ChatRoom {
 
     @Column(name = "CHAT_ROOM_PARTICIPANTS")
     private String chatRoomParticipants;
+
 }

@@ -3,12 +3,30 @@ let utility = new Utility();
 
 let nickName = user.userNickName;
 $(document).ready(function () {
-
+    console.log(user);
+    console.log(plans);
+    console.log(friends);
+    console.log(friendRequests);
+    console.log(promiseRequests);
+    console.log(chatRooms);
+    console.log(unreadChats);
+    console.log(unReadChatRooms);
+    console.log(unreadChatMap);
+    startRender();
     initEvent();
     onOffconnect();
     friendRequestConnect();
     promiseRequestConnect();
 });
+
+let unreadChatMap = new Map();
+for (let unreadChat of unreadChats) {
+    if (!unreadChatMap.has(unreadChat.chatRoomNo)) {
+        unreadChatMap.set(unreadChat.chatRoomNo, 1);
+    } else {
+        unreadChatMap.set(unreadChat.chatRoomNo, unreadChatMap.get(unreadChat.chatRoomNo) + 1);
+    }
+}
 
 let stompOnOffClient = null;
 let friendsStatus = null;
@@ -94,14 +112,6 @@ function promiseRequestConnect() {
         console.log(error);
     });
 }
-
-
-
-
-
-
-
-
 function loginUserStatus(message) {
     $(".user-li").each(function() {
        let friendName = $(this).find(".user-i").text();
@@ -177,8 +187,27 @@ function initEvent() {
     $('#chatButton').off('click').click(function () {
         console.log('채팅');
         $('#friendModal').modal('hide');
-        //window.open(chat)
-        openPopup('/volka/chat', 400, 800);
+        let clickedChatRoomNo;
+        let clickedName = $('.user-name').text().slice(0, -1).trim();
+
+        for (let i = 0; i < chatRooms.length; i++) {
+            let participantNickNames = Object.values(chatRooms[i].participants);
+
+            if (participantNickNames.length == 2 &&
+                participantNickNames.includes(clickedName) &&
+                participantNickNames.includes(nickName)) {
+
+                clickedChatRoomNo = chatRooms[i].chatRoomNo;
+                break;
+            }
+        }
+        if (clickedChatRoomNo) {
+            console.log(`Found matching chat room: ${clickedChatRoomNo}`);
+            openPopup('/volka/chat?room='+clickedChatRoomNo, 400, 400);
+        } else {
+            console.log(`No matching chat room found for user: ${clickedName}`);
+        }
+
     });
 
     $('#blockButton').off('click').click(function () {
@@ -497,6 +526,41 @@ function initEvent() {
         initEvent();
     }
 
+    function renderUnreadChatRooms() {
+        $('.unread-chatrooms').remove();
+
+        unReadChatRooms.forEach(function (unReadChatRoom) {
+            let chatRoomDiv = $('<div class="unread-chatrooms"></div>');
+            let dropdownDivider = $('<div class="dropdown-divider"></div>');
+            let chatName = $('<a href="#" class="dropdown-item chat-name"></a>');
+
+            let inputTag = $('<input type="hidden" class ="chatroom-no"/>').attr('value', unReadChatRoom.chatRoomNo);
+
+            let messageCountSpan = $('<span class="float-right text-muted text-sm"></span>');
+            messageCountSpan.text(`${unreadChatMap.get(unReadChatRoom.chatRoomNo)}개`);
+            let ids = unReadChatRoom.chatRoomParticipants.split('|');
+            let roomName = '';
+            for(let i = 0; i < ids.length - 1 ; i++){
+                if(ids[i] != user.userId){
+                    roomName += unReadChatRoom.participants[ids[i]];
+                }
+            }
+            chatName.html('<i class="far fa-comment"></i> ' + roomName + ' 님과의 채팅방');
+            chatName.append(messageCountSpan);
+            chatName.prepend(inputTag);
+            chatRoomDiv.append(dropdownDivider);
+            chatRoomDiv.append(chatName);
+
+            $('.dropdown-menu.dropdown-menu-lg.dropdown-menu-right').append(chatRoomDiv);
+        });
+
+        $('#message .navbar-badge').text(unreadChats.length);  // navbar 상단 알림 수 업데이트
+        $('.dropdown-header').text(`${unreadChats.length}개의 알림`);  // dropdown 헤더 알림 수 업데이트
+    }
+
+    function startRender(){
+        renderUnreadChatRooms();
+    }
     function openPopup(url,width,height) {
 
         let _width = width +'';
