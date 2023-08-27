@@ -33,8 +33,6 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
     private final UserRepository userRepository;
     private final ChatRoomRepository chatRoomRepository;
-    private final ChatRepository chatRepository;
-    private final ModelMapper modelMapper;
 
 
     @Override

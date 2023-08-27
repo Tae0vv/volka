@@ -34,7 +34,7 @@ public class Chat extends BaseEntity{
     private int chatRead;
 
     public void read() {
-        this.chatRead = chatRead -1;
+        this.chatRead = chatRead +1;
     }
 
     public ChatDTO entityToDto(){

@@ -22,13 +22,16 @@ function renderChatRoom(){
     }
 
     $(".chat-who").text(roomName+'님과의 채팅');
+    $("#chat-room-no").val(chatRoom.chatRoomNo);
     $(".direct-chat-messages").empty();
 
     for(let chat of chats){
+        let regDate = moment(chat.regDate, 'YYYY-MM-DDTHH:mm:ss.SSSSS').format('YYYY-MM-DD : HH:mm');
+
         let msgDiv = $('<div>').addClass('direct-chat-msg');
         let infoDiv = $('<div>').addClass('direct-chat-infos clearfix');
         let nameSpan = $('<span>').addClass('direct-chat-name').addClass(chat.chatUserId != user.userId ? 'float-left' : 'float-right').text(chatRoom.participants[chat.chatRoomNo]);
-        let timeSpan = $('<span>').addClass('direct-chat-timestamp').addClass(chat.chatUserId != user.userId ? 'float-right' : 'float-left').text(chat.regDate);
+        let timeSpan = $('<span>').addClass('direct-chat-timestamp').addClass(chat.chatUserId != user.userId ? 'float-right' : 'float-left').text(regDate);
         let img = $('<img>').addClass('direct-chat-img').attr('src', '/dist/img/volka.jpg').attr('alt', 'User Image');
         let textDiv = $('<div>').addClass('direct-chat-text').text(chat.chatContent);
 
@@ -40,5 +43,37 @@ function renderChatRoom(){
         }
         $(".direct-chat-messages").append(msgDiv);
         $(".direct-chat-messages").scrollTop($(".direct-chat-messages")[0].scrollHeight);
+    }
+    initEvent();
+}
+
+function initEvent(){
+    $(document).off('click', '#chat-btn').on('click', '#chat-btn', function () {
+        sendMessage();
+        $("#chat-content").val('');
+    });
+
+    $(document).off('keydown', '#chat-content').on('keydown', '#chat-content', function (e) {
+        if (e.keyCode == 13) {
+            e.preventDefault();
+            sendMessage();
+            $("#chat-content").val('');
+        }
+    });
+}
+
+function sendMessage(){
+    let content = $("#chat-content").val();
+    if(content.trim() != ''){
+        let data = {roomNo : $("#chat-room-no").val(), content : content}
+        utility.ajax("/volka/chat",data, 'post')
+            .then((responseData) => {
+                console.log(responseData);
+                chats = responseData.chats;
+                renderChatRoom();
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }
 }

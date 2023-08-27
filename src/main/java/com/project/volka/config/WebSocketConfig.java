@@ -21,6 +21,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 		registry.addEndpoint("/status").withSockJS();
 		registry.addEndpoint("/friend").withSockJS();
 		registry.addEndpoint("/promise").withSockJS();
+		registry.addEndpoint("/room").withSockJS();
 		registry.addEndpoint("/chat").withSockJS();
 	}
 

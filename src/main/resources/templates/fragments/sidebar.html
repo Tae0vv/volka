@@ -28,10 +28,10 @@
             <li class="nav-item dropdown" id="message">
                 <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false">
                     <i class="far fa-comment"></i>
-                    <span class="badge badge-primary navbar-badge" th:text="${#lists.size(unreadChats)}"></span>
+                    <span class="badge badge-primary navbar-badge msg-count" th:text="${#lists.size(unreadChats)}"></span>
                 </a>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px;">
-                    <span class="dropdown-item dropdown-header" th:text="${#lists.size(unreadChats)} + '개의 알림'"></span>
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="msg-div" style="left: inherit; right: 0px;">
+                    <span class="dropdown-item dropdown-header msg-header" th:text="${#lists.size(unreadChats)} + '개의 알림'"></span>
                     <div th:each="unReadChatRoom : ${unReadChatRooms}" class="unread-chatrooms">
                         <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item chat-name">
@@ -48,7 +48,7 @@
                     <i class="fas fa-users"></i>
                     <span class="badge badge-warning navbar-badge req-count" th:text="${#lists.size(friendRequests)}"></span>
                 </a>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px;">
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="friend-div" style="left: inherit; right: 0px;">
                     <span class="dropdown-item dropdown-header req-num" th:text="${#lists.size(friendRequests)} + '개의 알림'"></span>
                     <div th:each="friend : ${friendRequests}" class="friend-requests">
                         <div class="dropdown-divider"></div>
@@ -71,7 +71,7 @@
                     <i class="far fa-envelope"></i>
                     <span class="badge badge-danger navbar-badge promise-count" th:text="${#lists.size(promiseRequests)}"></span>
                 </a>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px;">
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="promise-div" style="left: inherit; right: 0px;">
                     <span class="dropdown-item dropdown-header promise-num" th:text="${#lists.size(promiseRequests)} + '개의 알림'"></span>
                     <div th:each="promise : ${promiseRequests}" class="promise-requests">
                         <div class="dropdown-divider"></div>

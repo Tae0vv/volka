@@ -16,16 +16,16 @@
     <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css">
     <link rel="stylesheet" href="/plugins/summernote/summernote-bs4.min.css">
     <style>
-        .direct-chat-messages {
-            height: 70vh;
-            overflow-y: auto;
+        .direct-chat-messages{
+            height: 80vh;
         }
     </style>
 </head>
 <body>
-    <div class="card card-success card-outline direct-chat direct-chat-success shadow-sm">
+    <div class="card card-success card-outline direct-chat direct-chat-secondary shadow-sm">
         <div class="card-header">
             <h3 class="card-title chat-who"></h3>
+            <input type="hidden" id="chat-room-no">
         </div>
 
         <div class="card-body">
@@ -36,9 +36,9 @@
         <div class="card-footer">
             <form action="#" method="post">
                 <div class="input-group">
-                    <input type="text" name="message" placehohlder="Type Message ..." class="form-control">
+                    <input type="text" name="message" id= "chat-content" class="form-control">
                     <span class="input-group-append">
-                        <button type="submit" class="btn btn-success">Send</button>
+                        <button class="btn btn-secondary" id="chat-btn" type="button">Send</button>
                         </span>
                 </div>
             </form>
@@ -54,7 +54,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.0.2/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.15/dist/sweetalert2.all.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script th:inline="javascript">
         let user = [[${user}]];
         let chats = [[${chats}]];
