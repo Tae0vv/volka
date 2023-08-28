@@ -487,7 +487,6 @@ function initEvent() {
         initEvent();
     }
 
-
     function sortUserList() {
         let renderFriendList = $("#friends-list");
         let onlineUsers = renderFriendList.find("li:has(.bg-light)").sort();
@@ -509,3 +508,4 @@ function initEvent() {
         window.open(url, 'schedule', 'width='+ _width +', height='+ _height +', left=' + _left + ', top='+ _top );
 
     }
+
