@@ -32,6 +32,7 @@ import java.util.*;
 public class ChatRoomServiceImpl implements ChatRoomService {
 
     private final UserRepository userRepository;
+    private final UserService userService;
     private final ChatRoomRepository chatRoomRepository;
 
 
@@ -128,6 +129,20 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
         return chatRoomDTOList;
 
+    }
+
+    @Override
+    public Long makeChatRoom(UserInfo userInfo,String[] participantsArray) {
+        String participants = userInfo.getUserId() + "|";
+
+        for(int i = 0; i < participantsArray.length; i++){
+            String id = userService.getUserInfo(participantsArray[i]).getUserId() + "|";
+            participants += id;
+        }
+        ChatRoom chatRoom = ChatRoom.builder()
+                .chatRoomParticipants(participants)
+                .build();
+        return chatRoomRepository.save(chatRoom).getChatRoomNo();
     }
 }
 

@@ -19,6 +19,7 @@ $(document).ready(function () {
     onOffconnect();
     friendRequestConnect();
     promiseRequestConnect();
+    roomConnect();
 });
 function initUnreadChatMap(){
     unreadChatMap.clear();
@@ -35,7 +36,10 @@ function initUnreadChatMap(){
 
 let stompOnOffClient = null;
 let friendsStatus = null;
-
+let stompFriendRequestClient = null;
+let stompPromiseRequestClient = null;
+let stompRoomClient = null;
+let stompReadClient = null;
 function onOffconnect() {
     let socket = new SockJS('/status');
     stompOnOffClient = Stomp.over(socket);
@@ -56,7 +60,6 @@ function onOffconnect() {
     });
 }
 
-let stompFriendRequestClient = null;
 function friendRequestConnect() {
     let socket = new SockJS('/friend');
     stompFriendRequestClient = Stomp.over(socket);
@@ -78,7 +81,6 @@ function friendRequestConnect() {
     });
 }
 
-let stompPromiseRequestClient = null;
 function promiseRequestConnect() {
     let socket = new SockJS('/promise');
     stompPromiseRequestClient = Stomp.over(socket);
@@ -118,16 +120,20 @@ function promiseRequestConnect() {
 
 function roomConnect() {
     let socket = new SockJS('/room');
-    stompOnOffClient = Stomp.over(socket);
-    stompOnOffClient.connect({}, function(frame) {
-        stompOnOffClient.subscribe('/queue/room/' + nickName, function(msg) {
-            // 랜더해야됨
+    stompRoomClient = Stomp.over(socket);
+    stompRoomClient.connect({}, function(frame) {
+
+        stompRoomClient.subscribe('/queue/room/' + nickName, function(msg) {
+
+            unReadChatRooms = JSON.parse(msg.body).unReadChatRooms;
+            chatRooms = JSON.parse(msg.body).chatRooms;
+            unreadChats = JSON.parse(msg.body).unreadChats;
+            chatAlarmRender();
         });
     },function (error){
         console.log(error);
     });
 }
-
 
 function loginUserStatus(message) {
     $(".user-li").each(function() {
@@ -203,7 +209,7 @@ function initEvent() {
 
     $('#chatButton').off('click').click(function () {
         $('#friendModal').modal('hide');
-        let clickedChatRoomNo;
+        let clickedChatRoomNo = 0;
         let clickedName = $('.user-name').text().slice(0, -1).trim();
 
         for (let i = 0; i < chatRooms.length; i++) {
@@ -217,11 +223,9 @@ function initEvent() {
                 break;
             }
         }
-        console.log('ajax 전 : ' + clickedChatRoomNo);
         if (clickedChatRoomNo) {
             utility.ajax('volka/chat/alarm',{roomNo : clickedChatRoomNo},'post')
                 .then((responseData) => {
-                    console.log('ajax');
                     chatRooms = responseData.chatRooms
                     unreadChats = responseData.unreadChats
                     unReadChatRooms = responseData.unReadChatRooms
@@ -230,9 +234,21 @@ function initEvent() {
                 })
                 .catch((error) => {
                     console.error(error);
+
                 });
         } else {
-            console.log(`No matching chat room found for user: ${clickedName}`);
+            utility.ajax('volka/chat/create',{member: clickedName},'post')
+                .then((responseData) => {
+                    chatRooms = responseData.chatRooms
+                    unreadChats = responseData.unreadChats
+                    unReadChatRooms = responseData.unReadChatRooms
+                    chatAlarmRender();
+                    openPopup('/volka/chat?room='+responseData.chatRoomNo, 400, 400);
+                })
+                .catch((error) => {
+                    console.error(error);
+
+                });
         }
     });
 
@@ -241,7 +257,6 @@ function initEvent() {
         utility.ajax('/friend/block', {nickName: userNickName}, 'post')
             .then((responseData) => {
                 friends = responseData.friends;
-
                 renderFriends();
             })
             .catch((error) => {
@@ -475,8 +490,10 @@ function initEvent() {
     });
 
     $(document).off('click', '.unread-chatrooms').on('click', '.unread-chatrooms', function () {
+        console.log('들어옴?')
         let value = $(this).find('.chatroom-no').val();
-        utility.ajax('volka/chat/alarm',{roomNo : clickedChatRoomNo},'post')
+        console.log(value);
+        utility.ajax('volka/chat/alarm',{roomNo : value},'post')
             .then((responseData) => {
                 console.log('ajax');
                 chatRooms = responseData.chatRooms
@@ -580,8 +597,7 @@ function initEvent() {
             messageCountSpan.text(`${unreadChatMap.get(unReadChatRoom.chatRoomNo)}개`);
             let ids = unReadChatRoom.chatRoomParticipants.split('|');
             let roomName = '';
-            console.log(ids);
-            for(let i = 0; i < ids.length - 1 ; i++){
+            for(let i = 0; i < ids.length-1; i++){
                 if(ids[i] != user.userId){
                     roomName += unReadChatRoom.participants[ids[i]];
                 }

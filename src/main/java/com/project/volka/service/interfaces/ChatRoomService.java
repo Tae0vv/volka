@@ -19,4 +19,5 @@ public interface ChatRoomService {
     List<ChatRoomDTO> getChatRooms(String userId);
     ChatRoomDTO getChatRoom(Long roomNo);
     List<ChatRoomDTO> getUnReadChatRooms(List<ChatDTO> unreadChatDTOList);
+    Long makeChatRoom(UserInfo userInfo ,String[] participantsArray);
 }

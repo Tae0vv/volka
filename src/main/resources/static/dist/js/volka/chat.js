@@ -8,14 +8,33 @@ $(document).ready(function () {
     console.log(user);
     console.log(chatRoom);
     renderChatRoom();
+    history.replaceState({}, null, '/volka/chat');
+    chatConnect();
 });
+
+let stompChatClient = null;
+function chatConnect() {
+    let socket = new SockJS('/chat');
+    stompChatClient = Stomp.over(socket);
+    stompChatClient.connect({}, function(frame) {
+
+        stompChatClient.subscribe('/queue/chat/' + nickName, function(msg) {
+            chats = JSON.parse(msg.body);
+            renderChatRoom();
+        });
+    },function (error){
+        console.log(error);
+    });
+}
+
 
 function renderChatRoom(){
 
     let ids = chatRoom.chatRoomParticipants.split('|');
+    console.log(ids);
     let roomName = '';
 
-    for(let i = 0; i < ids.length - 1 ; i++){
+    for(let i = 0; i < ids.length-1 ; i++){
         if(ids[i] != user.userId){
             roomName += chatRoom.participants[ids[i]];
         }
@@ -60,12 +79,30 @@ function initEvent(){
             $("#chat-content").val('');
         }
     });
+    $(document).off('click').on('click', function(event) {
+        console.log('click');
+        utility.ajax('/volka/read',{roomNo : chatRoom.chatRoomNo},'post')
+            .then((responseData) => {
+            })
+            .catch((error) => {
+            });
+    });
+
 }
 
 function sendMessage(){
     let content = $("#chat-content").val();
+    let ids = chatRoom.chatRoomParticipants.split('|');
+    let memberNames = '';
+
+    for(let i = 0; i < ids.length-1 ; i++){
+        console.log('for');
+        if(ids[i] != user.userId){
+            memberNames += chatRoom.participants[ids[i]]+'|';
+        }
+    }
     if(content.trim() != ''){
-        let data = {roomNo : $("#chat-room-no").val(), content : content}
+        let data = {roomNo : $("#chat-room-no").val(), content : content, participants : memberNames}
         utility.ajax("/volka/chat",data, 'post')
             .then((responseData) => {
                 console.log(responseData);
