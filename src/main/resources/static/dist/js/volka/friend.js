@@ -39,7 +39,6 @@ let friendsStatus = null;
 let stompFriendRequestClient = null;
 let stompPromiseRequestClient = null;
 let stompRoomClient = null;
-let stompReadClient = null;
 function onOffconnect() {
     let socket = new SockJS('/status');
     stompOnOffClient = Stomp.over(socket);
@@ -265,7 +264,7 @@ function initEvent() {
         $('#friendModal').modal('hide');
     });
 
-    $('#hideButton').off('click').click(function () {
+    /*$('#hideButton').off('click').click(function () {
         let userNickName = $('.user-name').text().split('님')[0].trim();
         utility.ajax('/friend/hide', {nickName: userNickName}, 'post')
             .then((responseData) => {
@@ -277,7 +276,7 @@ function initEvent() {
                 console.log(error);
             });
         $('#friendModal').modal('hide');
-    });
+    });*/
 
     $('#promise-req').off('click').click(function () {
         console.log('promise ajax post');
@@ -507,20 +506,61 @@ function initEvent() {
             });
     });
 
+    $("#profile-image").off('click').click(function(){
+        $("#profile-modal").modal('show');
+    });
+
+    $("#change-profile").off('click').click(function(){
+        $("#fileInput").click();
+    });
+
+    $("#fileInput").off('change').on('change', function(e){
+        let file = e.target.files[0];
+        let formData = new FormData();
+        formData.append('file', file);
+        let fileType = file["type"];
+        let validImageTypes = ["image/jpg", "image/jpeg", "image/png"];
+
+
+        if ($.inArray(fileType, validImageTypes) < 0) {
+            Swal.fire({
+                title: '알림',
+                text: 'jpg 또는 png 형식의 이미지만 업로드 가능합니다.',
+                icon: 'error',
+                showConfirmButton: false,
+                timer: 1000
+            });
+            return;
+        }
+        $.ajax({
+            url: 'profile/upload',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false
+        })
+            .done(function(responseData) {
+                $("#profile-modal").modal('hide');
+                window.location.reload();
+            })
+            .fail(function(error) {
+                console.error(error);
+            });
+    });
 }
 
 
     function renderFriends() {
         let friendsList = $('#friends-list');
         friendsList.empty();
-
         friends.forEach(function (friend) {
             let listItem = $('<li>').addClass('list-group-item d-flex justify-content-between align-items-center user-li').css('background-color', 'white');
-            let icon = $('<i>').addClass('fas fa-user mr-3').css('color', 'silver');
+            let image = $('<img>').attr('src', '/profile/image/' + friend).addClass('img-circle elevation-2 mr-3').css({'width': '33px', 'height': '33px'});
             let nameSpan = $('<span>').addClass('user-i').text(friend);
-            listItem.append(icon, nameSpan);
+            listItem.append(image, nameSpan);
             friendsList.append(listItem);
         });
+
         stompOnOffClient.send("/app/status", {}, JSON.stringify({nickName: nickName, status: 'on'}));
     }
 

@@ -101,11 +101,10 @@ public class FriendServiceImpl implements FriendService {
                 String nickName = friendMap.get("nickName");
                 UserInfo targetUser = userRepository.findByUserNickName(nickName);
 
-                Friend friend = friendRepository.findByMainUserAndTargetUser(userInfo, targetUser);
-
-                friend.block();
-
-                friendRepository.save(friend);
+                Friend main = friendRepository.findByMainUserAndTargetUser(userInfo, targetUser);
+                Friend target = friendRepository.findByMainUserAndTargetUser(targetUser, userInfo);
+                friendRepository.delete(main);
+                friendRepository.delete(target);
             }
         }
     }

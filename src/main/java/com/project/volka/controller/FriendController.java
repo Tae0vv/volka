@@ -112,6 +112,7 @@ public class FriendController {
         HashMap<String, Object> responseData = new HashMap<>();
         friendService.hideFriendship(userInfo,friendMap);
         List<String> friends = friendService.getFriendsNickName(userInfo, 1);
+
         responseData.put("friends",friends);
         return ResponseEntity.ok(responseData);
     }
@@ -119,13 +120,23 @@ public class FriendController {
     @PostMapping("block")
     @ResponseBody
     public ResponseEntity<?> friendBlock(@AuthenticationPrincipal User user,
-                                        @RequestBody HashMap<String,String> friendMap) {
+                                        @RequestBody HashMap<String,String> friendMap) throws JsonProcessingException {
 
         UserInfo userInfo = userService.updateUserInfo((UserSecurityDTO) user);
+        UserInfo waitUser = userService.getUserInfo(friendMap.get("nickName"));
         HashMap<String, Object> responseData = new HashMap<>();
         friendService.blockFriendship(userInfo,friendMap);
         List<String> friends = friendService.getFriendsNickName(userInfo, 1);
         responseData.put("friends",friends);
+        HashMap<String, Object> waitUserData = new HashMap<>();
+        List<String> waitUserFriends = friendService.getFriendsNickName(waitUser, 1);
+        List<FriendReqDTO> waitFriendRequests = friendService.getFriendRequests(waitUser);
+        waitUserData.put("friends",waitUserFriends);
+        waitUserData.put("friendRequests",waitFriendRequests);
+
+        ObjectMapper serverToClient = new ObjectMapper();
+        String waitUserDataJson = serverToClient.writeValueAsString(waitUserData);
+        simpMessagingTemplate.convertAndSend("/queue/accept/" +  friendMap.get("nickName"),waitUserDataJson);
         return ResponseEntity.ok(responseData);
     }
 }

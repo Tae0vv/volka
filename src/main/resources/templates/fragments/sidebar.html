@@ -105,8 +105,9 @@
         <div class="sidebar">
             <!-- Sidebar user panel (optional) -->
             <div class="user-panel mt-3 pb-3 mb-3 d-flex" style="border-bottom: 1px solid lightgrey;">
-                <div class="image">
-                    <img src="/dist/img/volka.jpg" class="img-circle elevation-2" alt="User Image">
+                <input type="file" id="fileInput" style="display: none;" />
+                <div class="image" id = "profile-image" style="cursor: pointer">
+                    <img th:src="@{'/profile/image/' + ${user.userNickName}}" class="img-circle elevation-2" alt="User Image"  style="width: 33px; height: 33px;">
                 </div>
                 <div class="info">
                     <a class="d-block" th:text="${user.userNickName}" style="color: black; font-weight: bold;"></a>

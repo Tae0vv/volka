@@ -111,7 +111,6 @@ $(function () {
         editable: true,      // 이벤트를 편집 가능하도록 합니다.
         droppable: true,      // 이벤트를 달력에 놓을 수 있도록 합니다.
         eventResize: function(info) {
-            console.log('리사이즈');
             let selectedPlanNo = info.event.extendedProps.no;
             let newStartDate = new Date(info.event.start);
             let newEndDate = info.event.end ? new Date(info.event.end) : null; //

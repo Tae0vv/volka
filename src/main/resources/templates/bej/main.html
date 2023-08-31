@@ -121,7 +121,7 @@
                                         <div class="checkbox">
                                             <label for="drop-remove">
                                                 <input type="checkbox" id="drop-remove">
-                                                remove after drop
+                                                remove and drop
                                             </label>
                                         </div>
                                     </div>
@@ -308,6 +308,19 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-info" id="newBtn">저장</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="profile-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <img th:src="@{'/profile/image/' + ${user.userNickName}}" alt="프로필 이미지" style="width: 100%;">
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" id ="change-profile" class ="btn btn-default">Change Profile Image</button>
             </div>
         </div>
     </div>

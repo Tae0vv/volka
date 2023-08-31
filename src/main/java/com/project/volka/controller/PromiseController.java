@@ -64,7 +64,6 @@ public class PromiseController {
         try{
              promiseReqDTOListJson = serverToClient.writeValueAsString(promiseResDTOList);
         }catch (JsonProcessingException e){
-            log.error("parsingError : ");
             log.error(e);
         }
         log.info(promiseReqDTOListJson);

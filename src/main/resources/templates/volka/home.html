@@ -81,6 +81,19 @@
   </aside>
   <!-- /.control-sidebar -->
 </div>
+<div class="modal" id="profile-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <img th:src="@{'/profile/image/' + ${user.userNickName}}" alt="프로필 이미지" style="width: 100%;">
+      </div>
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" id ="change-profile" class ="btn btn-default">Change Profile Image</button>
+      </div>
+    </div>
+  </div>
+</div>
 <div th:replace="fragments/friend :: friendModal"></div>
 <div th:replace="fragments/friend :: promiseModal"></div>
 <div th:replace="fragments/friend :: promiseResModal"></div>
@@ -100,7 +113,6 @@
   let chatRooms = [[${chatRooms}]];
   let unreadChats = [[${unreadChats}]];
   let unReadChatRooms = [[${unReadChatRooms}]];
-
 </script>
 <script type="module" src="/dist/js/volka/friend.js"></script>
 </body>
