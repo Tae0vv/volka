@@ -37,16 +37,11 @@ public class CustomUserDetailsService implements UserDetailsService {
             if(socialResult.isEmpty()){// 카카오 로그인에 대한 예외
                 throw new UsernameNotFoundException("username not found");
             }
-
             return getUserDetails(socialResult);
 
         }else{ //그냥 로그인이 있을때
             return getUserDetails(result);
-
         }
-
-        
-
     }
 
     private UserDetails getUserDetails(Optional<UserInfo> result) {
@@ -67,10 +62,6 @@ public class CustomUserDetailsService implements UserDetailsService {
                         .collect(Collectors.toList())
 
         );
-
-        log.info("userSecurityDTO");
-        log.info(userSecurityDTO);
-
         return userSecurityDTO;
     }
 }

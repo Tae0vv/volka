@@ -27,9 +27,6 @@ public class UserController {
 
     @GetMapping("/login")
     public void loginGet(String error, String logout){
-        log.info("login get..........");
-        log.info("logout: " + logout);
-
         if(logout != null){
             log.info("user logout..........");
         }
@@ -42,9 +39,6 @@ public class UserController {
 
     @PostMapping("/signup")
     public String signupPost(UserInfoDTO userInfoDTO, RedirectAttributes redirectAttributes){
-
-        log.info("signup post");
-        log.info(userInfoDTO);
 
         try {
             userService.signup(userInfoDTO);
@@ -66,9 +60,7 @@ public class UserController {
     @PostMapping("/forgotid")
     public String forgotIdPost(UserInfoDTO userInfoDTO){
 
-        log.info("forgotIdPost");
         mailService.sendId(userInfoDTO);
-
         return "redirect:/user/login";
     }
 
@@ -80,9 +72,7 @@ public class UserController {
     @PostMapping("/forgotpw")
     public String forgotPwPost(UserInfoDTO userInfoDTO){
 
-        log.info("forgotPwPost");
         mailService.sendTempPw(userInfoDTO);
-
         return "redirect:/user/login";
     }
     @GetMapping("/kakao")
@@ -92,8 +82,6 @@ public class UserController {
 
     @PostMapping("/kakao")
     public String kakaoPost(UserInfoDTO userInfoDTO, RedirectAttributes redirectAttributes, @AuthenticationPrincipal User user){
-        log.info("kakao signup------");
-
         userInfoDTO.setUserId(user.getUsername());
         userService.kakaoAddInfo(userInfoDTO);
 

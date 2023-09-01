@@ -36,8 +36,6 @@ public class CustomSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         // 로그인하지 않아도 볼 수 있도록 설정
-        log.info("----------configure----------");
-
         //커스텀 로그인 페이지
         http.formLogin().loginPage("/user/login").defaultSuccessUrl("/volka", true);
         // CSRF 토큰 비활성화
@@ -57,7 +55,6 @@ public class CustomSecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer(){
         // 정적 자원들을 시큐리티 적용에서 제외시킴
-        log.info("----------configure----------");
         return (web) -> web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 

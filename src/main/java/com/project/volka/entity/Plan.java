@@ -47,6 +47,7 @@ public class Plan extends BaseEntity{
     private String planColor;
 
     public void changePlanTitle(String planTitle) {
+        this.planTitle = planTitle;
     }
 
     public void changePlanContent(String planContent) {

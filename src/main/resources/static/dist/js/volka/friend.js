@@ -222,31 +222,29 @@ function initEvent() {
                 break;
             }
         }
-        if (clickedChatRoomNo) {
-            utility.ajax('volka/chat/alarm',{roomNo : clickedChatRoomNo},'post')
+        if (clickedChatRoomNo > 0) {
+            utility.ajax('/volka/chat/alarm',{roomNo : clickedChatRoomNo},'post')
                 .then((responseData) => {
                     chatRooms = responseData.chatRooms
                     unreadChats = responseData.unreadChats
                     unReadChatRooms = responseData.unReadChatRooms
                     chatAlarmRender();
-                    openPopup('/volka/chat?room='+clickedChatRoomNo, 400, 400);
+                    openPopup('/volka/chat?room='+clickedChatRoomNo, 600, 800);
                 })
                 .catch((error) => {
                     console.error(error);
-
                 });
         } else {
-            utility.ajax('volka/chat/create',{member: clickedName},'post')
+            utility.ajax('/volka/chat/create',{member: clickedName},'post')
                 .then((responseData) => {
                     chatRooms = responseData.chatRooms
                     unreadChats = responseData.unreadChats
                     unReadChatRooms = responseData.unReadChatRooms
                     chatAlarmRender();
-                    openPopup('/volka/chat?room='+responseData.chatRoomNo, 400, 400);
+                    openPopup('/volka/chat?room='+responseData.chatRoomNo, 600, 800);
                 })
                 .catch((error) => {
                     console.error(error);
-
                 });
         }
     });
@@ -492,14 +490,14 @@ function initEvent() {
         console.log('들어옴?')
         let value = $(this).find('.chatroom-no').val();
         console.log(value);
-        utility.ajax('volka/chat/alarm',{roomNo : value},'post')
+        utility.ajax('/volka/chat/alarm',{roomNo : value},'post')
             .then((responseData) => {
                 console.log('ajax');
                 chatRooms = responseData.chatRooms
                 unreadChats = responseData.unreadChats
                 unReadChatRooms = responseData.unReadChatRooms
                 chatAlarmRender();
-                openPopup('/volka/chat?room='+value, 400, 400);
+                openPopup('/volka/chat?room='+value, 600, 800);
             })
             .catch((error) => {
                 console.error(error);

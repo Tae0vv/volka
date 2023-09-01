@@ -177,7 +177,6 @@ $(function () {
             $('#myModal').off('click','#modify-btn').on('click', '#modify-btn', function () {
 
                 let selectedPlanNo = info.event.extendedProps.no;
-                console.log(selectedPlanNo);
                 let sendData = {
                     planNo: selectedPlanNo,
                     title: $('#eventTitleInput').val(),

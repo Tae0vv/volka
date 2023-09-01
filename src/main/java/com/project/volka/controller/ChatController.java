@@ -34,7 +34,7 @@ public class ChatController {
     private final ChatService chatService;
 
     @PreAuthorize("hasRole('USER')")
-    @GetMapping("/chat")
+    @GetMapping("chat")
     public String chatRoomIn(@AuthenticationPrincipal User user, @RequestParam("room") Long chatRoomNo, Model model){
         UserInfo userInfo = userService.updateUserInfo((UserSecurityDTO) user);
         List<ChatDTO> chats = chatService.getChats(chatRoomNo);
@@ -47,7 +47,7 @@ public class ChatController {
         return "/volka/chat";
     }
 
-    @PostMapping("/chat/alarm")
+    @PostMapping("chat/alarm")
     @ResponseBody
     public  ResponseEntity<?> chatAlarm(@AuthenticationPrincipal User user,@RequestBody HashMap<String, String> chatMap){
         UserInfo userInfo = userService.updateUserInfo((UserSecurityDTO) user);
@@ -57,7 +57,6 @@ public class ChatController {
         List<ChatRoomDTO> chatRooms = chatRoomService.getChatRooms(userInfo.getUserId());
         List<ChatDTO> unreadChats = chatService.getUnreadChats(userInfo);
         List<ChatRoomDTO> unReadChatRooms = chatRoomService.getUnReadChatRooms(unreadChats);
-
         HashMap<String, Object> responseData = new HashMap<>();
         responseData.put("chatRooms", chatRooms);
         responseData.put("unreadChats", unreadChats);
@@ -65,7 +64,7 @@ public class ChatController {
 
         return ResponseEntity.ok(responseData);
     }
-    @PostMapping("/read")
+    @PostMapping("read")
     @ResponseBody
     public  ResponseEntity<?> read(@AuthenticationPrincipal User user,@RequestBody HashMap<String, String> chatMap){
 
@@ -86,7 +85,7 @@ public class ChatController {
         return ResponseEntity.ok(responseData);
     }
 
-    @PostMapping("/chat")
+    @PostMapping("chat")
     @ResponseBody
     public ResponseEntity<?> chat(@AuthenticationPrincipal User user,
                                       @RequestBody HashMap<String, String> chatMap) {
@@ -119,7 +118,6 @@ public class ChatController {
                 ObjectMapper serverToClient = new ObjectMapper();
                 serverToClient.registerModule(new JavaTimeModule());
                 String chatsJson = serverToClient.writeValueAsString(chats);
-                log.info("보내기전 : " + chatsJson);
                 simpMessagingTemplate.convertAndSend("/queue/chat/" +  participantsArray[i],chatsJson);
             }catch (Exception e){
                 log.error(e);
@@ -127,7 +125,7 @@ public class ChatController {
         }
         return ResponseEntity.ok(responseData); // 클라이언트에게 JSON 응답을 보냄
     }
-    @PostMapping("/chat/create")
+    @PostMapping("chat/create")
     @ResponseBody
     public ResponseEntity<?> chatCtreate(@AuthenticationPrincipal User user,
                                       @RequestBody HashMap<String, String> chatMap) {
