@@ -5,15 +5,6 @@ let nickName = user.userNickName;
 let unreadChatMap = new Map();
 
 $(document).ready(function () {
-    console.log(user);
-    console.log(plans);
-    console.log(friends);
-    console.log(friendRequests);
-    console.log(promiseRequests);
-    console.log(chatRooms);
-    console.log(unreadChats);
-    console.log(unReadChatRooms);
-    console.log(unreadChatMap);
     chatAlarmRender();
     initEvent();
     onOffconnect();
