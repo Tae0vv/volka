@@ -198,7 +198,6 @@ public class BejController {
             }
         }
 
-
         if (isFriend) {
             List<PlanDTO> planList = planService.getPlanList(friendInfo);
 
